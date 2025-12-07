@@ -1,0 +1,105 @@
+.card-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 50px 2vw;
+    transform-style: preserve-3d;
+    height: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 50px;
+    position: relative;
+}
+
+.card-grid.active {
+    z-index: 99;
+    isolation: isolate;
+}
+
+@media screen and (min-width: 900px) {
+    .card-grid {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
+
+@font-face {
+    font-family: "franklin-gothic-book";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../fonts/franklin-gothic-book.eot");
+    src: url("../fonts/franklin-gothic-book.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/franklin-gothic-book.woff2") format("woff2"),
+    url("../fonts/franklin-gothic-book.woff") format("woff"),
+    url("../fonts/franklin-gothic-book.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "IndieFlower";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../fonts/IndieFlower.eot");
+    src: url("../fonts/IndieFlower.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/IndieFlower.woff2") format("woff2"),
+    url("../fonts/IndieFlower.woff") format("woff"),
+    url("../fonts/IndieFlower.ttf") format("truetype"),
+    url("../fonts/IndieFlower.svg#IndieFlower.eot") format("svg");
+}
+
+
+@font-face {
+    font-family: "bank-gothic";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../fonts/bank-gothic-medium-bt.eot");
+    src: url("../fonts/bank-gothic-medium-bt.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/bank-gothic-medium-bt.woff2") format("woff2"),
+    url("../fonts/bank-gothic-medium-bt.woff") format("woff"),
+    url("../fonts/bank-gothic-medium-bt.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "built-titling";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../fonts/built-titling-sb.eot");
+    src: url("../fonts/built-titling-sb.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/built-titling-sb.woff2") format("woff2"),
+    url("../fonts/built-titling-sb.woff") format("woff"),
+    url("../fonts/built-titling-sb.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "frutiger-light";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../fonts/FrutigerLTStd-Light.eot");
+    src: url("../fonts/FrutigerLTStd-Light.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/FrutigerLTStd-Light.woff2") format("woff2"),
+    url("../fonts/FrutigerLTStd-Light.woff") format("woff"),
+    url("../fonts/FrutigerLTStd-Light.ttf") format("truetype");
+}
+
+
+
+@font-face {
+    font-family: "franklin-gothic-book";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../fonts/franklin-gothic-book.eot");
+    src: url("../fonts/franklin-gothic-book.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/franklin-gothic-book.woff2") format("woff2"),
+    url("../fonts/franklin-gothic-book.woff") format("woff"),
+    url("../fonts/franklin-gothic-book.ttf") format("truetype");
+}
+
+
+
+@font-face {
+    font-family: "brothers-regular";
+    font-style: normal;
+    font-weight: normal;
+    src: url("../fonts/brothers-regular.eot");
+    src: url("../fonts/brothers-regular.eot?#iefix") format("embedded-opentype"),
+    url("../fonts/brothers-regular.woff2") format("woff2"),
+    url("../fonts/brothers-regular.woff") format("woff"),
+    url("../fonts/brothers-regular.ttf") format("truetype");
+}
