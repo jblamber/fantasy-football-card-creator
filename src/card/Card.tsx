@@ -38,6 +38,9 @@ export type TradingCardProps = {
   // Listener props for lenticular imagery
   onLenticularChange?: (x: number, y: number) => void;
   lenticularLength?: number;
+
+  // Gesture callbacks
+  onSwipe?: (direction: 'left' | 'right') => void;
 };
 
 function clamp(n: number, min = 0, max = 100) {
@@ -73,7 +76,8 @@ export const TradingCard: React.FC<TradingCardProps> = ({
   className = '',
   showcase = false,
   onLenticularChange = () => {},
-  lenticularLength = 0
+  lenticularLength = 0,
+  onSwipe,
 }) => {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const frontRef = useRef<HTMLDivElement | null>(null);
@@ -230,6 +234,8 @@ export const TradingCard: React.FC<TradingCardProps> = ({
     }
   }, [foil, mask]);
 
+  const swipeRef = useRef<{x:number;y:number;t:number}|null>(null);
+
   const onPointerMove: React.PointerEventHandler = (e) => {
     const rot = rotatorRef.current;
     if (!rot) return;
@@ -312,11 +318,30 @@ export const TradingCard: React.FC<TradingCardProps> = ({
           onPointerDown={(e) => {
             const targetEl = e.currentTarget;
             try { targetEl.setPointerCapture?.(e.pointerId); } catch {}
+            // record swipe start
+            swipeRef.current = { x: e.clientX, y: e.clientY, t: Date.now() };
             onPointerMove(e);
           }}
           onPointerMove={onPointerMove}
           onPointerUp={(e) => {
             try { e.currentTarget.releasePointerCapture?.(e.pointerId); } catch {}
+            const start = swipeRef.current;
+            const rot = rotatorRef.current;
+            if (start && rot) {
+              const dt = Date.now() - start.t;
+              const dx = e.clientX - start.x;
+              const dy = e.clientY - start.y;
+              const rect = rot.getBoundingClientRect();
+              const threshold = Math.max(40, rect.width * 0.12);
+              if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) >= threshold && dt < 800) {
+                if (dx < 0) {
+                  onSwipe?.('left');
+                } else {
+                  onSwipe?.('right');
+                }
+              }
+            }
+            swipeRef.current = null;
             resetInteraction(200);
           }}
           onPointerCancel={(e) => {

@@ -10,6 +10,7 @@ interface FantasyFootballCardProps {
   types?: string | string[];
   subtypes?: string | string[];
   supertype?: string;
+  onSwipe?: (direction: 'left' | 'right') => void;
 
   playerData: {
     number?: string,
@@ -70,7 +71,8 @@ export default function FantasyFootballCard({
                                         set,
                                         types,
                                         subtypes,
-                                        supertype
+                                        supertype,
+                                        onSwipe,
                                       }:FantasyFootballCardProps) {
 
   const ref = useRef<HTMLCanvasElement | null>(null);
@@ -138,6 +140,7 @@ export default function FantasyFootballCard({
       showcase={false}
       onLenticularChange={(lenticularX: number) => setLenticular({x:lenticularX, y:0})}
       lenticularLength={imagery?.lenticularImages?.size ?? 0}
+      onSwipe={onSwipe}
     >
       <canvas ref={ref} width={822} height={1122} style={{ width: '100%', height: 'auto', display: 'block' }} />
     </HoloCard>
