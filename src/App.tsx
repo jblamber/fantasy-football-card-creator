@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useCallback } from "react";
-import BloodBowlCard, { CardRarity, PlayerType } from "./bloodbowl/BloodBowlCard";
+import FantasyFootballCard, { CardRarity, PlayerType } from "./bloodbowl/FantasyFootballCard";
 
 export default function App() {
 
@@ -127,7 +127,7 @@ export default function App() {
         onClick={(e)=> e.stopPropagation()}
         style={{ width: 'min(90vw, calc(90vh * 822 / 1122))', aspectRatio: '822 / 1122' }}
       >
-        <BloodBowlCard {...cards[index]} />
+        <FantasyFootballCard {...cards[index]} />
       </div>
     </section>
   );

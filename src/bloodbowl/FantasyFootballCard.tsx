@@ -4,7 +4,7 @@ import { CardData, defaultOptions, ImageAssets, renderCard } from "./blood-bowl-
 
 export type PlayerType = 'normal' | 'star';
 
-interface BloodBowlCardProps {
+interface FantasyFootballCardProps {
   rarity: CardRarity;
   set?: string;
   types?: string | string[];
@@ -63,7 +63,7 @@ async function loadImage(url: string) {
   });
 }
 
-export default function BloodBowlCard({
+export default function FantasyFootballCard({
                                         playerData,
                                         rarity,
                                         imagery,
@@ -71,7 +71,7 @@ export default function BloodBowlCard({
                                         types,
                                         subtypes,
                                         supertype
-                                      }:BloodBowlCardProps) {
+                                      }:FantasyFootballCardProps) {
 
   const ref = useRef<HTMLCanvasElement | null>(null);
   const [lenticular, setLenticular] = useState({x:0, y:0})
