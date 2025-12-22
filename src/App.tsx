@@ -11,9 +11,17 @@ export default function App() {
   return (
     <div className="min-h-screen">
       <nav className="fixed top-2 left-2 z-20 flex gap-2 rounded-md border border-neutral-700/80 bg-neutral-800/80 backdrop-blur px-1.5 py-1 shadow-md">
-        <a href="#" className="text-white no-underline px-2.5 py-1.5">Holo Fantasy Football Cards</a>
-        <a href="#/viewer" className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20">Viewer</a>
-        <a href="#/create" className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20">Creator</a>
+          <a href="#" className="text-white no-underline px-2.5 py-1.5 bg-neutral-800/80 title">HOLO FANTASY TEAM
+              <div className="aurora">
+                  <div className="aurora__item"></div>
+                  <div className="aurora__item"></div>
+                  <div className="aurora__item"></div>
+                  <div className="aurora__item"></div>
+              </div>
+          </a>
+          <a href="#/viewer"
+             className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20">Viewer</a>
+          <a href="#/create" className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20">Creator</a>
       </nav>
       <div className="pt-9 max-w-[900px] mx-auto">
         {route === '/create' ? <CardCreator /> : <CardViewer />}
