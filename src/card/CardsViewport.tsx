@@ -13,7 +13,7 @@ export function CardsViewport({cards}: { cards: any[] }) {
 
     return (
         <section
-            className="card-viewport w-screen h-screen flex p-1 justify-center [touch-action:manipulation]"
+            className="card-viewport h-screen flex p-1 justify-center [touch-action:manipulation]"
             onClick={onViewportClick}>
             <div onClick={(e) => e.stopPropagation()} style={{width: 'min(90vw, calc(90vh * 822 / 1122))'}}
                  className="aspect-[822/1122]">

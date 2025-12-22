@@ -1,9 +1,7 @@
-import React, {useMemo} from "react";
-import {CardRarity, PlayerType} from "./bloodbowl/FantasyFootballCard";
+import React from "react";
 import {CardCreator} from "./card/CardCreator";
 import {CardViewer} from "./card/CardViewer";
 import {useHashRoute} from "./utils/UseHashRoute";
-import {CardsViewport} from "./card/CardsViewport";
 
 export default function App() {
   const hash = useHashRoute();
@@ -13,6 +11,7 @@ export default function App() {
   return (
     <div className="min-h-screen">
       <nav className="fixed top-2 left-2 z-20 flex gap-2 rounded-md border border-neutral-700/80 bg-neutral-800/80 backdrop-blur px-1.5 py-1 shadow-md">
+        <a href="#" className="text-white no-underline px-2.5 py-1.5">Holo Fantasy Football Cards</a>
         <a href="#/viewer" className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20">Viewer</a>
         <a href="#/create" className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20">Creator</a>
       </nav>
