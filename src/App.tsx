@@ -119,8 +119,8 @@ export default function App() {
       className="card-viewport"
       onClick={onViewportClick}
       style={{
-        width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: '#111', overflow: 'hidden', touchAction: 'manipulation'
+        width: '100vw', height: '100vh', display: 'flex', padding: '0.3rem', justifyContent: 'center',
+        background: '#111', touchAction: 'manipulation'
       }}
     >
       <div
