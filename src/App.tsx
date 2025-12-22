@@ -22,6 +22,7 @@ export default function App() {
           <a href="#/viewer"
              className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20">Viewer</a>
           <a href="#/create" className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20">Creator</a>
+          <a href="https://github.com/jblamber/fantasy-football-card-creator" className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20">Info</a>
       </nav>
       <div className="pt-9 max-w-[900px] mx-auto">
         {route === '/create' ? <CardCreator /> : <CardViewer />}
