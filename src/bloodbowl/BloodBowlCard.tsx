@@ -139,7 +139,7 @@ export default function BloodBowlCard({
       onLenticularChange={(lenticularX: number) => setLenticular({x:lenticularX, y:0})}
       lenticularLength={imagery?.lenticularImages?.size ?? 0}
     >
-      <canvas ref={ref} width={822} height={1122}/>
+      <canvas ref={ref} width={822} height={1122} style={{ width: '100%', height: 'auto', display: 'block' }} />
     </HoloCard>
   )
 }

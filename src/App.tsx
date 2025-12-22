@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import BloodBowlCard, { CardRarity, PlayerType } from "./bloodbowl/BloodBowlCard";
 
 export default function App() {
@@ -102,23 +102,33 @@ export default function App() {
     };
   }, []);
 
+  const cards = useMemo(() => [grailKnightA, grailKnightB, thrower1], [grailKnightA, grailKnightB, thrower1]);
+  const [index, setIndex] = useState(0);
+
+  const next = useCallback(() => setIndex(i => (i + 1) % cards.length), [cards.length]);
+  const prev = useCallback(() => setIndex(i => (i - 1 + cards.length) % cards.length), [cards.length]);
+
+  const onViewportClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    if (x < rect.width / 2) prev(); else next();
+  }, [next, prev]);
+
   return (
-
     <section
-      className="card-grid"
+      className="card-viewport"
+      onClick={onViewportClick}
+      style={{
+        width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: '#111', overflow: 'hidden', touchAction: 'manipulation'
+      }}
     >
-      <BloodBowlCard
-        {...grailKnightA}
-      />
-
-      <BloodBowlCard
-        {...grailKnightB}
-      />
-
-      <BloodBowlCard
-        {...thrower1}
-      />
+      <div
+        onClick={(e)=> e.stopPropagation()}
+        style={{ width: 'min(90vw, calc(90vh * 822 / 1122))', aspectRatio: '822 / 1122' }}
+      >
+        <BloodBowlCard {...cards[index]} />
+      </div>
     </section>
-
   );
 }

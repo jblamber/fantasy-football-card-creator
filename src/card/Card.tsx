@@ -300,6 +300,7 @@ export const TradingCard: React.FC<TradingCardProps> = ({
       data-supertype={supertypeStr}
       data-rarity={rarityStr}
       ref={cardRef}
+      style={{ width: '100%', height: '100%' }}
     >
       <div className="card__translater">
         <button
@@ -307,7 +308,21 @@ export const TradingCard: React.FC<TradingCardProps> = ({
           aria-label={`Pokemon Card; ${name || 'Unknown'}.`}
           tabIndex={0}
           ref={rotatorRef}
+          style={{ touchAction: 'none', width: '100%', height: '100%' }}
+          onPointerDown={(e) => {
+            const targetEl = e.currentTarget;
+            try { targetEl.setPointerCapture?.(e.pointerId); } catch {}
+            onPointerMove(e);
+          }}
           onPointerMove={onPointerMove}
+          onPointerUp={(e) => {
+            try { e.currentTarget.releasePointerCapture?.(e.pointerId); } catch {}
+            resetInteraction(200);
+          }}
+          onPointerCancel={(e) => {
+            try { e.currentTarget.releasePointerCapture?.(e.pointerId); } catch {}
+            resetInteraction(200);
+          }}
           onPointerLeave={onPointerLeave}
           onBlur={onBlur}
         >
@@ -318,6 +333,7 @@ export const TradingCard: React.FC<TradingCardProps> = ({
             loading="lazy"
             width={660}
             height={921}
+            style={{ width: '100%', height: 'auto', display: 'block' }}
           />
           <div className="card__front" ref={frontRef}>
             {img? (<img
