@@ -26,6 +26,7 @@
 */
 
 import {FantasyFootballPlayerData} from "../../types";
+import * as QRCode from 'qrcode';
 
 export type StatValue = string | number; // e.g., "3+" or 4
 
@@ -84,6 +85,14 @@ export interface RenderOptions<fontOptions extends FontOptions, colorOptions ext
   // Text settings
   fonts?: fontOptions
   colors?: colorOptions
+
+  // QR code settings
+  showQrCode?: boolean; // default true
+  qrSize?: number; // in design-space px (default 180)
+  qrPadding?: number; // distance from card edges in design-space px (default 24)
+  qrPlateRadius?: number; // rounded corner radius for plate (default 12)
+  qrPlateFill?: string; // background plate color behind QR (default 'rgba(255,255,255,0.9)')
+  qrPlateStroke?: string; // outline color (default 'rgba(0,0,0,0.35)')
 }
 
 const defaultFonts: Required<FontOptions> = {
@@ -109,7 +118,13 @@ export const defaultOptions: Required<RenderOptions<Required<FontOptions>, Requi
   designWidth: 1125,
   designHeight: 1575,
   fonts: defaultFonts,
-  colors: defaultColors
+  colors: defaultColors,
+  showQrCode: true,
+  qrSize: 180,
+  qrPadding: 24,
+  qrPlateRadius: 12,
+  qrPlateFill: 'rgba(255,255,255,0.92)',
+  qrPlateStroke: 'rgba(0,0,0,0.35)'
 };
 
 export async function renderCard(
@@ -271,6 +286,9 @@ export async function renderCard(
     drawStat(data.pa, 240, 985, true);
     drawStat(data.av, 240, 1185, true);
   });
+
+  // QR code in bottom-right
+  await drawQrCode(ctx, data, opts);
 }
 
 function drawWrappedParagraph(
@@ -362,6 +380,96 @@ function drawNumberImages(
     ctx.drawImage(img, cx, y - h / 2, w, h);
     cx += w;
   }
+}
+
+function buildQrPayload(data: FantasyFootballCardData): string {
+  // Compact payload with key fields; avoid very long strings for QR reliability
+  const p = {
+    v: 1,
+    t: 'ffc',
+    n: data.cardName ?? '',
+    tm: data.teamName ?? '',
+    pt: data.playerType ?? '',
+    pos: data.positionName ?? '',
+    ma: String(data.ma ?? ''),
+    st: String(data.st ?? ''),
+    ag: String(data.ag ?? ''),
+    pa: String(data.pa ?? ''),
+    av: String(data.av ?? ''),
+    cost: data.cost ?? '',
+    skills: data.skillsAndTraits ?? '',
+    footer: data.footer ?? ''
+  };
+  try {
+    return JSON.stringify(p);
+  } catch {
+    return '';
+  }
+}
+
+async function drawQrCode(ctx: CanvasRenderingContext2D, data: FantasyFootballCardData, opts: AllOptions) {
+  if (!opts.showQrCode) return;
+
+  const { canvas } = ctx;
+  const sizeDesign = opts.qrSize ?? 180;
+  const paddingDesign = opts.qrPadding ?? 24;
+  const plateRadius = opts.qrPlateRadius ?? 12;
+  const plateFill = opts.qrPlateFill ?? 'rgba(255,255,255,0.92)';
+  const plateStroke = opts.qrPlateStroke ?? 'rgba(0,0,0,0.35)';
+
+  // Convert design-space to device-space
+  const scaleX = canvas.width / opts.designWidth;
+  const scaleY = canvas.height / opts.designHeight;
+  const sizeDevice = Math.round(sizeDesign * Math.min(scaleX, scaleY));
+  const padX = Math.round(paddingDesign * scaleX);
+  const padY = Math.round(paddingDesign * scaleY);
+
+  const x = canvas.width - padX - sizeDevice;
+  const y = canvas.height - padY - sizeDevice;
+
+  // Background plate slightly larger than QR
+  const platePad = Math.round(10 * Math.min(scaleX, scaleY));
+  const plateX = x - platePad;
+  const plateY = y - platePad;
+  const plateW = sizeDevice + platePad * 2;
+  const plateH = sizeDevice + platePad * 2;
+
+  // Draw plate
+  ctx.save();
+  ctx.beginPath();
+  const r = Math.round(plateRadius * Math.min(scaleX, scaleY));
+  roundRect(ctx, plateX, plateY, plateW, plateH, r);
+  ctx.fillStyle = plateFill;
+  ctx.fill();
+  ctx.strokeStyle = plateStroke;
+  ctx.lineWidth = Math.max(1, Math.round(2 * Math.min(scaleX, scaleY)));
+  ctx.stroke();
+  ctx.restore();
+
+  // Generate QR to offscreen canvas
+  const text = buildQrPayload(data);
+  const off = document.createElement('canvas');
+  off.width = sizeDevice;
+  off.height = sizeDevice;
+  try {
+    await QRCode.toCanvas(off, text, { errorCorrectionLevel: 'M', margin: 0, width: sizeDevice, color: { dark: '#000000', light: '#FFFFFF' } });
+  } catch (e) {
+    // On failure, skip gracefully
+    return;
+  }
+
+  // Draw QR
+  ctx.drawImage(off, x, y, sizeDevice, sizeDevice);
+}
+
+function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
+  const rr = Math.min(r, w / 2, h / 2);
+  ctx.moveTo(x + rr, y);
+  ctx.arcTo(x + w, y, x + w, y + h, rr);
+  ctx.arcTo(x + w, y + h, x, y + h, rr);
+  ctx.arcTo(x, y + h, x, y, rr);
+  ctx.arcTo(x, y, x + w, y, rr);
+  ctx.closePath();
 }
 
 export function loadImage(url: string): Promise<HTMLImageElement> {
