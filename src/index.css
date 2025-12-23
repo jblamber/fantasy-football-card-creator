@@ -26,6 +26,11 @@
 
 /* App shell background and fonts */
 @layer base {
-  :root { color-scheme: dark light; }
-  body { @apply min-h-screen bg-black text-white; }
+    :root {
+        color-scheme: dark light;
+    }
+
+    body {
+        @apply min-h-screen bg-black text-white;
+    }
 }

@@ -6,8 +6,6 @@
 */
 
 
-
-
 /*
 
   SHINE LAYERS
@@ -15,20 +13,15 @@
 */
 
 
-
-
-
-
-
 /*
 
   GLARE LAYERS
 
-*/    
+*/
 
 
 .card[data-rarity="rare holo v"][data-trainer-gallery="true"] .card__glare {
 
-  opacity: calc(var(--card-opacity)*.4);
+    opacity: calc(var(--card-opacity) * .4);
 
 }

@@ -1,36 +1,44 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/fav/favicon-96x96.png" sizes="96x96" />
-    <link rel="icon" type="image/svg+xml" href="/fav/favicon.svg" />
-    <link rel="shortcut icon" href="/fav/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/fav/apple-touch-icon.png" />
-    <link rel="manifest" href="/fav/site.webmanifest" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="icon" type="image/png" href="/fav/favicon-96x96.png" sizes="96x96"/>
+    <link rel="icon" type="image/svg+xml" href="/fav/favicon.svg"/>
+    <link rel="shortcut icon" href="/fav/favicon.ico"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="/fav/apple-touch-icon.png"/>
+    <link rel="manifest" href="/fav/site.webmanifest"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Fantasy Football Cards</title>
     <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,700;1,300;1,700&family=Roboto:ital,wght@0,300;0,700;1,300;1,700&display=swap">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,700;1,300;1,700&family=Roboto:ital,wght@0,300;0,700;1,300;1,700&display=swap">
     <style>
-      :root { color-scheme: dark light; }
-      body {
-        margin: 0; padding-top: 1rem; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-        background: radial-gradient(1200px 600px at 10% -10%, #222 0%, #000 50%, #000 100%);
-        min-height: 100vh;
-      }
-      .stage {
-        display: grid; min-height: calc(100vh - 4rem);
-      }
+        :root {
+            color-scheme: dark light;
+        }
+
+        body {
+            margin: 0;
+            padding-top: 1rem;
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+            background: radial-gradient(1200px 600px at 10% -10%, #222 0%, #000 50%, #000 100%);
+            min-height: 100vh;
+        }
+
+        .stage {
+            display: grid;
+            min-height: calc(100vh - 4rem);
+        }
     </style>
-  </head>
-  <body>
-  <div class="font_preload" style="opacity: 0; user-select:none; pointer-events: none" role="none presentation" >
+</head>
+<body>
+<div class="font_preload" style="opacity: 0; user-select:none; pointer-events: none" role="none presentation">
     <span style="font-family: 'franklin-gothic-book', Arial, sans-serif;"></span>
     <span style="font-family: 'brothers-regular', Arial, sans-serif;"></span>
-  </div>
-    <div id="root" class="stage"></div>
-    <script type="module" src="main.tsx"></script>
-  </body>
+</div>
+<div id="root" class="stage"></div>
+<script type="module" src="main.tsx"></script>
+</body>
 </html>

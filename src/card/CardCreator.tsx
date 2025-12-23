@@ -7,7 +7,7 @@ import FantasyFootballCard, {CardRarity} from "./fantasyFootballCard/FantasyFoot
 import {FantasyFootballCardData} from "./fantasyFootballCard/fantasyFootballRender";
 
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+function Field({label, children}: { label: string; children: React.ReactNode }) {
     return (
         <label className="grid gap-1.5">
             <span className="text-xs text-neutral-200">{label}</span>
@@ -17,7 +17,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 }
 
 function TextInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
-    const { className, ...rest } = props as any;
+    const {className, ...rest} = props as any;
     return (
         <input
             {...rest}
@@ -27,7 +27,7 @@ function TextInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
 }
 
 function TextArea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
-    const { className, ...rest } = props as any;
+    const {className, ...rest} = props as any;
     return (
         <textarea
             {...rest}
@@ -58,7 +58,7 @@ export function CardCreator() {
         playerData: emptyPlayer,
         imagery: {
             imageProperties: {offsetX: 0, offsetY: 0, scalePercent: 100},
-            lenticularUrls: new Map([['0','/img/players/grail1.png']])
+            lenticularUrls: new Map([['0', '/img/players/grail1.png']])
         }
     }]);
     const [saving, setSaving] = useState(false);
@@ -106,7 +106,10 @@ export function CardCreator() {
     const addLenticularUrl = useCallback((idx: number) => {
         setCards(prev => prev.map((c, i) => i === idx ? {
             ...c,
-            imagery: {...c.imagery, lenticularUrls: c.imagery.lenticularUrls.set(`${c.imagery.lenticularUrls.size}`, '')}
+            imagery: {
+                ...c.imagery,
+                lenticularUrls: c.imagery.lenticularUrls.set(`${c.imagery.lenticularUrls.size}`, '')
+            }
         } : c));
     }, []);
 
@@ -231,11 +234,11 @@ export function CardCreator() {
                 <div className="grid gap-2 mt-2">
                     {Array.from(c.imagery.lenticularUrls.entries()).map((u, j) => (
                         <div>
-                       {/* <TextInput key={j} placeholder={`Index`} value={u[0]}
+                            {/* <TextInput key={j} placeholder={`Index`} value={u[0]}
                                        onChange={e => {}}/>*/}
-                        <TextInput key={j} placeholder={`Image URL ${j + 1}`} value={u[1]}
-                                   onChange={e => updateLenticularUrl(idx, u[0], e.target.value)}/>
-                           {/* <button onClick={() => {}}
+                            <TextInput key={j} placeholder={`Image URL ${j + 1}`} value={u[1]}
+                                       onChange={e => updateLenticularUrl(idx, u[0], e.target.value)}/>
+                            {/* <button onClick={() => {}}
                                     className="bg-red-900 text-white border border-red-700 rounded-md px-2 py-1.5 hover:bg-red-800">Remove
                             </button>*/}
 

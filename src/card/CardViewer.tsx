@@ -18,7 +18,10 @@ function DefaultViewer() {
             footer: "Games Plus Spring 2026 League",
             playerType: "normal" as PlayerType, teamName: "Bruisers of Brione", cost: "95,000"
         },
-        imagery: { imageProperties: { offsetX: -60, offsetY: 0, scalePercent: 150 }, lenticularImages: new Map<string, string>([["0", "/img/players/grail1.png"]]) },
+        imagery: {
+            imageProperties: {offsetX: -60, offsetY: 0, scalePercent: 150},
+            lenticularImages: new Map<string, string>([["0", "/img/players/grail1.png"]])
+        },
         types: "fire"
     }), []);
 
@@ -32,7 +35,10 @@ function DefaultViewer() {
             footer: "Games Plus Spring 2026 League",
             playerType: "normal" as PlayerType, teamName: "Bruisers of Brione", cost: "95,000"
         },
-        imagery: { imageProperties: { offsetX: -50, offsetY: 0, scalePercent: 150 }, lenticularImages: new Map<string, string>([["0", "/img/players/grail2.png"]]) },
+        imagery: {
+            imageProperties: {offsetX: -50, offsetY: 0, scalePercent: 150},
+            lenticularImages: new Map<string, string>([["0", "/img/players/grail2.png"]])
+        },
         types: "electric"
     }), []);
 
@@ -46,11 +52,14 @@ function DefaultViewer() {
             footer: "Games Plus Spring 2026 League",
             playerType: "normal" as PlayerType, teamName: "Bruisers of Brione", cost: "80,000"
         },
-        imagery: { imageProperties: { offsetX: 0, offsetY: 0, scalePercent: 150 }, lenticularImages: new Map<string, string>([["0", "/img/players/thrower1.png"]]) },
+        imagery: {
+            imageProperties: {offsetX: 0, offsetY: 0, scalePercent: 150},
+            lenticularImages: new Map<string, string>([["0", "/img/players/thrower1.png"]])
+        },
         types: "water"
     }), []);
 
-    return <CardsViewport cards={[grailKnightA, grailKnightB, thrower1]} />
+    return <CardsViewport cards={[grailKnightA, grailKnightB, thrower1]}/>
 }
 
 export function CardViewer() {
