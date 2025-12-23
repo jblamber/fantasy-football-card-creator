@@ -215,7 +215,9 @@ export async function renderCard(
 
         // Footer
         ctx.font = opts.fonts.footerFont;
-        fillText(ctx, data.footer, 365, 1500);
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        fillText(ctx, data.footer, 595, 1500);
 
         // Body text, dynamic wrapping and size scaling similar to original
         const yStart = data.playerType === 'star' ? 670 : 1020;
