@@ -9,7 +9,7 @@
     "preview": "node_modules/.bin/vite preview"
   },
   "simple-git-hooks": {
-    "pre-commit": "npx pretty-quick --staged" // or "npx pretty-quick --staged"
+    "pre-commit": "npx pretty-quick --staged"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
