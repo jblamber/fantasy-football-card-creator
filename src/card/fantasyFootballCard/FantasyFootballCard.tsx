@@ -64,7 +64,7 @@ export default function FantasyFootballCard({
     const ref = useRef<HTMLCanvasElement | null>(null);
     const [lenticular, setLenticular] = useState({x: 0, y: 0})
 
-    let url = "data:image/gif;base64,R0lGODl...";
+    console.log({imagery})
 
 
     const bloodBowlCardDefaultAssets: Promise<ImageAssets> = useMemo(async () => {
@@ -100,7 +100,8 @@ export default function FantasyFootballCard({
     }, [])
 
     const data: FantasyFootballCardData = useMemo(() => {
-        const url = imagery?.lenticularUrls?.get(lenticular.x.toString())
+        const url = imagery?.lenticularUrls[lenticular.x.toString()]
+        console.debug({url, x: lenticular.x.toString(), imagery, playerData})
         return {
             ...playerData,
             imageProperties: imagery?.imageProperties,
@@ -125,7 +126,7 @@ export default function FantasyFootballCard({
             supertype={supertype}
             showcase={false}
             onLenticularChange={(lenticularX: number) => setLenticular({x: lenticularX, y: 0})}
-            lenticularLength={imagery?.lenticularUrls?.size ?? 0}
+            lenticularLength={Object.keys(imagery?.lenticularUrls?.size || {}).length ?? 0}
             onSwipe={onSwipe}
             className={className}
         >

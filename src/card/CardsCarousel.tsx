@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from "react";
 import FantasyFootballCard from "./fantasyFootballCard/FantasyFootballCard";
 
-export function CardsViewport({cards}: { cards: any[] }) {
+export function CardsCarousel({cards}: { cards: any[] }) {
     const [index, setIndex] = useState(0);
     const next = useCallback(() => setIndex(i => (i + 1) % cards.length), [cards.length]);
     const prev = useCallback(() => setIndex(i => (i - 1 + cards.length) % cards.length), [cards.length]);

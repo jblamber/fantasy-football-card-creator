@@ -58,7 +58,7 @@ export function CardCreator() {
         playerData: emptyPlayer,
         imagery: {
             imageProperties: {offsetX: 0, offsetY: 0, scalePercent: 100},
-            lenticularUrls: new Map([['0', '/img/players/grail1.png']])
+            lenticularUrls: {'0': '/img/players/grail1.png'}
         }
     }]);
     const [saving, setSaving] = useState(false);
@@ -69,7 +69,7 @@ export function CardCreator() {
         setCards(prev => [...prev, {
             rarity: 'common',
             playerData: {...emptyPlayer},
-            imagery: {imageProperties: {offsetX: 0, offsetY: 0, scalePercent: 100}, lenticularUrls: new Map()}
+            imagery: {imageProperties: {offsetX: 0, offsetY: 0, scalePercent: 100}, lenticularUrls: {}}
         }]);
     }, []);
 
@@ -97,20 +97,21 @@ export function CardCreator() {
     }, []);
 
     const updateLenticularUrl = useCallback((idx: number, key: string, url: string) => {
-        setCards(prev => prev.map((c, i) => i === idx ? {
-            ...c,
-            imagery: {...c.imagery, lenticularUrls: c.imagery.lenticularUrls.set(key, url)}
-        } : c));
+        setCards(prev => prev.map((c, i) => {
+            if (i===idx) {
+                c.imagery.lenticularUrls[key] = url
+            }
+            return c;
+        }))
     }, []);
 
-    const addLenticularUrl = useCallback((idx: number) => {
-        setCards(prev => prev.map((c, i) => i === idx ? {
-            ...c,
-            imagery: {
-                ...c.imagery,
-                lenticularUrls: c.imagery.lenticularUrls.set(`${c.imagery.lenticularUrls.size}`, '')
+    const addLenticularUrl = useCallback((idx: number, key: string) => {
+        setCards(prev => prev.map((c, i) => {
+            if (i===idx) {
+                c.imagery.lenticularUrls[key] = ''
             }
-        } : c));
+            return c;
+        }));
     }, []);
 
     const removeCard = useCallback((idx: number) => setCards(prev => prev.filter((_, i) => i !== idx)), []);
@@ -156,13 +157,13 @@ export function CardCreator() {
         }
     }, [cards]);
 
-    function cardForm(idx: number, c: FantasyFootballCardSerializable) {
+    function cardForm(cardDeckNo: number, c: FantasyFootballCardSerializable) {
 
-        return <div key={idx}
+        return <div key={cardDeckNo}
                     className="rounded-xl border border-neutral-700/70 bg-neutral-800/60 backdrop-blur-sm shadow-md p-4 mt-4">
             <div className="flex justify-between items-center">
-                <strong className="text-neutral-300 font-semibold">Card #{idx + 1}</strong>
-                <button onClick={() => removeCard(idx)}
+                <strong className="text-neutral-300 font-semibold">Card #{cardDeckNo + 1}</strong>
+                <button onClick={() => removeCard(cardDeckNo)}
                         className="bg-red-900 text-white border border-red-700 rounded-md px-2 py-1.5 hover:bg-red-800">Remove
                 </button>
 
@@ -174,54 +175,54 @@ export function CardCreator() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
                 <Field label="Rarity"><TextInput value={c.rarity}
-                                                 onChange={e => updateCard(idx, {rarity: e.target.value as CardRarity})}/></Field>
+                                                 onChange={e => updateCard(cardDeckNo, {rarity: e.target.value as CardRarity})}/></Field>
                 <Field label="Types (comma)"><TextInput value={(c.types as string) || ''}
-                                                        onChange={e => updateCard(idx, {types: e.target.value})}/></Field>
+                                                        onChange={e => updateCard(cardDeckNo, {types: e.target.value})}/></Field>
                 <Field label="Subtypes (comma)"><TextInput value={(c.subtypes as string) || ''}
-                                                           onChange={e => updateCard(idx, {subtypes: e.target.value})}/></Field>
+                                                           onChange={e => updateCard(cardDeckNo, {subtypes: e.target.value})}/></Field>
                 <Field label="Supertype"><TextInput value={c.supertype || ''}
-                                                    onChange={e => updateCard(idx, {supertype: e.target.value})}/></Field>
+                                                    onChange={e => updateCard(cardDeckNo, {supertype: e.target.value})}/></Field>
             </div>
             <h4 className="text-neutral-300 mt-4">Player</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 <Field label="Name"><TextInput value={c.playerData.cardName}
-                                               onChange={e => updatePlayer(idx, {cardName: e.target.value})}/></Field>
+                                               onChange={e => updatePlayer(cardDeckNo, {cardName: e.target.value})}/></Field>
                 <Field label="Team"><TextInput value={c.playerData.teamName}
-                                               onChange={e => updatePlayer(idx, {teamName: e.target.value})}/></Field>
+                                               onChange={e => updatePlayer(cardDeckNo, {teamName: e.target.value})}/></Field>
                 <Field label="Position"><TextInput value={c.playerData.positionName}
-                                                   onChange={e => updatePlayer(idx, {positionName: e.target.value})}/></Field>
+                                                   onChange={e => updatePlayer(cardDeckNo, {positionName: e.target.value})}/></Field>
                 <Field label="Type"><TextInput value={c.playerData.playerType}
-                                               onChange={e => updatePlayer(idx, {playerType: e.target.value as any})}/></Field>
+                                               onChange={e => updatePlayer(cardDeckNo, {playerType: e.target.value as any})}/></Field>
                 <Field label="MA"><TextInput value={c.playerData.ma}
-                                             onChange={e => updatePlayer(idx, {ma: e.target.value})}/></Field>
+                                             onChange={e => updatePlayer(cardDeckNo, {ma: e.target.value})}/></Field>
                 <Field label="ST"><TextInput value={c.playerData.st}
-                                             onChange={e => updatePlayer(idx, {st: e.target.value})}/></Field>
+                                             onChange={e => updatePlayer(cardDeckNo, {st: e.target.value})}/></Field>
                 <Field label="AG"><TextInput value={c.playerData.ag}
-                                             onChange={e => updatePlayer(idx, {ag: e.target.value})}/></Field>
+                                             onChange={e => updatePlayer(cardDeckNo, {ag: e.target.value})}/></Field>
                 <Field label="PA"><TextInput value={c.playerData.pa}
-                                             onChange={e => updatePlayer(idx, {pa: e.target.value})}/></Field>
+                                             onChange={e => updatePlayer(cardDeckNo, {pa: e.target.value})}/></Field>
                 <Field label="AV"><TextInput value={c.playerData.av}
-                                             onChange={e => updatePlayer(idx, {av: e.target.value})}/></Field>
+                                             onChange={e => updatePlayer(cardDeckNo, {av: e.target.value})}/></Field>
                 <Field label="Cost"><TextInput value={c.playerData.cost}
-                                               onChange={e => updatePlayer(idx, {cost: e.target.value})}/></Field>
+                                               onChange={e => updatePlayer(cardDeckNo, {cost: e.target.value})}/></Field>
                 <Field label="Primary"><TextInput value={c.playerData.primary}
-                                                  onChange={e => updatePlayer(idx, {primary: e.target.value})}/></Field>
+                                                  onChange={e => updatePlayer(cardDeckNo, {primary: e.target.value})}/></Field>
                 <Field label="Secondary"><TextInput value={c.playerData.secondary}
-                                                    onChange={e => updatePlayer(idx, {secondary: e.target.value})}/></Field>
+                                                    onChange={e => updatePlayer(cardDeckNo, {secondary: e.target.value})}/></Field>
                 <Field label="Footer"><TextInput value={c.playerData.footer}
-                                                 onChange={e => updatePlayer(idx, {footer: e.target.value})}/></Field>
+                                                 onChange={e => updatePlayer(cardDeckNo, {footer: e.target.value})}/></Field>
                 <Field label="Skills & Traits"><TextArea rows={3} value={c.playerData.skillsAndTraits}
-                                                         onChange={e => updatePlayer(idx, {skillsAndTraits: e.target.value})}/></Field>
+                                                         onChange={e => updatePlayer(cardDeckNo, {skillsAndTraits: e.target.value})}/></Field>
             </div>
             <h4 className="text-neutral-300 mt-4">Imagery</h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                 <Field label="Offset X"><TextInput type="number" value={c.imagery.imageProperties.offsetX}
-                                                   onChange={e => updateImageProps(idx, {offsetX: Number(e.target.value)})}/></Field>
+                                                   onChange={e => updateImageProps(cardDeckNo, {offsetX: Number(e.target.value)})}/></Field>
                 <Field label="Offset Y"><TextInput type="number" value={c.imagery.imageProperties.offsetY}
-                                                   onChange={e => updateImageProps(idx, {offsetY: Number(e.target.value)})}/></Field>
+                                                   onChange={e => updateImageProps(cardDeckNo, {offsetY: Number(e.target.value)})}/></Field>
                 <Field label="Scale %"><TextInput type="number"
                                                   value={c.imagery.imageProperties.scalePercent}
-                                                  onChange={e => updateImageProps(idx, {scalePercent: Number(e.target.value)})}/></Field>
+                                                  onChange={e => updateImageProps(cardDeckNo, {scalePercent: Number(e.target.value)})}/></Field>
             </div>
             <div>
                 <div className="flex justify-between items-center mt-2">
@@ -232,12 +233,12 @@ export function CardCreator() {
                     </button>*/}
                 </div>
                 <div className="grid gap-2 mt-2">
-                    {Array.from(c.imagery.lenticularUrls.entries()).map((u, j) => (
+                    {Object.keys(c.imagery.lenticularUrls).map((u, j) => (
                         <div>
                             {/* <TextInput key={j} placeholder={`Index`} value={u[0]}
                                        onChange={e => {}}/>*/}
-                            <TextInput key={j} placeholder={`Image URL ${j + 1}`} value={u[1]}
-                                       onChange={e => updateLenticularUrl(idx, u[0], e.target.value)}/>
+                            <TextInput key={j} placeholder={`Image URL ${j + 1}`} value={c.imagery.lenticularUrls[u]}
+                                       onChange={e => updateLenticularUrl(cardDeckNo, u[0], e.target.value)}/>
                             {/* <button onClick={() => {}}
                                     className="bg-red-900 text-white border border-red-700 rounded-md px-2 py-1.5 hover:bg-red-800">Remove
                             </button>*/}

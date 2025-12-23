@@ -18,11 +18,12 @@ export function parseQuery(search: string) {
 }
 
 export function mapToRuntime(card: FantasyFootballCardSerializable) {
+    console.log({card})
     return {
         ...card,
         imagery: {
             imageProperties: card.imagery.imageProperties,
-            lenticularImages: new Map(card.imagery.lenticularUrls.map((u, i) => [String(i), u]))
+            lenticularUrls: card.imagery.lenticularUrls
         }
     };
 }

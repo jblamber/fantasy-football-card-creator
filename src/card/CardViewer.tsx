@@ -3,7 +3,7 @@ import {AnyPayload} from "../types";
 import React, {useEffect, useMemo, useState} from "react";
 import {loadSet} from "../services/backend";
 import {mapToRuntime, parseQuery, useHashRoute} from "../utils/UseHashRoute";
-import {CardsViewport} from "./CardsViewport";
+import {CardsCarousel} from "./CardsCarousel";
 import {CardRarity, PlayerType} from "./fantasyFootballCard/FantasyFootballCard";
 
 
@@ -20,7 +20,7 @@ function DefaultViewer() {
         },
         imagery: {
             imageProperties: {offsetX: -60, offsetY: 0, scalePercent: 150},
-            lenticularImages: new Map<string, string>([["0", "/img/players/grail1.png"]])
+            lenticularUrls: {"0": "/img/players/grail1.png"}
         },
         types: "fire"
     }), []);
@@ -37,7 +37,7 @@ function DefaultViewer() {
         },
         imagery: {
             imageProperties: {offsetX: -50, offsetY: 0, scalePercent: 150},
-            lenticularImages: new Map<string, string>([["0", "/img/players/grail2.png"]])
+            lenticularUrls: {"0": "/img/players/grail2.png"}
         },
         types: "electric"
     }), []);
@@ -54,12 +54,12 @@ function DefaultViewer() {
         },
         imagery: {
             imageProperties: {offsetX: 0, offsetY: 0, scalePercent: 150},
-            lenticularImages: new Map<string, string>([["0", "/img/players/thrower1.png"]])
+            lenticularUrls: {"0": "/img/players/thrower1.png"}
         },
         types: "water"
     }), []);
 
-    return <CardsViewport cards={[grailKnightA, grailKnightB, thrower1]}/>
+    return <CardsCarousel cards={[grailKnightA, grailKnightB, thrower1]}/>
 }
 
 export function CardViewer() {
@@ -67,19 +67,6 @@ export function CardViewer() {
     const [, routeAndQuery] = hash.split('#');
     const [route, queryString] = (routeAndQuery || '/viewer').split('?');
     const q = parseQuery(queryString || '');
-
-    // support ?d= for base64 data immediately
-    if (q.d) {
-        try {
-            const payload = base64UrlDecode<AnyPayload>(q.d);
-            if (payload && (payload as any).v === 1) {
-                const cards = (payload as AnyPayload).cards.map(mapToRuntime);
-                return <CardsViewport cards={cards}/>
-            }
-        } catch (e) {
-            // fallthrough to backend or default
-        }
-    }
 
     // support ?s= shortcode via backend
     const [loaded, setLoaded] = useState<{ ok: boolean; cards?: any[] } | null>(null);
@@ -108,9 +95,24 @@ export function CardViewer() {
         };
     }, [q.s]);
 
+    // support ?d= for base64 data
+    if (q.d) {
+        try {
+            const payload = base64UrlDecode<AnyPayload>(q.d);
+            console.log({payload})
+            if (payload && (payload as any).v === 1) {
+                const cards = (payload as AnyPayload).cards.map(mapToRuntime);
+                return <CardsCarousel cards={cards}/>
+            }
+        } catch (e) {
+            // fallthrough to backend or default
+            console.error(e);
+        }
+    }
+
     if (q.s) {
         if (!loaded) return <div className="text-white p-4">Loading…</div>;
-        if (loaded.ok && loaded.cards) return <CardsViewport cards={loaded.cards}/>;
+        if (loaded.ok && loaded.cards) return <CardsCarousel cards={loaded.cards}/>;
     }
 
     return <DefaultViewer/>

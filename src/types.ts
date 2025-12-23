@@ -1,5 +1,5 @@
 import {CardRarity, PlayerType} from "./card/fantasyFootballCard/FantasyFootballCard";
-import {FantasyFootballCardData, StatValue} from "./card/fantasyFootballCard/fantasyFootballRender";
+import {StatValue} from "./card/fantasyFootballCard/fantasyFootballRender";
 
 
 export interface ImageProperties {
@@ -41,7 +41,7 @@ export interface FantasyFootballCardSerializable {
     playerData: FantasyFootballPlayerData;
     imagery: {
         imageProperties: ImageProperties;
-        lenticularUrls: Map<string, string>; // serialized as array; viewer will convert to Map
+        lenticularUrls: { [key: string]: string;} // 0: url, 1: url etc...
     }
 }
 
