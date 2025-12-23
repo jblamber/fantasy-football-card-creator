@@ -4,7 +4,7 @@ import React, {useEffect, useMemo, useState} from "react";
 import {loadSet} from "../services/backend";
 import {mapToRuntime, parseQuery, useHashRoute} from "../utils/UseHashRoute";
 import {CardsViewport} from "./CardsViewport";
-import {CardRarity, PlayerType} from "../bloodbowl/FantasyFootballCard";
+import {CardRarity, PlayerType} from "./fantasyFootballCard/FantasyFootballCard";
 
 
 function DefaultViewer() {

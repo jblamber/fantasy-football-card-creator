@@ -25,6 +25,8 @@
   Tailwind friendly: apply classes to the wrapping elements; this renderer only draws on canvas.
 */
 
+import {FantasyFootballPlayerData} from "../../types";
+
 export type StatValue = string | number; // e.g., "3+" or 4
 
 export interface ModelImageProperties {
@@ -33,33 +35,9 @@ export interface ModelImageProperties {
   scalePercent: number; // 100 = 1.0
 }
 
-export interface CardData {
-  // Visual frame variants
-  playerType: 'normal' | 'star';
+export interface FantasyFootballCardData extends FantasyFootballPlayerData {
+
   removeBorder?: boolean;
-
-  // Text fields
-  cardName: string; // large top text
-  teamName: string; // under name
-  footer: string; // bottom small
-  skillsAndTraits: string; // main body text block
-  positionName?: string; // position label (non-star only)
-  cost: string;
-
-  // Development strings (already joined, to keep module focused on rendering only)
-  primary?: string; // comma-separated
-  secondary?: string; // comma-separated
-
-  // Star-only extra fields
-  playsFor?: string;
-  specialRules?: string;
-
-  // Stats
-  ma: StatValue;
-  st: StatValue;
-  ag: StatValue;
-  pa: StatValue;
-  av: StatValue;
 
   // Player image
   imageUrl?: string; // optional; you can alternatively pass a preloaded image in assets
@@ -136,7 +114,7 @@ export const defaultOptions: Required<RenderOptions<Required<FontOptions>, Requi
 
 export async function renderCard(
   ctx: CanvasRenderingContext2D,
-  data: CardData,
+  data: FantasyFootballCardData,
   assets: ImageAssets,
   opts: AllOptions
 ): Promise<void> {

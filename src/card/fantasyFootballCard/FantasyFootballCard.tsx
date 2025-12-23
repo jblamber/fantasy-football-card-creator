@@ -1,35 +1,20 @@
-import { HoloCard } from "../card";
+import { HoloCard } from "../index";
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { CardData, defaultOptions, ImageAssets, renderCard } from "./blood-bowl-render";
+import { FantasyFootballCardData, defaultOptions, ImageAssets, renderCard } from "./fantasyFootballRender";
+import {FantasyFootballCardSerializable, FantasyFootballPlayerData} from "../../types";
 
 export type PlayerType = 'normal' | 'star';
 
-interface FantasyFootballCardProps {
-  rarity: CardRarity;
+interface FantasyFootballCardProps extends FantasyFootballCardSerializable{
+    className?: string;
+    /*rarity: CardRarity;
+  className?: string;
   set?: string;
   types?: string | string[];
-  subtypes?: string | string[];
+  subtypes?: string | string[];*/
   supertype?: string;
   onSwipe?: (direction: 'left' | 'right') => void;
-
-  playerData: {
-    number?: string,
-    ag: string,
-    av: string,
-    ma: string,
-    pa: string,
-    playerType: PlayerType,
-    st: string,
-    teamName: string,
-    cost: string,
-    cardName: string,
-    skillsAndTraits: string,
-    positionName: string,
-    primary: string,
-    secondary: string,
-    footer: string,
-  },
-
+  /*playerData: FantasyFootballPlayerData,
   imagery: {
     lenticularImages?: Map<string, string>
     imageProperties: {
@@ -37,7 +22,7 @@ interface FantasyFootballCardProps {
       offsetY: number, // px
       scalePercent: number
     },
-  }
+  }*/
 
 }
 
@@ -66,9 +51,10 @@ async function loadImage(url: string) {
 
 export default function FantasyFootballCard({
                                         playerData,
+                                        className="",
                                         rarity,
                                         imagery,
-                                        set,
+                                        //set,
                                         types,
                                         subtypes,
                                         supertype,
@@ -113,14 +99,14 @@ export default function FantasyFootballCard({
     }
   }, [])
 
-  const data: CardData = useMemo(()=> {
-    const url = imagery?.lenticularImages?.get(lenticular.x.toString())
+  const data: FantasyFootballCardData = useMemo(()=> {
+    const url = imagery?.lenticularUrls?.get(lenticular.x.toString())
     return {
       ...playerData,
       imageProperties: imagery?.imageProperties,
       imageUrl: url,
     }
-  },[lenticular.x, lenticular.y, imagery?.lenticularImages]);
+  },[lenticular.x, lenticular.y, imagery, playerData]);
 
   useEffect(() => {
     const canvas = ref.current!;
@@ -133,14 +119,15 @@ export default function FantasyFootballCard({
   return (
     <HoloCard
       rarity={rarity as CardRarity}
-      set={set}
+      set={""}
       types={types}
       subtypes={subtypes}
       supertype={supertype}
       showcase={false}
       onLenticularChange={(lenticularX: number) => setLenticular({x:lenticularX, y:0})}
-      lenticularLength={imagery?.lenticularImages?.size ?? 0}
+      lenticularLength={imagery?.lenticularUrls?.size ?? 0}
       onSwipe={onSwipe}
+      className={className}
     >
       <canvas ref={ref} width={822} height={1122} style={{ width: '100%', height: 'auto', display: 'block' }} />
     </HoloCard>

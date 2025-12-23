@@ -1,9 +1,10 @@
-import {CardSerializable, type CardSetPayloadV1, PlayerData} from "../types";
+import {FantasyFootballCardSerializable, type CardSetPayloadV1, FantasyFootballPlayerData} from "../types";
 import React, {useCallback, useState} from "react";
 import {isSignedIn, signIn, signOut} from "../services/auth";
 import {base64UrlEncode} from "../utils/codec";
 import {saveSet} from "../services/backend";
-import {CardRarity} from "../bloodbowl/FantasyFootballCard";
+import FantasyFootballCard, {CardRarity} from "./fantasyFootballCard/FantasyFootballCard";
+import {FantasyFootballCardData} from "./fantasyFootballCard/fantasyFootballRender";
 
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
@@ -36,7 +37,7 @@ function TextArea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
 }
 
 export function CardCreator() {
-    const emptyPlayer: PlayerData = {
+    const emptyPlayer: FantasyFootballPlayerData = {
         ag: '',
         av: '',
         ma: '',
@@ -52,12 +53,12 @@ export function CardCreator() {
         secondary: '',
         footer: ''
     };
-    const [cards, setCards] = useState<CardSerializable[]>([{
+    const [cards, setCards] = useState<FantasyFootballCardSerializable[]>([{
         rarity: 'common',
         playerData: emptyPlayer,
         imagery: {
             imageProperties: {offsetX: 0, offsetY: 0, scalePercent: 100},
-            lenticularUrls: ['/img/players/grail1.png']
+            lenticularUrls: new Map([['0','/img/players/grail1.png']])
         }
     }]);
     const [saving, setSaving] = useState(false);
@@ -68,11 +69,11 @@ export function CardCreator() {
         setCards(prev => [...prev, {
             rarity: 'common',
             playerData: {...emptyPlayer},
-            imagery: {imageProperties: {offsetX: 0, offsetY: 0, scalePercent: 100}, lenticularUrls: []}
+            imagery: {imageProperties: {offsetX: 0, offsetY: 0, scalePercent: 100}, lenticularUrls: new Map()}
         }]);
     }, []);
 
-    const updateCard = useCallback((idx: number, patch: Partial<CardSerializable>) => {
+    const updateCard = useCallback((idx: number, patch: Partial<FantasyFootballCardSerializable>) => {
         setCards(prev => prev.map((c, i) => i === idx ? {
             ...c, ...patch,
             playerData: {...c.playerData, ...(patch as any).playerData},
@@ -80,7 +81,7 @@ export function CardCreator() {
         } : c));
     }, []);
 
-    const updatePlayer = useCallback((idx: number, patch: Partial<PlayerData>) => {
+    const updatePlayer = useCallback((idx: number, patch: Partial<FantasyFootballCardData>) => {
         setCards(prev => prev.map((c, i) => i === idx ? {...c, playerData: {...c.playerData, ...patch}} : c));
     }, []);
 
@@ -95,17 +96,17 @@ export function CardCreator() {
         } : c));
     }, []);
 
-    const updateLenticularUrl = useCallback((idx: number, urlIdx: number, url: string) => {
+    const updateLenticularUrl = useCallback((idx: number, key: string, url: string) => {
         setCards(prev => prev.map((c, i) => i === idx ? {
             ...c,
-            imagery: {...c.imagery, lenticularUrls: c.imagery.lenticularUrls.map((u, j) => j === urlIdx ? url : u)}
+            imagery: {...c.imagery, lenticularUrls: c.imagery.lenticularUrls.set(key, url)}
         } : c));
     }, []);
 
     const addLenticularUrl = useCallback((idx: number) => {
         setCards(prev => prev.map((c, i) => i === idx ? {
             ...c,
-            imagery: {...c.imagery, lenticularUrls: [...c.imagery.lenticularUrls, '']}
+            imagery: {...c.imagery, lenticularUrls: c.imagery.lenticularUrls.set(`${c.imagery.lenticularUrls.size}`, '')}
         } : c));
     }, []);
 
@@ -117,7 +118,7 @@ export function CardCreator() {
         const url = `${window.location.origin}${window.location.pathname}#/viewer?d=${d}`;
         navigator.clipboard?.writeText(url).catch(() => {
         });
-        alert(`Viewer link copied to clipboard:\n${url}`);
+        alert(`Link copied to clipboard:\n`);
     }, [cards]);
 
     const handleSignIn = useCallback(async () => {
@@ -152,6 +153,99 @@ export function CardCreator() {
         }
     }, [cards]);
 
+    function cardForm(idx: number, c: FantasyFootballCardSerializable) {
+
+        return <div key={idx}
+                    className="rounded-xl border border-neutral-700/70 bg-neutral-800/60 backdrop-blur-sm shadow-md p-4 mt-4">
+            <div className="flex justify-between items-center">
+                <strong className="text-neutral-300 font-semibold">Card #{idx + 1}</strong>
+                <button onClick={() => removeCard(idx)}
+                        className="bg-red-900 text-white border border-red-700 rounded-md px-2 py-1.5 hover:bg-red-800">Remove
+                </button>
+
+            </div>
+            <div className="justify-between items-center grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                <FantasyFootballCard
+                    {...c}
+                />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+                <Field label="Rarity"><TextInput value={c.rarity}
+                                                 onChange={e => updateCard(idx, {rarity: e.target.value as CardRarity})}/></Field>
+                <Field label="Types (comma)"><TextInput value={(c.types as string) || ''}
+                                                        onChange={e => updateCard(idx, {types: e.target.value})}/></Field>
+                <Field label="Subtypes (comma)"><TextInput value={(c.subtypes as string) || ''}
+                                                           onChange={e => updateCard(idx, {subtypes: e.target.value})}/></Field>
+                <Field label="Supertype"><TextInput value={c.supertype || ''}
+                                                    onChange={e => updateCard(idx, {supertype: e.target.value})}/></Field>
+            </div>
+            <h4 className="text-neutral-300 mt-4">Player</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                <Field label="Name"><TextInput value={c.playerData.cardName}
+                                               onChange={e => updatePlayer(idx, {cardName: e.target.value})}/></Field>
+                <Field label="Team"><TextInput value={c.playerData.teamName}
+                                               onChange={e => updatePlayer(idx, {teamName: e.target.value})}/></Field>
+                <Field label="Position"><TextInput value={c.playerData.positionName}
+                                                   onChange={e => updatePlayer(idx, {positionName: e.target.value})}/></Field>
+                <Field label="Type"><TextInput value={c.playerData.playerType}
+                                               onChange={e => updatePlayer(idx, {playerType: e.target.value as any})}/></Field>
+                <Field label="MA"><TextInput value={c.playerData.ma}
+                                             onChange={e => updatePlayer(idx, {ma: e.target.value})}/></Field>
+                <Field label="ST"><TextInput value={c.playerData.st}
+                                             onChange={e => updatePlayer(idx, {st: e.target.value})}/></Field>
+                <Field label="AG"><TextInput value={c.playerData.ag}
+                                             onChange={e => updatePlayer(idx, {ag: e.target.value})}/></Field>
+                <Field label="PA"><TextInput value={c.playerData.pa}
+                                             onChange={e => updatePlayer(idx, {pa: e.target.value})}/></Field>
+                <Field label="AV"><TextInput value={c.playerData.av}
+                                             onChange={e => updatePlayer(idx, {av: e.target.value})}/></Field>
+                <Field label="Cost"><TextInput value={c.playerData.cost}
+                                               onChange={e => updatePlayer(idx, {cost: e.target.value})}/></Field>
+                <Field label="Primary"><TextInput value={c.playerData.primary}
+                                                  onChange={e => updatePlayer(idx, {primary: e.target.value})}/></Field>
+                <Field label="Secondary"><TextInput value={c.playerData.secondary}
+                                                    onChange={e => updatePlayer(idx, {secondary: e.target.value})}/></Field>
+                <Field label="Footer"><TextInput value={c.playerData.footer}
+                                                 onChange={e => updatePlayer(idx, {footer: e.target.value})}/></Field>
+                <Field label="Skills & Traits"><TextArea rows={3} value={c.playerData.skillsAndTraits}
+                                                         onChange={e => updatePlayer(idx, {skillsAndTraits: e.target.value})}/></Field>
+            </div>
+            <h4 className="text-neutral-300 mt-4">Imagery</h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <Field label="Offset X"><TextInput type="number" value={c.imagery.imageProperties.offsetX}
+                                                   onChange={e => updateImageProps(idx, {offsetX: Number(e.target.value)})}/></Field>
+                <Field label="Offset Y"><TextInput type="number" value={c.imagery.imageProperties.offsetY}
+                                                   onChange={e => updateImageProps(idx, {offsetY: Number(e.target.value)})}/></Field>
+                <Field label="Scale %"><TextInput type="number"
+                                                  value={c.imagery.imageProperties.scalePercent}
+                                                  onChange={e => updateImageProps(idx, {scalePercent: Number(e.target.value)})}/></Field>
+            </div>
+            <div>
+                <div className="flex justify-between items-center mt-2">
+                    <span className="text-neutral-400">Card Images</span>
+                    {/*<button onClick={() => addLenticularUrl(idx)}
+                            className="bg-green-900 text-white border border-green-700 rounded-md px-2 py-1.5 hover:bg-green-800">Add
+                        URL
+                    </button>*/}
+                </div>
+                <div className="grid gap-2 mt-2">
+                    {Array.from(c.imagery.lenticularUrls.entries()).map((u, j) => (
+                        <div>
+                       {/* <TextInput key={j} placeholder={`Index`} value={u[0]}
+                                       onChange={e => {}}/>*/}
+                        <TextInput key={j} placeholder={`Image URL ${j + 1}`} value={u[1]}
+                                   onChange={e => updateLenticularUrl(idx, u[0], e.target.value)}/>
+                           {/* <button onClick={() => {}}
+                                    className="bg-red-900 text-white border border-red-700 rounded-md px-2 py-1.5 hover:bg-red-800">Remove
+                            </button>*/}
+
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>;
+    }
+
     return (
         <div className="pt-12 px-3 md:px-4 pb-28">
             <div className="max-w-[900px] mx-auto space-y-4">
@@ -161,83 +255,7 @@ export function CardCreator() {
                     <p className="text-neutral-300 text-sm mt-1">Build one or more cards, then generate a share link or
                         save a shortcode. All fields are optional unless your card art requires specific properties.</p>
                 </div>
-                {cards.map((c, idx) => (
-                    <div key={idx}
-                         className="rounded-xl border border-neutral-700/70 bg-neutral-800/60 backdrop-blur-sm shadow-md p-4 mt-4">
-                        <div className="flex justify-between items-center">
-                            <strong className="text-neutral-300 font-semibold">Card #{idx + 1}</strong>
-                            <button onClick={() => removeCard(idx)}
-                                    className="bg-red-900 text-white border border-red-700 rounded-md px-2 py-1.5 hover:bg-red-800">Remove
-                            </button>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
-                            <Field label="Rarity"><TextInput value={c.rarity}
-                                                             onChange={e => updateCard(idx, {rarity: e.target.value as CardRarity})}/></Field>
-                            <Field label="Types (comma)"><TextInput value={(c.types as string) || ''}
-                                                                    onChange={e => updateCard(idx, {types: e.target.value})}/></Field>
-                            <Field label="Subtypes (comma)"><TextInput value={(c.subtypes as string) || ''}
-                                                                       onChange={e => updateCard(idx, {subtypes: e.target.value})}/></Field>
-                            <Field label="Supertype"><TextInput value={c.supertype || ''}
-                                                                onChange={e => updateCard(idx, {supertype: e.target.value})}/></Field>
-                        </div>
-                        <h4 className="text-neutral-300 mt-4">Player</h4>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                            <Field label="Name"><TextInput value={c.playerData.cardName}
-                                                           onChange={e => updatePlayer(idx, {cardName: e.target.value})}/></Field>
-                            <Field label="Team"><TextInput value={c.playerData.teamName}
-                                                           onChange={e => updatePlayer(idx, {teamName: e.target.value})}/></Field>
-                            <Field label="Position"><TextInput value={c.playerData.positionName}
-                                                               onChange={e => updatePlayer(idx, {positionName: e.target.value})}/></Field>
-                            <Field label="Type"><TextInput value={c.playerData.playerType}
-                                                           onChange={e => updatePlayer(idx, {playerType: e.target.value as any})}/></Field>
-                            <Field label="MA"><TextInput value={c.playerData.ma}
-                                                         onChange={e => updatePlayer(idx, {ma: e.target.value})}/></Field>
-                            <Field label="ST"><TextInput value={c.playerData.st}
-                                                         onChange={e => updatePlayer(idx, {st: e.target.value})}/></Field>
-                            <Field label="AG"><TextInput value={c.playerData.ag}
-                                                         onChange={e => updatePlayer(idx, {ag: e.target.value})}/></Field>
-                            <Field label="PA"><TextInput value={c.playerData.pa}
-                                                         onChange={e => updatePlayer(idx, {pa: e.target.value})}/></Field>
-                            <Field label="AV"><TextInput value={c.playerData.av}
-                                                         onChange={e => updatePlayer(idx, {av: e.target.value})}/></Field>
-                            <Field label="Cost"><TextInput value={c.playerData.cost}
-                                                           onChange={e => updatePlayer(idx, {cost: e.target.value})}/></Field>
-                            <Field label="Primary"><TextInput value={c.playerData.primary}
-                                                              onChange={e => updatePlayer(idx, {primary: e.target.value})}/></Field>
-                            <Field label="Secondary"><TextInput value={c.playerData.secondary}
-                                                                onChange={e => updatePlayer(idx, {secondary: e.target.value})}/></Field>
-                            <Field label="Footer"><TextInput value={c.playerData.footer}
-                                                             onChange={e => updatePlayer(idx, {footer: e.target.value})}/></Field>
-                            <Field label="Skills & Traits"><TextArea rows={3} value={c.playerData.skillsAndTraits}
-                                                                     onChange={e => updatePlayer(idx, {skillsAndTraits: e.target.value})}/></Field>
-                        </div>
-                        <h4 className="text-neutral-300 mt-4">Imagery</h4>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <Field label="Offset X"><TextInput type="number" value={c.imagery.imageProperties.offsetX}
-                                                               onChange={e => updateImageProps(idx, {offsetX: Number(e.target.value)})}/></Field>
-                            <Field label="Offset Y"><TextInput type="number" value={c.imagery.imageProperties.offsetY}
-                                                               onChange={e => updateImageProps(idx, {offsetY: Number(e.target.value)})}/></Field>
-                            <Field label="Scale %"><TextInput type="number"
-                                                              value={c.imagery.imageProperties.scalePercent}
-                                                              onChange={e => updateImageProps(idx, {scalePercent: Number(e.target.value)})}/></Field>
-                        </div>
-                        <div>
-                            <div className="flex justify-between items-center mt-2">
-                                <span className="text-neutral-400">Lenticular URLs</span>
-                                <button onClick={() => addLenticularUrl(idx)}
-                                        className="bg-green-900 text-white border border-green-700 rounded-md px-2 py-1.5 hover:bg-green-800">Add
-                                    URL
-                                </button>
-                            </div>
-                            <div className="grid gap-2 mt-2">
-                                {c.imagery.lenticularUrls.map((u, j) => (
-                                    <TextInput key={j} placeholder={`Image URL ${j + 1}`} value={u}
-                                               onChange={e => updateLenticularUrl(idx, j, e.target.value)}/>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                ))}
+                {cards.map((c, idx) => cardForm(idx, c))}
                 <div className="flex justify-between items-center gap-2 mt-4 flex-wrap">
                     <div className="flex gap-2">
                         <button onClick={addCard}

@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from "react";
-import FantasyFootballCard from "../bloodbowl/FantasyFootballCard";
+import FantasyFootballCard from "./fantasyFootballCard/FantasyFootballCard";
 
 export function CardsViewport({cards}: { cards: any[] }) {
     const [index, setIndex] = useState(0);

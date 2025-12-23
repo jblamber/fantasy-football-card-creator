@@ -295,8 +295,6 @@ export const TradingCard: React.FC<TradingCardProps> = ({
   const rarityStr = String(rarity).toLowerCase();
   const supertypeStr = String(supertype).toLowerCase();
 
-  //console.log({rx,ry})
-
   return (
     <div
       className={`card ${typesStr} interactive ${mask ? 'masked' : ''} ${foil ? 'foil' : ''} ${className || ''}`}
@@ -311,7 +309,7 @@ export const TradingCard: React.FC<TradingCardProps> = ({
       <div className="card__translater">
         <button
           className="card__rotator"
-          aria-label={`Pokemon Card; ${name || 'Unknown'}.`}
+          aria-label={`Trading Card; ${name || 'Unknown'}.`}
           tabIndex={0}
           ref={rotatorRef}
           style={{ touchAction: 'none', width: '100%', height: '100%' }}
@@ -354,19 +352,17 @@ export const TradingCard: React.FC<TradingCardProps> = ({
           <img
             className="card__back"
             src={back}
-            alt="The back of a Pokemon Card, a Pokeball in the center with Pokemon logo above and below"
-            loading="lazy"
-            width={660}
-            height={921}
+            alt={`The back of the ${name || 'Trading'} Card Card`}
+            width={822}
+            height={1122}
             style={{ width: '100%', height: 'auto', display: 'block' }}
           />
           <div className="card__front" ref={frontRef}>
             {img? (<img
               src={img}
-              alt={`Front design of the ${name || 'Pokemon'} Card, with the stats and info around the edge`}
-              loading="lazy"
-              width={660}
-              height={921}
+              alt={`Front design of the ${name || 'Trading'} Card, with the stats and info around the edge`}
+              width={822}
+              height={1122}
             />) : children}
             <div className="card__info">
               <span className="card__name"></span>

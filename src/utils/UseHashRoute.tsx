@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import {CardSerializable} from "../types";
+import {FantasyFootballCardSerializable} from "../types";
 
 export function useHashRoute() {
     const [hash, setHash] = useState<string>(window.location.hash || '#/viewer');
@@ -17,7 +17,7 @@ export function parseQuery(search: string) {
     return Object.fromEntries(params.entries());
 }
 
-export function mapToRuntime(card: CardSerializable) {
+export function mapToRuntime(card: FantasyFootballCardSerializable) {
     return {
         ...card,
         imagery: {
