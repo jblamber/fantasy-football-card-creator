@@ -99,7 +99,6 @@ export function CardViewer() {
     if (q.d) {
         try {
             const payload = base64UrlDecode<AnyPayload>(q.d);
-            console.log({payload})
             if (payload && (payload as any).v === 1) {
                 const cards = (payload as AnyPayload).cards.map(mapToRuntime);
                 return <CardsCarousel cards={cards}/>

@@ -64,8 +64,6 @@ export default function FantasyFootballCard({
     const ref = useRef<HTMLCanvasElement | null>(null);
     const [lenticular, setLenticular] = useState({x: 0, y: 0})
 
-    console.log({imagery})
-
 
     const bloodBowlCardDefaultAssets: Promise<ImageAssets> = useMemo(async () => {
 
@@ -101,7 +99,6 @@ export default function FantasyFootballCard({
 
     const data: FantasyFootballCardData = useMemo(() => {
         const url = imagery?.lenticularUrls[lenticular.x.toString()]
-        console.debug({url, x: lenticular.x.toString(), imagery, playerData})
         return {
             ...playerData,
             imageProperties: imagery?.imageProperties,
