@@ -26,7 +26,7 @@ export default function App() {
                     href="#"
                     className="text-white no-underline px-2.5 py-1.5 bg-neutral-800/80 title"
                 >
-                    HOLO-BUILDER
+                    MY HOLO CARD DECK
                     <div className="aurora">
                         <div className="aurora__item"></div>
                         <div className="aurora__item"></div>
