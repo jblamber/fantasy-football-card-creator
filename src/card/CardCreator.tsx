@@ -317,7 +317,7 @@ export function CardCreator() {
             <div className="max-w-[900px] mx-auto space-y-4">
                 <div
                     className="rounded-xl border border-neutral-700/60 bg-neutral-800/60 backdrop-blur-sm shadow-lg px-4 py-3">
-                    <h2 className="text-neutral-100 text-2xl font-semibold">Card Creator</h2>
+                    <h2 className="text-neutral-100 text-2xl font-semibold">Deck Creator</h2>
                     <p className="text-neutral-300 text-sm mt-1">Build one or more cards, then generate a share link or
                         save a shortcode. All fields are optional unless your card art requires specific properties.</p>
                 </div>
