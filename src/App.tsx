@@ -1,12 +1,21 @@
 import React from "react";
 import {CardCreator} from "./card/CardCreator";
 import {CardViewer} from "./card/CardViewer";
-import {useHashRoute} from "./utils/UseHashRoute";
+import {useHashRoute, parseQuery} from "./utils/UseHashRoute";
 
 export default function App() {
     const hash = useHashRoute();
     const [, routeAndQuery] = hash.split("#");
-    const [route] = (routeAndQuery || "/viewer").split("?");
+    const [route, queryString] = (routeAndQuery || "/viewer").split("?");
+    const q = parseQuery(queryString || "");
+    const hasActiveSet = (Boolean(q.d) || Boolean(q.s));
+
+    const remixHref = hasActiveSet ? `#/create?${queryString || ''}` : '#/create';
+    const remixLabel = hasActiveSet ? 'Remix' : 'Create';
+
+    const viewHref = route === '/create' && (Boolean(q.d) || Boolean(q.s))
+        ? `#/viewer?${queryString || ''}`
+        : '#/viewer';
 
     return (
         <div className="min-h-screen">
@@ -25,16 +34,16 @@ export default function App() {
                     </div>
                 </a>
                 <a
-                    href="#/viewer"
+                    href={viewHref}
                     className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20"
                 >
                     View
                 </a>
                 <a
-                    href="#/create"
+                    href={remixHref}
                     className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20"
                 >
-                    Create
+                    {remixLabel}
                 </a>
                 <a
                     href="https://github.com/jblamber/fantasy-football-card-creator"

@@ -1,10 +1,11 @@
-import {FantasyFootballCardSerializable, type CardSetPayloadV1, FantasyFootballPlayerData} from "../types";
-import React, {useCallback, useState} from "react";
+import {FantasyFootballCardSerializable, type CardSetPayloadV1, FantasyFootballPlayerData, AnyPayload} from "../types";
+import React, {useCallback, useEffect, useState} from "react";
 import {isSignedIn, signIn, signOut} from "../services/auth";
-import {base64UrlEncode} from "../utils/codec";
-import {saveSet} from "../services/backend";
+import {base64UrlEncode, base64UrlDecode} from "../utils/codec";
+import {saveSet, loadSet} from "../services/backend";
 import FantasyFootballCard, {CardRarity} from "./fantasyFootballCard/FantasyFootballCard";
 import {FantasyFootballCardData} from "./fantasyFootballCard/fantasyFootballRender";
+import {parseQuery, useHashRoute} from "../utils/UseHashRoute";
 
 
 function Field({label, children}: { label: string; children: React.ReactNode }) {
@@ -65,6 +66,72 @@ export function CardCreator() {
     const [saveError, setSaveError] = useState<string | null>(null);
     const [signedInState, setSignedInState] = useState<boolean>(isSignedIn());
 
+    // Remix support: if arriving on /create with ?d= or ?s=, preload those cards for editing
+    const hash = useHashRoute();
+    const [, routeAndQuery] = hash.split('#');
+    const [route, queryString] = (routeAndQuery || '/create').split('?');
+    const q = parseQuery(queryString || '');
+
+    useEffect(() => {
+        let cancelled = false;
+        async function loadFromQuery() {
+            try {
+                if (route !== '/create') return;
+                if (q.d) {
+                    const payload = base64UrlDecode<AnyPayload>(q.d);
+                    if ((payload as any)?.v === 1) {
+                        if (!cancelled) setCards((payload as AnyPayload).cards);
+                    }
+                } else if (q.s) {
+                    const {data} = await loadSet(q.s);
+                    const payload = base64UrlDecode<AnyPayload>(data);
+                    if ((payload as any)?.v === 1) {
+                        if (!cancelled) setCards((payload as AnyPayload).cards);
+                    }
+                }
+            } catch (e) {
+                // ignore and keep defaults
+                console.error('Failed to load remix set', e);
+            }
+        }
+        loadFromQuery();
+        return () => {
+            cancelled = true;
+        }
+    }, [route, q.d, q.s]);
+
+    // Keep the creator URL in-sync with the current cards so the View link can display them
+    // Debounced: wait 2s after the last change before updating the URL
+    useEffect(() => {
+        if (route !== '/create') return;
+        const timer = window.setTimeout(() => {
+            try {
+                const payload: CardSetPayloadV1 = {v: 1, cards};
+                const d = base64UrlEncode(payload);
+
+                // Parse existing params
+                const [, rq] = (window.location.hash || '#/create').split('#');
+                const [r, qs] = (rq || '/create').split('?');
+                const params = new URLSearchParams(qs || '');
+                const currentD = params.get('d') || '';
+
+                if (currentD !== d) {
+                    params.set('d', d);
+                    // remove backend shortcode to avoid ambiguity with live data edits
+                    params.delete('s');
+                    const newHash = `#/create?${params.toString()}`;
+                    const newUrl = `${window.location.pathname}${newHash}`;
+                    // Replace without adding history entries, and notify listeners
+                    history.replaceState(null, '', newUrl);
+                    window.dispatchEvent(new HashChangeEvent('hashchange'));
+                }
+            } catch (e) {
+                // no-op
+            }
+        }, 2000);
+        return () => window.clearTimeout(timer);
+    }, [cards, route]);
+
     const addCard = useCallback(() => {
         setCards(prev => [...prev, {
             rarity: 'common',
@@ -116,14 +183,6 @@ export function CardCreator() {
 
     const removeCard = useCallback((idx: number) => setCards(prev => prev.filter((_, i) => i !== idx)), []);
 
-    const generateLink = useCallback(() => {
-        const payload: CardSetPayloadV1 = {v: 1, cards};
-        const d = base64UrlEncode(payload);
-        const url = `${window.location.origin}${window.location.pathname}#/viewer?d=${d}`;
-        navigator.clipboard?.writeText(url).catch(() => {
-        });
-        alert(`Link copied to clipboard:\n`);
-    }, [cards]);
 
     const handleSignIn = useCallback(async () => {
         await signIn();
@@ -266,12 +325,12 @@ export function CardCreator() {
                                 className="bg-green-900 text-white border border-green-700 rounded-md px-3 py-2 hover:bg-green-800">Add
                             Card
                         </button>
-                        <button onClick={generateLink}
+                        {/*<button onClick={generateLink}
                                 className="bg-sky-900 text-white border border-sky-700 rounded-md px-3 py-2 hover:bg-sky-800">Generate
                             Viewer Link
-                        </button>
+                        </button>*/}
                     </div>
-                    <div className="flex gap-2 items-center">
+                   {/* <div className="flex gap-2 items-center">
                         <span className="text-neutral-400 text-xs">Backend save (optional)</span>
                         {signedInState ? (
                             <button onClick={handleSignOut}
@@ -284,7 +343,7 @@ export function CardCreator() {
                         )}
                         <button onClick={saveToBackend} disabled={!signedInState || saving}
                                 className="bg-green-900 text-white border border-green-700 rounded-md px-3 py-2 hover:bg-green-800 disabled:opacity-60 disabled:cursor-not-allowed">{saving ? 'Saving…' : 'Save & get shortcode'}</button>
-                    </div>
+                    </div>*/}
                 </div>
                 {saveError && <div className="text-rose-300 mt-2">Error: {saveError}</div>}
             </div>
@@ -296,16 +355,13 @@ export function CardCreator() {
                     <button onClick={addCard}
                             className="flex-1 bg-green-700 text-white border border-green-600 rounded-md px-3 py-2.5 text-sm font-medium shadow hover:bg-green-600 active:bg-green-700">Add
                     </button>
-                    <button onClick={generateLink}
-                            className="flex-1 bg-sky-700 text-white border border-sky-600 rounded-md px-3 py-2.5 text-sm font-medium shadow hover:bg-sky-600 active:bg-sky-700">Link
-                    </button>
-                    <button onClick={saveToBackend} disabled={!signedInState || saving}
+                    {/*<button onClick={saveToBackend} disabled={!signedInState || saving}
                             className="flex-1 bg-emerald-700 text-white border border-emerald-600 rounded-md px-3 py-2.5 text-sm font-medium shadow hover:bg-emerald-600 active:bg-emerald-700 disabled:opacity-60 disabled:cursor-not-allowed">{saving ? 'Saving…' : 'Save'}</button>
-                </div>
-                {!signedInState && (
+                */}</div>
+                {/*{!signedInState && (
                     <p className="max-w-[900px] mx-auto text-[11px] text-neutral-400 mt-1">Sign in above to enable
                         save.</p>
-                )}
+                )}*/}
             </div>
         </div>
     );
