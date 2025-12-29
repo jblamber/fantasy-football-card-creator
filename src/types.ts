@@ -14,6 +14,66 @@ export enum CardGlowType {
     darkness,
 }
 
+export const CardHoloTypes = [
+    {
+        rarity: "common",
+        label: "Basic"
+    },
+    {
+        rarity: "rare holo",
+        label: "Vertical Bars"
+    },
+    {
+        rarity: "rare holo v",
+        label: "Diagonal Shine"
+    },
+    {
+        rarity: "reverse holo",
+        label: "Reverse Diagonal Shine"
+    },
+    {
+        rarity: "rare secret",
+        label: "Crosshatch"
+    },
+    {
+        rarity: "rare shiny",
+        label: "Diagonal Shine Texture"
+    },
+    {
+        rarity: "rare shiny v",
+        label: "Diagonal Shine Texture 2"
+    },
+    {
+        rarity: "rare holo vmax",
+        trainer_gallery: true,
+        label: "Diagonal Shine Texture 3"
+    },
+    {
+        rarity: "rare holo vstar",
+        label: "Diagonal Shine Texture 4"
+    },
+    {
+        rarity: "rare shiny vmax",
+        label: "Ultra Shine"
+    },
+    {
+        rarity: "rare holo cosmos",
+        label: "Cosmic"
+    },
+    {
+        rarity: "radiant rare",
+        label: "Radiant Cross Glow"
+    },
+    {
+        rarity: "rare rainbow alt",
+        label: "Sparkle"
+    },
+    {
+        rarity: "rare rainbow",
+        label: "Texture"
+    },
+]
+
 export interface ImageProperties {
     offsetX: number; // px
     offsetY: number; // px

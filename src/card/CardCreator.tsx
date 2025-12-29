@@ -1,4 +1,7 @@
-import {FantasyFootballCardSerializable, type CardSetPayloadV1, FantasyFootballPlayerData, AnyPayload, CardGlowType} from "../types";
+import {
+    FantasyFootballCardSerializable, type CardSetPayloadV1, FantasyFootballPlayerData, AnyPayload, CardGlowType,
+    CardHoloTypes
+} from "../types";
 import React, {useCallback, useEffect, useState} from "react";
 import {isSignedIn, signIn, signOut} from "../services/auth";
 import {base64UrlEncode, base64UrlDecode} from "../utils/codec";
@@ -228,6 +231,8 @@ export function CardCreator() {
             ? (c.types[0] || '')
             : (typeof c.types === 'string' ? (c.types || '') : '');
         const selectedGlow = glowOptions.includes(currentTypesValue as string) ? (currentTypesValue as string) : '';
+        const selectedHolo = CardHoloTypes.find(t => t.rarity === c.rarity)?.rarity || "";
+        console.log({selectedHolo})
 
         return <div key={cardDeckNo}
                     className="rounded-xl border border-neutral-700/70 bg-neutral-800/60 backdrop-blur-sm shadow-md p-4 mt-4">
@@ -245,9 +250,21 @@ export function CardCreator() {
                 />
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
-                <Field label="Rarity"><TextInput value={c.rarity}
-                                                 onChange={e => updateCard(cardDeckNo, {rarity: e.target.value as CardRarity})}/></Field>
-                <Field label="Outer Glow">
+                <Field label="Holo Effect">
+                    <select
+                        className="px-2.5 py-2 rounded-md border border-neutral-700 bg-neutral-900 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500"
+                        value={selectedHolo}
+                        onChange={e => {
+                            const v = e.target.value;
+                            updateCard(cardDeckNo, {rarity: v as CardRarity})
+                        }}>
+                        <option value="">(none)</option>
+                        {CardHoloTypes.map((typ) => (
+                            <option key={typ.label} value={typ.rarity}>{typ.label}</option>
+                        ))}
+                    </select>
+                </Field>
+                <Field label="Glow Color">
                     <select
                         className="px-2.5 py-2 rounded-md border border-neutral-700 bg-neutral-900 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500"
                         value={selectedGlow}
@@ -255,7 +272,7 @@ export function CardCreator() {
                             const v = e.target.value;
                             updateCard(cardDeckNo, { types: v ? v : undefined });
                         }}>
-                        <option value="">(none)</option>
+                        <option value="">White</option>
                         {glowOptions.map((name) => (
                             <option key={name} value={name}>{name}</option>
                         ))}
@@ -274,8 +291,12 @@ export function CardCreator() {
                                                onChange={e => updatePlayer(cardDeckNo, {teamName: e.target.value})}/></Field>
                 <Field label="Position"><TextInput value={c.playerData.positionName}
                                                    onChange={e => updatePlayer(cardDeckNo, {positionName: e.target.value})}/></Field>
-                <Field label="Card Layout"><TextInput value={c.playerData.playerType}
+                {/*<Field label="Card Layout"><TextInput value={c.playerData.playerType}
                                                onChange={e => updatePlayer(cardDeckNo, {playerType: e.target.value as any})}/></Field>
+                */}
+            </div>
+            <h4 className="text-neutral-300 mt-4">Stats</h4>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 <Field label="MA"><TextInput value={c.playerData.ma}
                                              onChange={e => updatePlayer(cardDeckNo, {ma: e.target.value})}/></Field>
                 <Field label="ST"><TextInput value={c.playerData.st}
@@ -298,24 +319,16 @@ export function CardCreator() {
                                                          onChange={e => updatePlayer(cardDeckNo, {skillsAndTraits: e.target.value})}/></Field>
             </div>
             <h4 className="text-neutral-300 mt-4">Imagery</h4>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-                <Field label="Offset X"><TextInput type="number" value={c.imagery.imageProperties.offsetX}
-                                                   onChange={e => updateImageProps(cardDeckNo, {offsetX: Number(e.target.value)})}/></Field>
-                <Field label="Offset Y"><TextInput type="number" value={c.imagery.imageProperties.offsetY}
-                                                   onChange={e => updateImageProps(cardDeckNo, {offsetY: Number(e.target.value)})}/></Field>
-                <Field label="Scale %"><TextInput type="number"
-                                                  value={c.imagery.imageProperties.scalePercent}
-                                                  onChange={e => updateImageProps(cardDeckNo, {scalePercent: Number(e.target.value)})}/></Field>
-            </div>
             <div>
-                <div className="flex justify-between items-center mt-2">
-                    <span className="text-neutral-400">Card Images</span>
-                    {/*<button onClick={() => addLenticularUrl(idx)}
+              {/*  <div className="flex justify-between items-center mt-2">
+                    <span className="text-neutral-400">Card Image</span>
+                    <button onClick={() => addLenticularUrl(idx)}
                             className="bg-green-900 text-white border border-green-700 rounded-md px-2 py-1.5 hover:bg-green-800">Add
                         URL
-                    </button>*/}
-                </div>
+                    </button>
+                </div>*/}
                 <div className="grid gap-2 mt-2">
+                    <Field label="Url">
                     {Object.keys(c.imagery.lenticularUrls).map((u, j) => (
                         <div>
                             {/* <TextInput key={j} placeholder={`Index`} value={u[0]}
@@ -328,7 +341,17 @@ export function CardCreator() {
 
                         </div>
                     ))}
+                    </Field>
                 </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <Field label="Offset X"><TextInput type="number" value={c.imagery.imageProperties.offsetX}
+                                                   onChange={e => updateImageProps(cardDeckNo, {offsetX: Number(e.target.value)})}/></Field>
+                <Field label="Offset Y"><TextInput type="number" value={c.imagery.imageProperties.offsetY}
+                                                   onChange={e => updateImageProps(cardDeckNo, {offsetY: Number(e.target.value)})}/></Field>
+                <Field label="Scale %"><TextInput type="number"
+                                                  value={c.imagery.imageProperties.scalePercent}
+                                                  onChange={e => updateImageProps(cardDeckNo, {scalePercent: Number(e.target.value)})}/></Field>
             </div>
         </div>;
     }
