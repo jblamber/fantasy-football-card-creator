@@ -8,4 +8,3 @@ Feature Ideas
 - Have selectable card backs
 - Have selectable card fronts
 - Replace placeholder images with images from my team
-- Add some visual indicator about how large the deck is while swiping

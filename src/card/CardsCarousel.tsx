@@ -15,6 +15,16 @@ export function CardsCarousel({cards}: { cards: any[] }) {
         <section
             className="card-viewport h-screen flex p-1 justify-center [touch-action:manipulation]"
             onClick={onViewportClick}>
+            {/* Sticky index indicator top-right */}
+            <div
+                className="fixed top-2 right-2 z-20 rounded-md border border-neutral-700/80 bg-neutral-800/80 backdrop-blur px-2.5 py-1 text-white text-sm shadow-md select-none"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <span aria-label="Current card index">{index + 1}</span>
+                <span className="opacity-70"> / </span>
+                <span aria-label="Total cards">{cards.length}</span>
+            </div>
+
             <div onClick={(e) => e.stopPropagation()} style={{width: 'min(90vw, calc(90vh * 822 / 1122))'}}
                  className="aspect-[822/1122]">
                 <FantasyFootballCard
