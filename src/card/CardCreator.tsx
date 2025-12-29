@@ -9,7 +9,7 @@ import {saveSet, loadSet} from "../services/backend";
 import FantasyFootballCard, {CardRarity} from "./fantasyFootballCard/FantasyFootballCard";
 import {FantasyFootballCardData} from "./fantasyFootballCard/fantasyFootballRender";
 import {parseQuery, useHashRoute} from "../utils/UseHashRoute";
-import { TrashIcon } from '@heroicons/react/24/solid';
+import { TrashIcon, PlusIcon } from '@heroicons/react/24/solid';
 
 
 
@@ -369,8 +369,8 @@ export function CardCreator() {
                 <div className="flex justify-between items-center gap-2 mt-4 flex-wrap">
                     <div className="flex gap-2">
                         <button onClick={addCard}
-                                className="bg-green-900 text-white border border-green-700 rounded-md px-3 py-2 hover:bg-green-800">Add
-                            Card
+                                className="bg-green-900 text-white border border-green-700 rounded-md px-3 py-2 hover:bg-green-800">
+                            <PlusIcon className="h-4 w-4"/>
                         </button>
                         {/*<button onClick={generateLink}
                                 className="bg-sky-900 text-white border border-sky-700 rounded-md px-3 py-2 hover:bg-sky-800">Generate
