@@ -2,7 +2,7 @@ import {
     FantasyFootballCardSerializable, type CardSetPayloadV1, FantasyFootballPlayerData, AnyPayload, CardGlowType,
     CardHoloTypes
 } from "../types";
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {isSignedIn, signIn, signOut} from "../services/auth";
 import {base64UrlEncode, base64UrlDecode} from "../utils/codec";
 import {saveSet, loadSet} from "../services/backend";
@@ -10,6 +10,18 @@ import FantasyFootballCard, {CardRarity} from "./fantasyFootballCard/FantasyFoot
 import {FantasyFootballCardData} from "./fantasyFootballCard/fantasyFootballRender";
 import {parseQuery, useHashRoute} from "../utils/UseHashRoute";
 import { TrashIcon, PlusIcon } from '@heroicons/react/24/solid';
+import {
+    deleteDeck,
+    getCurrentDeckId,
+    getDeck,
+    listDecks,
+    nextUntitledName,
+    renameDeck as renameDeckLs,
+    saveDeck as saveDeckLs,
+    setCurrentDeckId
+} from "../services/localDecks";
+import {CloudArrowUpIcon} from "@heroicons/react/16/solid";
+import {toast} from "react-toastify";
 
 
 
@@ -71,6 +83,10 @@ export function CardCreator() {
     const [saveError, setSaveError] = useState<string | null>(null);
     const [signedInState, setSignedInState] = useState<boolean>(isSignedIn());
 
+    // Local deck identity for Creator
+    const [deckId, setDeckId] = useState<string | null>(getCurrentDeckId());
+    const [deckName, setDeckName] = useState<string>(() => getDeck(getCurrentDeckId() || undefined)?.name || '');
+
     // Available glow types (from enum)
     const glowOptions = Object.keys(CardGlowType).filter(k => isNaN(Number(k as any)));
 
@@ -82,27 +98,46 @@ export function CardCreator() {
 
     useEffect(() => {
         let cancelled = false;
-        async function loadFromQuery() {
+        async function loadFromQueryOrCurrentDeck() {
             try {
                 if (route !== '/create') return;
                 if (q.d) {
                     const payload = base64UrlDecode<AnyPayload>(q.d);
                     if ((payload as any)?.v === 1) {
                         if (!cancelled) setCards((payload as AnyPayload).cards);
+                        const cid = getCurrentDeckId();
+                        setDeckId(cid);
+                        setDeckName(getDeck(cid || undefined)?.name || '');
+                        return;
                     }
                 } else if (q.s) {
                     const {data} = await loadSet(q.s);
                     const payload = base64UrlDecode<AnyPayload>(data);
                     if ((payload as any)?.v === 1) {
                         if (!cancelled) setCards((payload as AnyPayload).cards);
+                        // editing shortcode is unsaved deck until user saves
+                        setDeckId(getCurrentDeckId());
+                        setDeckName(getDeck(getCurrentDeckId() || undefined)?.name || '');
+                        return;
+                    }
+                }
+                // No query payloads; try current deck
+                const curId = getCurrentDeckId();
+                const deck = getDeck(curId || undefined);
+                if (deck) {
+                    const payload = base64UrlDecode<AnyPayload>(deck.data);
+                    if ((payload as any)?.v === 1) {
+                        if (!cancelled) setCards((payload as AnyPayload).cards);
+                        setDeckId(deck.id);
+                        setDeckName(deck.name);
                     }
                 }
             } catch (e) {
                 // ignore and keep defaults
-                console.error('Failed to load remix set', e);
+                console.error('Failed to load remix/deck set', e);
             }
         }
-        loadFromQuery();
+        loadFromQueryOrCurrentDeck();
         return () => {
             cancelled = true;
         }
@@ -191,7 +226,6 @@ export function CardCreator() {
 
     const removeCard = useCallback((idx: number) => setCards(prev => prev.filter((_, i) => i !== idx)), []);
 
-
     const handleSignIn = useCallback(async () => {
         await signIn();
         setSignedInState(isSignedIn());
@@ -214,11 +248,11 @@ export function CardCreator() {
                 await navigator.clipboard?.writeText(url);
             } catch {
             }
-            alert(`Shortcode link copied to clipboard:\n${url}`);
+            toast(`Shortcode link copied to clipboard:\n${url}`);
         } catch (e: any) {
             console.error(e);
             setSaveError(e?.message || 'Save failed');
-            alert(`Save failed: ${e?.message || e}`);
+            toast(`Save failed: ${e?.message || e}`, {type: 'error'});
         } finally {
             setSaving(false);
         }
@@ -361,9 +395,127 @@ export function CardCreator() {
             <div className="max-w-[900px] mx-auto space-y-4">
                 <div
                     className="rounded-xl border border-neutral-700/60 bg-neutral-800/60 backdrop-blur-sm shadow-lg px-4 py-3">
-                    <h2 className="text-neutral-100 text-2xl font-semibold">Deck Creator</h2>
+                    <h2 className="text-neutral-100 text-2xl font-semibold">Deck Editor</h2>
                     <p className="text-neutral-300 text-sm mt-1">Build one or more cards, then generate a share link or
                         save a shortcode. All fields are optional unless your card art requires specific properties.</p>
+
+                    {/* Deck storage controls */}
+                    <div className="mt-3 flex flex-wrap items-center gap-2">
+                        <Field label="Deck Name"><TextInput value={deckName || ''}
+                                                       onChange={e => {
+                                                           const current = deckName || getDeck(deckId || undefined)?.name || '';
+                                                           const name = e.target.value
+                                                           if (!name) return;
+                                                           if (!deckId) {
+                                                               // If unsaved, just set local name; will apply on first save
+                                                               setDeckName(name);
+                                                               return;
+                                                           }
+                                                           const updated = renameDeckLs(deckId, name.trim());
+                                                           if (updated) {
+                                                               setDeckName(updated.name.trim());
+                                                           }
+                                                       }}/></Field>
+
+                        <div className={'mt-5.5'}>
+                            <button
+                                onClick={() => {
+                                    try {
+                                        const payload: CardSetPayloadV1 = { v: 1, cards };
+                                        const d = base64UrlEncode(payload);
+                                        const saved = saveDeckLs({ id: deckId, name: deckName || undefined, data: d });
+                                        setCurrentDeckId(saved.id);
+                                        setDeckId(saved.id);
+                                        setDeckName(saved.name);
+                                        // reflect in URL immediately
+                                        const params = new URLSearchParams(window.location.hash.split('?')[1] || '');
+                                        params.set('d', saved.data);
+                                        params.delete('s');
+                                        history.replaceState(null, '', `${window.location.pathname}#/create?${params.toString()}`);
+                                        window.dispatchEvent(new HashChangeEvent('hashchange'));
+                                        toast('Deck saved');
+                                    } catch (e) {
+                                        toast('Failed to save deck', { type: 'error' });
+                                        console.error(e)
+                                    }
+                                }}
+                                className="bg-emerald-700 text-white border border-emerald-600 rounded-md px-3 py-1.5 mr-2 hover:bg-emerald-600">
+                                <CloudArrowUpIcon className={'h-7 w-7'}/>
+                            </button>
+                            <button
+                                onClick={() => {
+                                    const name = nextUntitledName();
+                                    const defaultCards: FantasyFootballCardSerializable[] = [{
+                                        rarity: 'common',
+                                        playerData: emptyPlayer,
+                                        imagery: { imageProperties: { offsetX: 0, offsetY: 0, scalePercent: 100 }, lenticularUrls: { '0': '/img/players/grail1.png' } }
+                                    }];
+                                    const d = base64UrlEncode({ v: 1, cards: defaultCards });
+                                    const saved = saveDeckLs({ name, data: d });
+                                    setCurrentDeckId(saved.id);
+                                    setDeckId(saved.id);
+                                    setDeckName(saved.name);
+                                    setCards(defaultCards);
+                                    history.replaceState(null, '', `${window.location.pathname}#/create?d=${saved.data}`);
+                                    window.dispatchEvent(new HashChangeEvent('hashchange'));
+                                }}
+                                className="bg-sky-800 text-white border border-sky-700 rounded-md px-3 py-1.5 mr-2 hover:bg-sky-700">
+                                <PlusIcon className="h-7 w-7"/>
+                            </button>
+                            <button
+                                onClick={() => {
+                                    if (!deckId) {
+                                        // Nothing to delete for unsaved deck; clear fields
+                                        if (confirm('Discard current unsaved changes and start a new deck?')) {
+                                            const name = nextUntitledName();
+                                            const defaultCards: FantasyFootballCardSerializable[] = [{
+                                                rarity: 'common',
+                                                playerData: emptyPlayer,
+                                                imagery: { imageProperties: { offsetX: 0, offsetY: 0, scalePercent: 100 }, lenticularUrls: { '0': '/img/players/grail1.png' } }
+                                            }];
+                                            setCards(defaultCards);
+                                            setDeckName('');
+                                            history.replaceState(null, '', `${window.location.pathname}#/create`);
+                                            window.dispatchEvent(new HashChangeEvent('hashchange'));
+                                        }
+                                        return;
+                                    }
+                                    const deck = getDeck(deckId);
+                                    const ok = confirm(`Delete deck "${deck?.name || 'Untitled'}"? This cannot be undone.`);
+                                    if (!ok) return;
+                                    deleteDeck(deckId);
+                                    // Choose next deck or create fresh unsaved
+                                    const remaining = listDecks();
+                                    if (remaining.length > 0) {
+                                        const next = remaining[0];
+                                        setCurrentDeckId(next.id);
+                                        setDeckId(next.id);
+                                        setDeckName(next.name);
+                                        try {
+                                            const payload = base64UrlDecode<AnyPayload>(next.data);
+                                            if ((payload as any)?.v === 1) setCards((payload as AnyPayload).cards);
+                                        } catch {}
+                                        history.replaceState(null, '', `${window.location.pathname}#/create?d=${next.data}`);
+                                    } else {
+                                        setCurrentDeckId(null);
+                                        setDeckId(null);
+                                        setDeckName('');
+                                        const defaultCards: FantasyFootballCardSerializable[] = [{
+                                            rarity: 'common',
+                                            playerData: emptyPlayer,
+                                            imagery: { imageProperties: { offsetX: 0, offsetY: 0, scalePercent: 100 }, lenticularUrls: { '0': '/img/players/grail1.png' } }
+                                        }];
+                                        setCards(defaultCards);
+                                        history.replaceState(null, '', `${window.location.pathname}#/create`);
+                                    }
+                                    window.dispatchEvent(new HashChangeEvent('hashchange'));
+                                }}
+                                className="bg-red-800 text-white border border-red-700 rounded-md px-3 py-1.5 mr-2 hover:bg-red-700"
+                            >
+                                <TrashIcon className="h-7 w-7"/>
+                            </button>
+                        </div>
+                    </div>
                 </div>
                 {cards.map((c, idx) => cardForm(idx, c))}
                 <div className="flex justify-between items-center gap-2 mt-4 flex-wrap">
@@ -393,22 +545,6 @@ export function CardCreator() {
                     </div>*/}
                 </div>
                 {saveError && <div className="text-rose-300 mt-2">Error: {saveError}</div>}
-            </div>
-
-            {/* Sticky mobile action bar */}
-            <div
-                className="md:hidden fixed bottom-0 left-0 right-0 z-20 border-t border-neutral-700/70 bg-neutral-900/90 backdrop-blur px-3 py-2">
-                <div className="max-w-[900px] mx-auto flex gap-2">
-                    <button onClick={addCard}
-                            className="flex-1 bg-green-700 text-white border border-green-600 rounded-md px-3 py-2.5 text-sm font-medium shadow hover:bg-green-600 active:bg-green-700">Add
-                    </button>
-                    {/*<button onClick={saveToBackend} disabled={!signedInState || saving}
-                            className="flex-1 bg-emerald-700 text-white border border-emerald-600 rounded-md px-3 py-2.5 text-sm font-medium shadow hover:bg-emerald-600 active:bg-emerald-700 disabled:opacity-60 disabled:cursor-not-allowed">{saving ? 'Saving…' : 'Save'}</button>
-                */}</div>
-                {/*{!signedInState && (
-                    <p className="max-w-[900px] mx-auto text-[11px] text-neutral-400 mt-1">Sign in above to enable
-                        save.</p>
-                )}*/}
             </div>
         </div>
     );
