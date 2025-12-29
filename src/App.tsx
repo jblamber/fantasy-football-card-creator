@@ -1,6 +1,7 @@
 import React from "react";
 import {CardCreator} from "./card/CardCreator";
 import {CardViewer} from "./card/CardViewer";
+import { ArrowDownTrayIcon, PencilSquareIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import {useHashRoute, parseQuery} from "./utils/UseHashRoute";
 
 export default function App() {
@@ -37,19 +38,25 @@ export default function App() {
                     href={viewHref}
                     className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20"
                 >
-                    View
+                    <MagnifyingGlassIcon className={"size-5 pt-1"}/>
                 </a>
                 <a
                     href={remixHref}
                     className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20"
                 >
-                    {remixLabel}
+                   <PencilSquareIcon className="size-5 pt-1"/>
                 </a>
                 <a
                     href="https://github.com/jblamber/fantasy-football-card-creator"
                     className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20"
                 >
                     ?
+                </a>
+                <a
+                    href="https://github.com/jblamber/fantasy-football-card-creator"
+                    className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20"
+                >
+                    <ArrowDownTrayIcon className="size-5 pt-1"/>
                 </a>
             </nav>
             <div className="pt-12 max-w-[900px] mx-auto">

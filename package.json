@@ -12,6 +12,7 @@
     "pre-commit": "npx pretty-quick --staged"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@tailwindcss/vite": "^4.1.18",
     "qrcode": "^1.5.4",
     "react": "^18.3.1",

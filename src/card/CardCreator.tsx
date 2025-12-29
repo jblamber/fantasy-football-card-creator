@@ -6,6 +6,8 @@ import {saveSet, loadSet} from "../services/backend";
 import FantasyFootballCard, {CardRarity} from "./fantasyFootballCard/FantasyFootballCard";
 import {FantasyFootballCardData} from "./fantasyFootballCard/fantasyFootballRender";
 import {parseQuery, useHashRoute} from "../utils/UseHashRoute";
+import { TrashIcon } from '@heroicons/react/24/solid';
+
 
 
 function Field({label, children}: { label: string; children: React.ReactNode }) {
@@ -223,7 +225,8 @@ export function CardCreator() {
             <div className="flex justify-between items-center">
                 <strong className="text-neutral-300 font-semibold">Card #{cardDeckNo + 1}</strong>
                 <button onClick={() => removeCard(cardDeckNo)}
-                        className="bg-red-900 text-white border border-red-700 rounded-md px-2 py-1.5 hover:bg-red-800">Remove
+                        className="bg-red-900 text-white border border-red-700 rounded-md px-2 py-1.5 hover:bg-red-800">
+                    <TrashIcon className="h-4 w-4"/>
                 </button>
 
             </div>
