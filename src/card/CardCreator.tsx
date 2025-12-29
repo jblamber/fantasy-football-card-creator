@@ -1,4 +1,4 @@
-import {FantasyFootballCardSerializable, type CardSetPayloadV1, FantasyFootballPlayerData, AnyPayload} from "../types";
+import {FantasyFootballCardSerializable, type CardSetPayloadV1, FantasyFootballPlayerData, AnyPayload, CardGlowType} from "../types";
 import React, {useCallback, useEffect, useState} from "react";
 import {isSignedIn, signIn, signOut} from "../services/auth";
 import {base64UrlEncode, base64UrlDecode} from "../utils/codec";
@@ -67,6 +67,9 @@ export function CardCreator() {
     const [saving, setSaving] = useState(false);
     const [saveError, setSaveError] = useState<string | null>(null);
     const [signedInState, setSignedInState] = useState<boolean>(isSignedIn());
+
+    // Available glow types (from enum)
+    const glowOptions = Object.keys(CardGlowType).filter(k => isNaN(Number(k as any)));
 
     // Remix support: if arriving on /create with ?d= or ?s=, preload those cards for editing
     const hash = useHashRoute();
@@ -220,6 +223,12 @@ export function CardCreator() {
 
     function cardForm(cardDeckNo: number, c: FantasyFootballCardSerializable) {
 
+        // Normalize current type to a single glow string (or empty)
+        const currentTypesValue = Array.isArray(c.types)
+            ? (c.types[0] || '')
+            : (typeof c.types === 'string' ? (c.types || '') : '');
+        const selectedGlow = glowOptions.includes(currentTypesValue as string) ? (currentTypesValue as string) : '';
+
         return <div key={cardDeckNo}
                     className="rounded-xl border border-neutral-700/70 bg-neutral-800/60 backdrop-blur-sm shadow-md p-4 mt-4">
             <div className="flex justify-between items-center">
@@ -238,12 +247,24 @@ export function CardCreator() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
                 <Field label="Rarity"><TextInput value={c.rarity}
                                                  onChange={e => updateCard(cardDeckNo, {rarity: e.target.value as CardRarity})}/></Field>
-                <Field label="Types (comma)"><TextInput value={(c.types as string) || ''}
-                                                        onChange={e => updateCard(cardDeckNo, {types: e.target.value})}/></Field>
-                <Field label="Subtypes (comma)"><TextInput value={(c.subtypes as string) || ''}
+                <Field label="Outer Glow">
+                    <select
+                        className="px-2.5 py-2 rounded-md border border-neutral-700 bg-neutral-900 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500"
+                        value={selectedGlow}
+                        onChange={e => {
+                            const v = e.target.value;
+                            updateCard(cardDeckNo, { types: v ? v : undefined });
+                        }}>
+                        <option value="">(none)</option>
+                        {glowOptions.map((name) => (
+                            <option key={name} value={name}>{name}</option>
+                        ))}
+                    </select>
+                </Field>
+                {/*<Field label="Subtypes (comma)"><TextInput value={(c.subtypes as string) || ''}
                                                            onChange={e => updateCard(cardDeckNo, {subtypes: e.target.value})}/></Field>
                 <Field label="Supertype"><TextInput value={c.supertype || ''}
-                                                    onChange={e => updateCard(cardDeckNo, {supertype: e.target.value})}/></Field>
+                                                    onChange={e => updateCard(cardDeckNo, {supertype: e.target.value})}/></Field>*/}
             </div>
             <h4 className="text-neutral-300 mt-4">Player</h4>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -253,7 +274,7 @@ export function CardCreator() {
                                                onChange={e => updatePlayer(cardDeckNo, {teamName: e.target.value})}/></Field>
                 <Field label="Position"><TextInput value={c.playerData.positionName}
                                                    onChange={e => updatePlayer(cardDeckNo, {positionName: e.target.value})}/></Field>
-                <Field label="Type"><TextInput value={c.playerData.playerType}
+                <Field label="Card Layout"><TextInput value={c.playerData.playerType}
                                                onChange={e => updatePlayer(cardDeckNo, {playerType: e.target.value as any})}/></Field>
                 <Field label="MA"><TextInput value={c.playerData.ma}
                                              onChange={e => updatePlayer(cardDeckNo, {ma: e.target.value})}/></Field>

@@ -1,6 +1,18 @@
 import {CardRarity, PlayerType} from "./card/fantasyFootballCard/FantasyFootballCard";
 import {StatValue} from "./card/fantasyFootballCard/fantasyFootballRender";
 
+export enum CardGlowType {
+    blue,
+    red,
+    green,
+    electric,
+    purple,
+    brown,
+    gold,
+    pink,
+    metal,
+    darkness,
+}
 
 export interface ImageProperties {
     offsetX: number; // px
