@@ -52,12 +52,6 @@ export default function App() {
                 >
                     ?
                 </a>
-                <a
-                    href="https://github.com/jblamber/fantasy-football-card-creator"
-                    className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20"
-                >
-                    <ArrowDownTrayIcon className="size-5 pt-1"/>
-                </a>
             </nav>
             <div className="pt-12 max-w-[900px] mx-auto">
                 {route === "/create" ? <CardCreator/> : <CardViewer/>}

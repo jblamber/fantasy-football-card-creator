@@ -59,9 +59,12 @@ export default function FantasyFootballCard({
                                                 subtypes,
                                                 supertype,
                                                 onSwipe,
-                                            }: FantasyFootballCardProps) {
+                                                // Optional external canvas ref to allow downloads/snapshots from parent
+                                                canvasRef: externalCanvasRef,
+                                            }: FantasyFootballCardProps & { canvasRef?: React.RefObject<HTMLCanvasElement> }) {
 
-    const ref = useRef<HTMLCanvasElement | null>(null);
+    const internalRef = useRef<HTMLCanvasElement | null>(null);
+    const ref = (externalCanvasRef ?? internalRef);
     const [lenticular, setLenticular] = useState({x: 0, y: 0})
 
 
