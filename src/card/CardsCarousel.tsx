@@ -60,9 +60,9 @@ export function CardsCarousel({cards}: { cards: any[] }) {
         <section
             className="card-viewport h-screen flex p-1 justify-center [touch-action:manipulation]"
             onClick={onViewportClick}>
-            {/* Sticky controls top-right */}
+            {/* Sticky controls bottom-right */}
             <div
-                className="fixed top-2 right-2 z-20 rounded-md border border-neutral-700/80 bg-neutral-800/80 backdrop-blur px-2.5 py-1 text-white text-sm shadow-md select-none flex items-center gap-2"
+                className="fixed bottom-2 right-2 z-20 rounded-md border border-neutral-700/80 bg-neutral-800/80 backdrop-blur px-2.5 py-1 text-white text-sm shadow-md select-none flex items-center gap-2"
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="whitespace-nowrap">
