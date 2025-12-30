@@ -1,0 +1,362 @@
+[
+  {
+    "rarity": "rare rainbow",
+    "playerData": {
+      "ag": "3+",
+      "av": "10+",
+      "ma": "7",
+      "pa": "4+",
+      "st": "3",
+      "playerType": "normal",
+      "teamName": "Bruisers of Brionne",
+      "cost": "95000",
+      "cardName": "Sir Galahad Goldie",
+      "skillsAndTraits": "Block, Dauntless, Steady Footing",
+      "positionName": "Blitzer",
+      "primary": "G, S",
+      "secondary": "A",
+      "footer": "Grail Knight"
+    },
+    "imagery": {
+      "imageProperties": {
+        "offsetX": -100,
+        "offsetY": 0,
+        "scalePercent": 100
+      },
+      "lenticularUrls": {
+        "0": "/img/players/grail1.jpg"
+      }
+    },
+    "types": "electric"
+  },
+  {
+    "rarity": "rare rainbow",
+    "playerData": {
+      "ag": "3+",
+      "av": "10+",
+      "ma": "7",
+      "pa": "4+",
+      "st": "3",
+      "playerType": "normal",
+      "teamName": "Bruisers of Brionne",
+      "cost": "95000",
+      "cardName": "Sir Alaric du'Block",
+      "skillsAndTraits": "Block, Dauntless, Steady Footing",
+      "positionName": "Blitzer",
+      "primary": "G, S",
+      "secondary": "A",
+      "footer": "Grail Knight"
+    },
+    "imagery": {
+      "imageProperties": {
+        "offsetX": -100,
+        "offsetY": 0,
+        "scalePercent": 100
+      },
+      "lenticularUrls": {
+        "0": "/img/players/grail2.jpg"
+      }
+    },
+    "types": "electric"
+  },
+  {
+    "rarity": "rare shiny v",
+    "playerData": {
+      "ag": "3+",
+      "av": "9+",
+      "ma": "6",
+      "pa": "4+",
+      "st": "3",
+      "playerType": "normal",
+      "teamName": "Bruisers of Brionne",
+      "cost": "85000",
+      "cardName": "Sir Moore Dab",
+      "skillsAndTraits": "Dauntless, Nerves of Steel, Catch",
+      "positionName": "Catcher",
+      "primary": "A, G",
+      "secondary": "S",
+      "footer": "Brettonian Knight Catcher"
+    },
+    "imagery": {
+      "imageProperties": {
+        "offsetX": -100,
+        "offsetY": 0,
+        "scalePercent": 100
+      },
+      "lenticularUrls": {
+        "0": "/img/players/catcher1.jpg"
+      }
+    },
+    "types": "purple"
+  },
+  {
+    "rarity": "rare shiny v",
+    "playerData": {
+      "ag": "3+",
+      "av": "9+",
+      "ma": "7",
+      "pa": "4+",
+      "st": "3",
+      "playerType": "normal",
+      "teamName": "Bruisers of Brionne",
+      "cost": "85000",
+      "cardName": "Sir Caen Attraper",
+      "skillsAndTraits": "Dauntless, Nerves of Steel, Catch",
+      "positionName": "Catcher",
+      "primary": "A, G",
+      "secondary": "S",
+      "footer": "Brettonian Knight Catcher"
+    },
+    "imagery": {
+      "imageProperties": {
+        "offsetX": -120,
+        "offsetY": 0,
+        "scalePercent": 100
+      },
+      "lenticularUrls": {
+        "0": "/img/players/catcher2.jpg"
+      }
+    },
+    "types": "purple"
+  },
+  {
+    "rarity": "rare holo cosmos",
+    "playerData": {
+      "ag": "3",
+      "av": "9",
+      "ma": "6",
+      "pa": "3",
+      "st": "3",
+      "playerType": "normal",
+      "teamName": "Bruisers of Brionne",
+      "cost": "80000",
+      "cardName": "Dame Mid du'Field",
+      "skillsAndTraits": "Dauntless, Nerves of Steel, Pass",
+      "positionName": "Thrower",
+      "primary": "G, P",
+      "secondary": "A, S",
+      "footer": "Brettonian Knight Thrower"
+    },
+    "imagery": {
+      "imageProperties": {
+        "offsetX": -100,
+        "offsetY": 0,
+        "scalePercent": 100
+      },
+      "lenticularUrls": {
+        "0": "/img/players/thrower1.jpg"
+      }
+    },
+    "types": "metal"
+  },
+  {
+    "rarity": "rare holo cosmos",
+    "playerData": {
+      "ag": "3",
+      "av": "9",
+      "ma": "6",
+      "pa": "3",
+      "st": "3",
+      "playerType": "normal",
+      "teamName": "Bruisers of Brionne",
+      "cost": "80000",
+      "cardName": "Sir Bombs of Longs",
+      "skillsAndTraits": "Dauntless, Nerves of Steel, Pass",
+      "positionName": "Thrower",
+      "primary": "G, P",
+      "secondary": "A, S",
+      "footer": "Brettonian Knight Thrower"
+    },
+    "imagery": {
+      "imageProperties": {
+        "offsetX": -60,
+        "offsetY": 0,
+        "scalePercent": 100
+      },
+      "lenticularUrls": {
+        "0": "/img/players/thrower2.jpg"
+      }
+    },
+    "types": "metal"
+  },
+  {
+    "rarity": "rare secret",
+    "playerData": {
+      "ag": "3",
+      "av": "8",
+      "ma": "6",
+      "pa": "4",
+      "st": "3",
+      "playerType": "normal",
+      "teamName": "Bruisers of Brionne",
+      "cost": "50000",
+      "cardName": "Fightin' Mike",
+      "skillsAndTraits": "Wrestle",
+      "positionName": "Lineman",
+      "primary": "G",
+      "secondary": "A, S",
+      "footer": "Bretonnian Squire"
+    },
+    "imagery": {
+      "imageProperties": {
+        "offsetX": -130,
+        "offsetY": 0,
+        "scalePercent": 100
+      },
+      "lenticularUrls": {
+        "0": "/img/players/squire1.jpg"
+      }
+    },
+    "types": "brown"
+  },
+  {
+    "rarity": "rare secret",
+    "playerData": {
+      "ag": "3",
+      "av": "8",
+      "ma": "6",
+      "pa": "4",
+      "st": "3",
+      "playerType": "normal",
+      "teamName": "Bruisers of Brionne",
+      "cost": "50000",
+      "cardName": "Handsom Rob",
+      "skillsAndTraits": "Wrestle",
+      "positionName": "Lineman",
+      "primary": "G",
+      "secondary": "A, S",
+      "footer": "Bretonnian Squire"
+    },
+    "imagery": {
+      "imageProperties": {
+        "offsetX": -130,
+        "offsetY": 0,
+        "scalePercent": 100
+      },
+      "lenticularUrls": {
+        "0": "/img/players/squire2.jpg"
+      }
+    },
+    "types": "brown"
+  },
+  {
+    "rarity": "rare secret",
+    "playerData": {
+      "ag": "3",
+      "av": "8",
+      "ma": "6",
+      "pa": "4",
+      "st": "3",
+      "playerType": "normal",
+      "teamName": "Bruisers of Brionne",
+      "cost": "50000",
+      "cardName": "The Showman",
+      "skillsAndTraits": "Wrestle",
+      "positionName": "Lineman",
+      "primary": "G",
+      "secondary": "A, S",
+      "footer": "Bretonnian Squire"
+    },
+    "imagery": {
+      "imageProperties": {
+        "offsetX": -130,
+        "offsetY": 0,
+        "scalePercent": 100
+      },
+      "lenticularUrls": {
+        "0": "/img/players/squire3.jpg"
+      }
+    },
+    "types": "brown"
+  },
+  {
+    "rarity": "rare secret",
+    "playerData": {
+      "ag": "3",
+      "av": "8",
+      "ma": "6",
+      "pa": "4",
+      "st": "3",
+      "playerType": "normal",
+      "teamName": "Bruisers of Brionne",
+      "cost": "50000",
+      "cardName": "Madam Fend",
+      "skillsAndTraits": "Wrestle",
+      "positionName": "Lineman",
+      "primary": "G",
+      "secondary": "A, S",
+      "footer": "Bretonnian Squire"
+    },
+    "imagery": {
+      "imageProperties": {
+        "offsetX": -130,
+        "offsetY": 0,
+        "scalePercent": 100
+      },
+      "lenticularUrls": {
+        "0": "/img/players/squire4.jpg"
+      }
+    },
+    "types": "brown"
+  },
+  {
+    "rarity": "rare secret",
+    "playerData": {
+      "ag": "3",
+      "av": "8",
+      "ma": "6",
+      "pa": "4",
+      "st": "3",
+      "playerType": "normal",
+      "teamName": "Bruisers of Brionne",
+      "cost": "50000",
+      "cardName": "Lucy of the Line",
+      "skillsAndTraits": "Wrestle",
+      "positionName": "Lineman",
+      "primary": "G",
+      "secondary": "A, S",
+      "footer": "Bretonnian Squire"
+    },
+    "imagery": {
+      "imageProperties": {
+        "offsetX": -130,
+        "offsetY": 0,
+        "scalePercent": 100
+      },
+      "lenticularUrls": {
+        "0": "/img/players/squire5.jpg"
+      }
+    },
+    "types": "brown"
+  },
+  {
+    "rarity": "rare secret",
+    "playerData": {
+      "ag": "3",
+      "av": "8",
+      "ma": "6",
+      "pa": "4",
+      "st": "3",
+      "playerType": "normal",
+      "teamName": "Bruisers of Brionne",
+      "cost": "50000",
+      "cardName": "Gutsy Georgey ",
+      "skillsAndTraits": "Wrestle",
+      "positionName": "Lineman",
+      "primary": "G",
+      "secondary": "A, S",
+      "footer": "Bretonnian Squire"
+    },
+    "imagery": {
+      "imageProperties": {
+        "offsetX": -130,
+        "offsetY": 0,
+        "scalePercent": 100
+      },
+      "lenticularUrls": {
+        "0": "/img/players/squire6.jpg"
+      }
+    },
+    "types": "brown"
+  }
+]

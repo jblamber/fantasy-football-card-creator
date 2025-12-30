@@ -276,7 +276,6 @@ export function CardCreator() {
             : (typeof c.types === 'string' ? (c.types || '') : '');
         const selectedGlow = glowOptions.includes(currentTypesValue as string) ? (currentTypesValue as string) : '';
         const selectedHolo = CardHoloTypes.find(t => t.rarity === c.rarity)?.rarity || "";
-        console.log({selectedHolo})
 
         return <div key={cardDeckNo}
                     className="rounded-xl border border-neutral-700/70 bg-neutral-800/60 backdrop-blur-sm shadow-md p-4 mt-4">

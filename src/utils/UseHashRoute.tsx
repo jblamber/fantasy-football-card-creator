@@ -18,7 +18,6 @@ export function parseQuery(search: string) {
 }
 
 export function mapToRuntime(card: FantasyFootballCardSerializable) {
-    console.log({card})
     return {
         ...card,
         imagery: {

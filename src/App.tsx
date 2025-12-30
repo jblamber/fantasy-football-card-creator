@@ -5,6 +5,7 @@ import { PencilSquareIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid
 import {useHashRoute, parseQuery} from "./utils/UseHashRoute";
 import {getCurrentDeckId, getDeck, listDecks, LocalDeck, setCurrentDeckId} from "./services/localDecks";
 import {ToastContainer} from "react-toastify";
+import {PlayIcon} from "@heroicons/react/16/solid";
 
 export default function App() {
     const hash = useHashRoute();
@@ -74,10 +75,10 @@ export default function App() {
                     <select
                         id="deck-select"
                         className="bg-transparent text-white focus:outline-none"
-                        value={currentId ?? ''}
+                        value={currentId ?? 'Sample Deck'}
                         onChange={(e) => onSelectDeck(e.target.value)}
                     >
-                        <option value="">(Unsaved deck)</option>
+                        <option value="">Sample Deck</option>
                         {decks.map(d => (
                             <option key={d.id} value={d.id}>{d.name}</option>
                         ))}
@@ -94,7 +95,7 @@ export default function App() {
                     href={viewHref}
                     className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20"
                 >
-                    <MagnifyingGlassIcon className={"size-5 pt-1"}/>
+                    <PlayIcon className={"size-5 pt-1"}/>
                 </a>
                 <a
                     href={hasActiveSet ? `#/create?${queryString || ''}` : '#/create'}
