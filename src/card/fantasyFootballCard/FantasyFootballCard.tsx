@@ -70,7 +70,7 @@ export default function FantasyFootballCard({
 
     const bloodBowlCardDefaultAssets: Promise<ImageAssets> = useMemo(async () => {
 
-        const bg1 = await loadImage('/img/card/blank.png')
+        const bg1 = await loadImage('/img/card/blank.jpg')
         const frame = await loadImage('/img/card/bloodbowl_frame.png')
         const star_frame = await loadImage('/img/card/bloodbowl_specialplayer_frame.png')
         const border = await loadImage('/img/card/bloodbowl_border.png')
