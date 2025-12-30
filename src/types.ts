@@ -103,6 +103,9 @@ export interface FantasyFootballPlayerData {
     specialRules?: string;
 
     footer: string;
+
+    // Freeform per-card notes (not rendered on the card graphic)
+    notes?: string;
 }
 
 export interface FantasyFootballCardSerializable {

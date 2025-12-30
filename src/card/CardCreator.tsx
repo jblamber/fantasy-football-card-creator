@@ -85,7 +85,8 @@ export function CardCreator() {
         positionName: '',
         primary: '',
         secondary: '',
-        footer: ''
+        footer: '',
+        notes: ''
     };
 
     const emptyImagery = {
@@ -330,6 +331,9 @@ export function CardCreator() {
                                                     onChange={e => updatePlayer(cardDeckNo, {secondary: e.target.value})}/></Field>
                 <Field label="Card Footer"><TextInput value={c.playerData.footer}
                                                  onChange={e => updatePlayer(cardDeckNo, {footer: e.target.value})}/></Field>
+                <Field label="Notes"><TextArea rows={4} value={c.playerData.notes || ''}
+                                                 placeholder="Player notes (not visible on card)"
+                                                 onChange={e => updatePlayer(cardDeckNo, {notes: e.target.value})}/></Field>
                 </div>
             <div className="justify-between items-center grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-2">
                 <Field label="Card Preview">
