@@ -201,9 +201,9 @@ export async function renderCard(
         ctx.rotate(-6 * Math.PI / 180);
         ctx.font = opts.fonts.nameFont;
         ctx.fillStyle = opts.colors.shadow;
-        fillText(ctx, data.cardName, 100, 260);
+        fillText(ctx, data.cardName, 70, 260);
         ctx.fillStyle = opts.colors.title;
-        fillText(ctx, data.cardName, 105, 260);
+        fillText(ctx, data.cardName, 75, 260);
 
         // Team name
         ctx.font = opts.fonts.teamFont;
