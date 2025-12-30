@@ -2,6 +2,7 @@ import {HoloCard} from "../index";
 import React, {useEffect, useMemo, useRef, useState} from "react";
 import {FantasyFootballCardData, defaultOptions, ImageAssets, renderCard} from "./fantasyFootballRender";
 import {FantasyFootballCardSerializable, FantasyFootballPlayerData} from "../../types";
+import {getImageDataUrl, isLocalImageUrl, parseLocalImageId} from "../../services/localImages";
 
 export type PlayerType = 'normal' | 'star';
 
@@ -100,14 +101,25 @@ export default function FantasyFootballCard({
         }
     }, [])
 
+    const resolvedImageUrl = useMemo(() => {
+        const url = imagery?.lenticularUrls[lenticular.x.toString()];
+        if (isLocalImageUrl(url)) {
+            const id = parseLocalImageId(url!);
+            if (id) {
+                const dataUrl = getImageDataUrl(id);
+                return dataUrl || undefined;
+            }
+        }
+        return url;
+    }, [imagery, lenticular.x]);
+
     const data: FantasyFootballCardData = useMemo(() => {
-        const url = imagery?.lenticularUrls[lenticular.x.toString()]
         return {
             ...playerData,
             imageProperties: imagery?.imageProperties,
-            imageUrl: url,
+            imageUrl: resolvedImageUrl,
         }
-    }, [lenticular.x, lenticular.y, imagery, playerData]);
+    }, [resolvedImageUrl, imagery, playerData]);
 
     useEffect(() => {
         const canvas = ref.current!;

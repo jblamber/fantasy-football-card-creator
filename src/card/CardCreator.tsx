@@ -22,6 +22,7 @@ import {
 } from "../services/localDecks";
 import {CloudArrowUpIcon, DocumentDuplicateIcon, DocumentPlusIcon} from "@heroicons/react/16/solid";
 import {toast} from "react-toastify";
+import {isLocalImageUrl, localImageUrl, saveImageFile} from "../services/localImages";
 
 
 
@@ -365,6 +366,9 @@ export function CardCreator() {
                                                          onChange={e => updatePlayer(cardDeckNo, {skillsAndTraits: e.target.value})}/></Field>
             </div>
             <h4 className="text-neutral-300 mt-4">Imagery</h4>
+            <div className="text-xs mb-2">
+                Images to showcase your player. Use a cloud hosted url for maximum portability or use a local image file.
+            </div>
             <div>
               {/*  <div className="flex justify-between items-center mt-2">
                     <span className="text-neutral-400">Card Image</span>
@@ -374,17 +378,41 @@ export function CardCreator() {
                     </button>
                 </div>*/}
                 <div className="grid gap-2 mt-2">
-                    <Field label="Url">
+                    <Field label="Player Image URL">
                     {Object.keys(c.imagery.lenticularUrls).map((u, j) => (
-                        <div>
-                            {/* <TextInput key={j} placeholder={`Index`} value={u[0]}
-                                       onChange={e => {}}/>*/}
-                            <TextInput key={j} placeholder={`Image URL ${j + 1}`} value={c.imagery.lenticularUrls[u]}
-                                       onChange={e => updateLenticularUrl(cardDeckNo, u[0], e.target.value)}/>
-                            {/* <button onClick={() => {}}
-                                    className="bg-red-900 text-white border border-red-700 rounded-md px-2 py-1.5 hover:bg-red-800">Remove
-                            </button>*/}
+                        <div key={j} className="flex flex-col gap-1">
+                            {/* URL input */}
+                            <div className="flex items-center gap-2">
+                                <TextInput placeholder={`Image URL ${j + 1}`} value={c.imagery.lenticularUrls[u]}
+                                           onChange={e => updateLenticularUrl(cardDeckNo, u, e.target.value)} />
+                                <label className="inline-flex items-center gap-1 text-xs">
+                                    <span className="sr-only">Upload image for slot {j + 1}</span>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={async (e) => {
+                                            const file = e.target.files?.[0];
+                                            if (!file) return;
+                                            try {
+                                                const img = await saveImageFile(file);
+                                                updateLenticularUrl(cardDeckNo, u, localImageUrl(img.id));
+                                                toast(`Image uploaded to this device only`);
+                                            } catch (err) {
+                                                toast(`Failed to load image`, { type: 'error' });
+                                            } finally {
 
+                                            }
+                                        }}
+                                        className="text-xs file:mr-2 file:py-1 file:px-2 file:rounded-md file:border file:border-neutral-700 file:bg-neutral-900 file:text-white"
+                                    />
+                                </label>
+                            </div>
+                            {/* Local image warning */}
+                            {isLocalImageUrl(c.imagery.lenticularUrls[u]) && (
+                                <div className="text-amber-300 text-xs mb-2">
+                                    This card will only display correctly on this device.
+                                </div>
+                            )}
                         </div>
                     ))}
                     </Field>
