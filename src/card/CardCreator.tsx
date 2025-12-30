@@ -20,7 +20,7 @@ import {
     saveDeck as saveDeckLs,
     setCurrentDeckId
 } from "../services/localDecks";
-import {CloudArrowUpIcon} from "@heroicons/react/16/solid";
+import {CloudArrowUpIcon, DocumentDuplicateIcon, DocumentPlusIcon} from "@heroicons/react/16/solid";
 import {toast} from "react-toastify";
 
 
@@ -55,6 +55,16 @@ function TextArea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
 }
 
 export function CardCreator() {
+
+
+    const [saving, setSaving] = useState(false);
+    const [saveError, setSaveError] = useState<string | null>(null);
+    const [signedInState, setSignedInState] = useState<boolean>(isSignedIn());
+
+    // Local deck identity for Creator
+    const [deckId, setDeckId] = useState<string | null>(getCurrentDeckId());
+    const [deckName, setDeckName] = useState<string>(() => getDeck(getCurrentDeckId() || undefined)?.name || '');
+
     const emptyPlayer: FantasyFootballPlayerData = {
         ag: '',
         av: '',
@@ -62,7 +72,7 @@ export function CardCreator() {
         pa: '',
         st: '',
         playerType: 'normal',
-        teamName: '',
+        teamName: deckName || '',
         cost: '',
         cardName: '',
         skillsAndTraits: '',
@@ -79,13 +89,6 @@ export function CardCreator() {
             lenticularUrls: {'0': '/img/players/grail1.png'}
         }
     }]);
-    const [saving, setSaving] = useState(false);
-    const [saveError, setSaveError] = useState<string | null>(null);
-    const [signedInState, setSignedInState] = useState<boolean>(isSignedIn());
-
-    // Local deck identity for Creator
-    const [deckId, setDeckId] = useState<string | null>(getCurrentDeckId());
-    const [deckName, setDeckName] = useState<string>(() => getDeck(getCurrentDeckId() || undefined)?.name || '');
 
     // Available glow types (from enum)
     const glowOptions = Object.keys(CardGlowType).filter(k => isNaN(Number(k as any)));
@@ -175,13 +178,20 @@ export function CardCreator() {
         return () => window.clearTimeout(timer);
     }, [cards, route]);
 
-    const addCard = useCallback(() => {
+    const addCard = useCallback((duplicate = false) => {
+        if (duplicate) {
+            const lastCard = cards[cards.length - 1];
+            setCards(prev => [...prev, {
+                ...lastCard,
+            }]);
+            return;
+        }
         setCards(prev => [...prev, {
             rarity: 'common',
             playerData: {...emptyPlayer},
-            imagery: {imageProperties: {offsetX: 0, offsetY: 0, scalePercent: 100}, lenticularUrls: {}}
+            imagery: {imageProperties: {offsetX: 0, offsetY: 0, scalePercent: 100}, lenticularUrls: {'0' : '/img/players/grail2.jpg'}}
         }]);
-    }, []);
+    }, [cards]);
 
     const updateCard = useCallback((idx: number, patch: Partial<FantasyFootballCardSerializable>) => {
         setCards(prev => prev.map((c, i) => i === idx ? {
@@ -448,7 +458,7 @@ export function CardCreator() {
                                     const defaultCards: FantasyFootballCardSerializable[] = [{
                                         rarity: 'common',
                                         playerData: emptyPlayer,
-                                        imagery: { imageProperties: { offsetX: 0, offsetY: 0, scalePercent: 100 }, lenticularUrls: { '0': '/img/players/grail1.png' } }
+                                        imagery: { imageProperties: { offsetX: 0, offsetY: 0, scalePercent: 100 }, lenticularUrls: { '0': '/img/players/grail1.jpg' } }
                                     }];
                                     const d = base64UrlEncode({ v: 1, cards: defaultCards });
                                     const saved = saveDeckLs({ name, data: d });
@@ -520,9 +530,17 @@ export function CardCreator() {
                 {cards.map((c, idx) => cardForm(idx, c))}
                 <div className="flex justify-between items-center gap-2 mt-4 flex-wrap">
                     <div className="flex gap-2">
-                        <button onClick={addCard}
+                        <button onClick={()=> {
+                            addCard()
+                        }}
                                 className="bg-green-900 text-white border border-green-700 rounded-md px-3 py-2 hover:bg-green-800">
-                            <PlusIcon className="h-4 w-4"/>
+                            <DocumentPlusIcon className="h-4 w-4"/>
+                        </button>
+                        <button onClick={() => {
+                            addCard(true)
+                        }}
+                                className="bg-green-900 text-white border border-green-700 rounded-md px-3 py-2 hover:bg-green-800">
+                            <DocumentDuplicateIcon className="h-4 w-4"/>
                         </button>
                         {/*<button onClick={generateLink}
                                 className="bg-sky-900 text-white border border-sky-700 rounded-md px-3 py-2 hover:bg-sky-800">Generate
