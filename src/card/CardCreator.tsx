@@ -81,13 +81,16 @@ export function CardCreator() {
         secondary: '',
         footer: ''
     };
+
+    const emptyImagery = {
+        imageProperties: {offsetX: -100, offsetY: 0, scalePercent: 100},
+        lenticularUrls: {'0': '/img/players/grail1.jpg'}
+    }
+
     const [cards, setCards] = useState<FantasyFootballCardSerializable[]>([{
         rarity: 'common',
         playerData: emptyPlayer,
-        imagery: {
-            imageProperties: {offsetX: 0, offsetY: 0, scalePercent: 100},
-            lenticularUrls: {'0': '/img/players/grail1.png'}
-        }
+        imagery: emptyImagery
     }]);
 
     // Available glow types (from enum)
@@ -480,7 +483,7 @@ export function CardCreator() {
                                             const defaultCards: FantasyFootballCardSerializable[] = [{
                                                 rarity: 'common',
                                                 playerData: emptyPlayer,
-                                                imagery: { imageProperties: { offsetX: 0, offsetY: 0, scalePercent: 100 }, lenticularUrls: { '0': '/img/players/grail1.png' } }
+                                                imagery: emptyImagery
                                             }];
                                             setCards(defaultCards);
                                             setDeckName('');
@@ -512,7 +515,7 @@ export function CardCreator() {
                                         const defaultCards: FantasyFootballCardSerializable[] = [{
                                             rarity: 'common',
                                             playerData: emptyPlayer,
-                                            imagery: { imageProperties: { offsetX: 0, offsetY: 0, scalePercent: 100 }, lenticularUrls: { '0': '/img/players/grail1.png' } }
+                                            imagery: emptyImagery
                                         }];
                                         setCards(defaultCards);
                                         history.replaceState(null, '', `${window.location.pathname}#/create`);
