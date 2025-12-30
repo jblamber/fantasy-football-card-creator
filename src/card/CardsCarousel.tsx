@@ -62,10 +62,10 @@ export function CardsCarousel({cards}: { cards: any[] }) {
             onClick={onViewportClick}>
             {/* Sticky controls bottom-right */}
             <div
-                className="fixed bottom-2 right-2 z-20 rounded-md border border-neutral-700/80 bg-neutral-800/80 backdrop-blur px-2.5 py-1 text-white text-sm shadow-md select-none flex items-center gap-2"
+                className="fixed bottom-2 right-2 z-20 rounded-md py-1 text-white text-sm shadow-md select-none flex items-center gap-2"
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="whitespace-nowrap">
+                <div className="whitespace-nowrap rounded-md border border-neutral-600/70 bg-neutral-700/40 hover:bg-neutral-600/50 active:bg-neutral-600/60 px-1.5 py-1" onClick={next} role="button" aria-label="Next card">
                     <span aria-label="Current card index">{index + 1}</span>
                     <span className="opacity-70"> / </span>
                     <span aria-label="Total cards">{cards.length}</span>
