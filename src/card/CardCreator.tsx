@@ -439,7 +439,7 @@ export function CardCreator() {
     }
 
     return (
-        <div className="pt-12 px-3 md:px-4 pb-28">
+        <div className="pt-1 px-3 md:px-4 pb-28">
             <div className="max-w-[900px] mx-auto space-y-4">
                 <div
                     className="rounded-xl border border-neutral-700/60 bg-neutral-800/60 backdrop-blur-sm shadow-lg px-4 py-3">
