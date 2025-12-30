@@ -70,7 +70,7 @@ export const TradingCard: React.FC<TradingCardProps> = ({
                                                             rarity = 'common',
                                                             isReverse = false,
                                                             img,
-                                                            back = '/img/card/BB_Card_Back_Players_Border.png',
+                                                            back = '/img/card/card_back.jpg',
                                                             foil,
                                                             mask,
                                                             className = '',
