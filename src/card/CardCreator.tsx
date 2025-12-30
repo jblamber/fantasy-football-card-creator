@@ -20,7 +20,12 @@ import {
     saveDeck as saveDeckLs,
     setCurrentDeckId
 } from "../services/localDecks";
-import {CloudArrowUpIcon, DocumentDuplicateIcon, DocumentPlusIcon} from "@heroicons/react/16/solid";
+import {
+    ArrowRightEndOnRectangleIcon,
+    CloudArrowUpIcon,
+    DocumentDuplicateIcon,
+    DocumentPlusIcon
+} from "@heroicons/react/16/solid";
 import {toast} from "react-toastify";
 import {isLocalImageUrl, localImageUrl, saveImageFile} from "../services/localImages";
 
@@ -480,7 +485,7 @@ export function CardCreator() {
                                     }
                                 }}
                                 className="bg-emerald-700 text-white border border-emerald-600 rounded-md px-3 py-1.5 mr-2 hover:bg-emerald-600">
-                                <CloudArrowUpIcon className={'h-7 w-7'}/>
+                                <ArrowRightEndOnRectangleIcon title={'Save to Device'} className={'h-7 w-7'}/>
                             </button>
                             <button
                                 onClick={() => {
@@ -500,7 +505,7 @@ export function CardCreator() {
                                     window.dispatchEvent(new HashChangeEvent('hashchange'));
                                 }}
                                 className="bg-sky-800 text-white border border-sky-700 rounded-md px-3 py-1.5 mr-2 hover:bg-sky-700">
-                                <PlusIcon className="h-7 w-7"/>
+                                <PlusIcon title={'Create new Deck'} className="h-7 w-7"/>
                             </button>
                             <button
                                 onClick={() => {
@@ -552,7 +557,7 @@ export function CardCreator() {
                                 }}
                                 className="bg-red-800 text-white border border-red-700 rounded-md px-3 py-1.5 mr-2 hover:bg-red-700"
                             >
-                                <TrashIcon className="h-7 w-7"/>
+                                <TrashIcon title={'Delete Deck'} className="h-7 w-7"/>
                             </button>
                         </div>
                     </div>
