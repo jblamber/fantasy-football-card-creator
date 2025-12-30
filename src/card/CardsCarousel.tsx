@@ -3,11 +3,19 @@ import FantasyFootballCard from "./fantasyFootballCard/FantasyFootballCard";
 import {ArrowDownTrayIcon} from "@heroicons/react/24/solid";
 import { base64UrlEncode } from "../utils/codec";
 import { type CardSetPayloadV1 } from "../types";
+import skillsDataSet from './data/skills.json'
 
 export function CardsCarousel({cards}: { cards: any[] }) {
     const [index, setIndex] = useState(0);
     const [localCards, setLocalCards] = useState<any[]>(cards);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const [openSkill, setOpenSkill] = useState<string | null>(null);
+    const skillData = skillsDataSet.find(s=>s.name?.toLowerCase() === openSkill?.toLowerCase());
+    const skills = React.useMemo(() => {
+        const raw = ((localCards[index]?.playerData?.skillsAndTraits ?? '') as string);
+        //if (!raw || raw.indexOf(',') === -1) return [] as string[];
+        return Array.from(new Set(raw.split(',').map(s => s.trim()).filter(Boolean)));
+    }, [localCards, index]);
 
     // keep local copy in sync if parent updates
     React.useEffect(() => {
@@ -117,7 +125,27 @@ export function CardsCarousel({cards}: { cards: any[] }) {
                 className="fixed bottom-28 right-2 z-20 rounded-md py-1 text-white text-sm shadow-md select-none flex items-center gap-2"
                 onClick={(e) => e.stopPropagation()}
             >
-                <div className="whitespace-nowrap rounded-md border border-neutral-600/70 bg-neutral-700/40 hover:bg-neutral-600/50 active:bg-neutral-600/60 px-1.5 py-1" onClick={next} role="button" aria-label="Next card">
+                {skills.length > 0 && (
+                    <div className="flex items-center gap-1 max-w-[90vw] overflow-scroll pl-1">
+                        {skills.map((skill) => (
+                            <button
+                                key={skill}
+                                type="button"
+                                title={skill}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setOpenSkill(skill); }
+                            }
+                                className="inline-flex items-center whitespace-nowrap rounded-md border border-neutral-600/70 bg-neutral-700/40 hover:bg-neutral-600/50 active:bg-neutral-600/60 px-1.5 py-0.5"
+                                aria-haspopup="dialog"
+                                aria-controls="skill-modal"
+                            >
+                                {skill}
+                            </button>
+                        ))}
+                    </div>
+                )}
+                <div className="whitespace-nowrap rounded-md border border-neutral-600/70 bg-neutral-700/40 hover:bg-neutral-600/50 active:bg-neutral-600/60 px-1.5 py-0.5" onClick={next} role="button" aria-label="Next card">
                     <span aria-label="Current card index">{index + 1}</span>
                     <span className="opacity-70"> / </span>
                     <span aria-label="Total cards">{localCards.length}</span>
@@ -127,11 +155,45 @@ export function CardsCarousel({cards}: { cards: any[] }) {
                     onClick={handleDownload}
                     title="Download this card as PNG"
                     aria-label="Download card image"
-                    className="inline-flex items-center justify-center rounded-md border border-neutral-600/70 bg-neutral-700/40 hover:bg-neutral-600/50 active:bg-neutral-600/60 px-1.5 py-1"
+                    className="text-white inline-flex items-center justify-center rounded-md border border-neutral-600/70 bg-neutral-700/40 hover:bg-neutral-600/50 active:bg-neutral-600/60 px-1.5 py-1"
                 >
                     <ArrowDownTrayIcon className="w-4 h-4"/>
                 </button>
             </div>
+
+            {openSkill && (
+                <div
+                    id="skill-modal-backdrop"
+                    className="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm flex items-center justify-center px-3"
+                    onClick={() => setOpenSkill(null)}
+                    aria-hidden={false}
+                >
+                    <div
+                        id="skill-modal"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="skill-modal-title"
+                        className="max-w-md w-full rounded-lg border border-neutral-600 bg-neutral-800 text-white shadow-xl"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <div className="flex items-center justify-between px-3 py-2 border-b border-neutral-700">
+                            <h3 id="skill-modal-title" className="text-base font-semibold">{openSkill}</h3>
+                            <button
+                                type="button"
+                                className="rounded-md border border-neutral-600/70 bg-neutral-700/40 hover:bg-neutral-600/50 active:bg-neutral-600/60 px-2 py-0.5"
+                                onClick={() => setOpenSkill(null)}
+                                aria-label="Close"
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        <div className="px-3 py-3 text-sm text-neutral-200">
+                            <p>{skillData?.description}</p>
+                            <p className="mt-2 opacity-75">{skillData?.notes}</p>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <div
                 className="fixed left-0 right-0 bottom-0 z-20 px-2 pb-2"
