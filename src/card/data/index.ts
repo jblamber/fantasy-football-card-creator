@@ -44,7 +44,7 @@ export const TeamData = {
     "Gnomes": Gnomes,
     "Goblin": Goblin,
     "Halflings": Halflings,
-    "HighElf": HighElf,
+    "High Elves": HighElf,
     "Humans": Humans,
     "Imperial Nobility": ImperialNobility,
     "Khorne": Khorne,
@@ -58,10 +58,10 @@ export const TeamData = {
     "Shambling Undead": ShamblingUndead,
     "Skaven": Skaven,
     "Snotlings": Snotlings,
-    "TombKings": TombKings,
+    "Tomb-Kings": TombKings,
     "Underworld Denezins": UnderworldDenezins,
     "Vampires": Vampires,
-    "WoodElves": WoodElves,
+    "Wood Elves": WoodElves,
 }
 
 export const Skills = skills;
