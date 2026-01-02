@@ -368,9 +368,8 @@ export function CardCreator() {
 
                 {/* Right column: form sections */}
                 <div>
-                    <CollapsibleSection title="Player" defaultOpen={false}>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3">
+                    <CollapsibleSection title="Player Data" defaultOpen={false}>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-3">
                             <Field label="Name"><TextInput value={c.playerData.cardName}
                                                            onChange={e => updatePlayer(cardDeckNo, {cardName: e.target.value})}/></Field>
                             <Field label="Team"><TextInput value={c.playerData.teamName}
@@ -391,18 +390,22 @@ export function CardCreator() {
                                                              placeholder="Player notes (not visible on card)"
                                                              onChange={e => updatePlayer(cardDeckNo, {notes: e.target.value})}/></Field>
                         </div>
-
                         <Field label="Stats">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                        <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-3">
                             <Field label="MA"><TextInput value={c.playerData.ma}
+                                                         className={'field-sizing-fixed w-15 '}
                                                          onChange={e => updatePlayer(cardDeckNo, {ma: e.target.value})}/></Field>
                             <Field label="ST"><TextInput value={c.playerData.st}
+                                                         className={'field-sizing-fixed w-15 '}
                                                          onChange={e => updatePlayer(cardDeckNo, {st: e.target.value})}/></Field>
                             <Field label="AG"><TextInput value={c.playerData.ag}
+                                                         className={'field-sizing-fixed w-15 '}
                                                          onChange={e => updatePlayer(cardDeckNo, {ag: e.target.value})}/></Field>
                             <Field label="PA"><TextInput value={c.playerData.pa}
+                                                         className={'field-sizing-fixed w-15 '}
                                                          onChange={e => updatePlayer(cardDeckNo, {pa: e.target.value})}/></Field>
                             <Field label="AV"><TextInput value={c.playerData.av}
+                                                         className={'field-sizing-fixed w-15 '}
                                                          onChange={e => updatePlayer(cardDeckNo, {av: e.target.value})}/></Field>
                         </div>
                         </Field>
