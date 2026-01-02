@@ -60,6 +60,35 @@ function TextArea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
     );
 }
 
+function CollapsibleSection({ title, defaultOpen = true, children }:{ title: string; defaultOpen?: boolean; children: React.ReactNode }) {
+    const [open, setOpen] = useState<boolean>(defaultOpen);
+    return (
+        <section className="mt-4 border border-neutral-700/70 rounded-lg overflow-hidden">
+            <button
+                type="button"
+                className="w-full flex items-center justify-between px-3 py-2 bg-neutral-800/70 hover:bg-neutral-700/50 focus:outline-none focus:ring-2 focus:ring-sky-500/50"
+                aria-expanded={open}
+                onClick={() => setOpen(o => !o)}
+            >
+                <span className="text-neutral-300 font-medium">{title}</span>
+                <svg
+                    className={`h-4 w-4 text-neutral-300 transition-transform duration-200 ${open ? 'rotate-90' : ''}`}
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                >
+                    <path fillRule="evenodd" d="M6.293 9.293a1 1 0 011.414 0L10 11.586l2.293-2.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+            </button>
+            {open && (
+                <div className="p-3 bg-neutral-800/40">
+                    {children}
+                </div>
+            )}
+        </section>
+    );
+}
+
 export function CardCreator() {
 
 
@@ -290,161 +319,158 @@ export function CardCreator() {
         return <div key={cardDeckNo}
                     className="rounded-xl border border-neutral-700/70 bg-neutral-800/60 backdrop-blur-sm shadow-md p-4 mt-4">
             <div className="flex justify-between items-center">
-                <strong className="text-neutral-300 font-semibold">Card #{cardDeckNo + 1}</strong>
+                <strong className="text-neutral-300 font-semibold">Card #{cardDeckNo + 1}: {c.playerData.cardName}</strong>
                 <button onClick={() => removeCard(cardDeckNo)}
                         className="bg-red-900 text-white border border-red-700 rounded-md px-2 py-1.5 hover:bg-red-800">
                     <TrashIcon className="h-4 w-4"/>
                 </button>
 
             </div>
-            <h4 className="text-neutral-300 mt-4">Player</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                <Field label="Name"><TextInput value={c.playerData.cardName}
-                                               onChange={e => updatePlayer(cardDeckNo, {cardName: e.target.value})}/></Field>
-                <Field label="Team"><TextInput value={c.playerData.teamName}
-                                               onChange={e => updatePlayer(cardDeckNo, {teamName: e.target.value})}/></Field>
-                <Field label="Position"><TextInput value={c.playerData.positionName}
-                                                   onChange={e => updatePlayer(cardDeckNo, {positionName: e.target.value})}/></Field>
-                {/*<Field label="Card Layout"><TextInput value={c.playerData.playerType}
-                                               onChange={e => updatePlayer(cardDeckNo, {playerType: e.target.value as any})}/></Field>
-                */}
-            </div>
-            <h4 className="text-neutral-300 mt-4">Stats</h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                <Field label="MA"><TextInput value={c.playerData.ma}
-                                             onChange={e => updatePlayer(cardDeckNo, {ma: e.target.value})}/></Field>
-                <Field label="ST"><TextInput value={c.playerData.st}
-                                             onChange={e => updatePlayer(cardDeckNo, {st: e.target.value})}/></Field>
-                <Field label="AG"><TextInput value={c.playerData.ag}
-                                             onChange={e => updatePlayer(cardDeckNo, {ag: e.target.value})}/></Field>
-                <Field label="PA"><TextInput value={c.playerData.pa}
-                                             onChange={e => updatePlayer(cardDeckNo, {pa: e.target.value})}/></Field>
-                <Field label="AV"><TextInput value={c.playerData.av}
-                                             onChange={e => updatePlayer(cardDeckNo, {av: e.target.value})}/></Field>
-                <Field label="Cost"><TextInput value={c.playerData.cost}
-                                               onChange={e => updatePlayer(cardDeckNo, {cost: e.target.value})}/></Field>
-                <Field label="Skills & Traits"><TextArea rows={3} value={c.playerData.skillsAndTraits}
-                                                         onChange={e => updatePlayer(cardDeckNo, {skillsAndTraits: e.target.value})}/></Field>
-                <Field label="Primary Growth Areas"><TextInput value={c.playerData.primary}
-                                                  onChange={e => updatePlayer(cardDeckNo, {primary: e.target.value})}/></Field>
-                <Field label="Secondary Growth Areas"><TextInput value={c.playerData.secondary}
-                                                    onChange={e => updatePlayer(cardDeckNo, {secondary: e.target.value})}/></Field>
-                <Field label="Card Footer"><TextInput value={c.playerData.footer}
-                                                 onChange={e => updatePlayer(cardDeckNo, {footer: e.target.value})}/></Field>
-                <Field label="Notes"><TextArea rows={4} value={c.playerData.notes || ''}
-                                                 placeholder="Player notes (not visible on card)"
-                                                 onChange={e => updatePlayer(cardDeckNo, {notes: e.target.value})}/></Field>
-                </div>
-            <div className="justify-between items-center grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-2">
-                <Field label="Card Preview">
-                <FantasyFootballCard
-                    {...c}
-                />
-                </Field>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
-                <Field label="Holo Effect">
-                    <select
-                        className="px-2.5 py-2 rounded-md border border-neutral-700 bg-neutral-900 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500"
-                        value={selectedHolo}
-                        onChange={e => {
-                            const v = e.target.value;
-                            updateCard(cardDeckNo, {rarity: v as CardRarity})
-                        }}>
-                        <option value="">(none)</option>
-                        {CardHoloTypes.map((typ) => (
-                            <option key={typ.label} value={typ.rarity}>{typ.label}</option>
-                        ))}
-                    </select>
-                </Field>
-                <Field label="Glow Color">
-                    <select
-                        className="px-2.5 py-2 rounded-md border border-neutral-700 bg-neutral-900 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500"
-                        value={selectedGlow}
-                        onChange={e => {
-                            const v = e.target.value;
-                            updateCard(cardDeckNo, { types: v ? v : undefined });
-                        }}>
-                        <option value="">White</option>
-                        {glowOptions.map((name) => (
-                            <option key={name} value={name}>{name}</option>
-                        ))}
-                    </select>
-                </Field>
-                {/*<Field label="Subtypes (comma)"><TextInput value={(c.subtypes as string) || ''}
-                                                           onChange={e => updateCard(cardDeckNo, {subtypes: e.target.value})}/></Field>
-                <Field label="Supertype"><TextInput value={c.supertype || ''}
-                                                    onChange={e => updateCard(cardDeckNo, {supertype: e.target.value})}/></Field>*/}
-            </div>
-            <h4 className="text-neutral-300 mt-4">Imagery</h4>
-            <div className="text-xs mb-2">
-                Input a cloud hosted url for maximum portability or use a local image file. Use the offsets to move the image
-                around and center the player on the card.
-            </div>
-            <div>
-              {/*  <div className="flex justify-between items-center mt-2">
-                    <span className="text-neutral-400">Card Image</span>
-                    <button onClick={() => addLenticularUrl(idx)}
-                            className="bg-green-900 text-white border border-green-700 rounded-md px-2 py-1.5 hover:bg-green-800">Add
-                        URL
-                    </button>
-                </div>*/}
-                <div className="grid gap-2 mt-2">
-                    <Field label="Player Image">
-                    {Object.keys(c.imagery.lenticularUrls).map((u, j) => (
-                        <div key={j} className="flex flex-col gap-1">
-                            {/* URL input */}
-                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-                                <TextInput placeholder={`Image URL ${j + 1}`} value={c.imagery.lenticularUrls[u]}
-                                           onChange={e => updateLenticularUrl(cardDeckNo, u, e.target.value)} />
-                                <label className="inline-flex items-center gap-1 text-xs">
-                                    <span className="sr-only">Upload image for slot {j + 1}</span>
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={async (e) => {
-                                            const file = e.target.files?.[0];
-                                            if (!file) return;
-                                            try {
-                                                const img = await saveImageFile(file);
-                                                updateLenticularUrl(cardDeckNo, u, localImageUrl(img.id));
-                                                toast(`Image uploaded to this device only`);
-                                            } catch (err) {
-                                                toast(`Failed to load image`, { type: 'error' });
-                                            } finally {
 
-                                            }
-                                        }}
-                                        className="text-xs file:mr-2 file:py-1 file:px-2 file:rounded-md file:border file:border-neutral-700 file:bg-neutral-900 file:text-white"
-                                    />
-                                </label>
-                            </div>
-                            {/* Local image warning */}
-                            {isLocalImageUrl(c.imagery.lenticularUrls[u]) && (
-                                <div className="text-amber-300 text-xs mb-2">
-                                    This card will only display correctly on this device.
-                                </div>
-                            )}
-                        </div>
-                    ))}
+            <div className="lg:grid lg:grid-cols-2 lg:gap-6">
+                {/* Left column: sticky preview on large screens */}
+                <div className="justify-between items-center grid grid-cols-2 md:grid-cols-3 lg:block lg:sticky lg:top-4 self-start">
+                    <Field label="Card Preview">
+                        <FantasyFootballCard {...c} />
                     </Field>
                 </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-1">
-                <Field label="Image Offset X"><TextInput type="number" inputMode="numeric" value={c.imagery.imageProperties.offsetX}
-                                                   onChange={e => updateImageProps(cardDeckNo, {offsetX: Number(e.target.value)})}/></Field>
-                <Field label="Image Offset Y"><TextInput type="number" inputMode="numeric" value={c.imagery.imageProperties.offsetY}
-                                                   onChange={e => updateImageProps(cardDeckNo, {offsetY: Number(e.target.value)})}/></Field>
-                <Field label="Scale %"><TextInput type="number"
-                                                  value={c.imagery.imageProperties.scalePercent}
-                                                  onChange={e => updateImageProps(cardDeckNo, {scalePercent: Number(e.target.value)})}/></Field>
+
+                {/* Right column: form sections */}
+                <div>
+                    <CollapsibleSection title="Player" defaultOpen={false}>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-3">
+                            <Field label="Name"><TextInput value={c.playerData.cardName}
+                                                           onChange={e => updatePlayer(cardDeckNo, {cardName: e.target.value})}/></Field>
+                            <Field label="Team"><TextInput value={c.playerData.teamName}
+                                                           onChange={e => updatePlayer(cardDeckNo, {teamName: e.target.value})}/></Field>
+                            <Field label="Position"><TextInput value={c.playerData.positionName}
+                                                               onChange={e => updatePlayer(cardDeckNo, {positionName: e.target.value})}/></Field>
+                            <Field label="Cost"><TextInput value={c.playerData.cost}
+                                                           onChange={e => updatePlayer(cardDeckNo, {cost: e.target.value})}/></Field>
+                            <Field label="Skills & Traits"><TextArea rows={3} value={c.playerData.skillsAndTraits}
+                                                                     onChange={e => updatePlayer(cardDeckNo, {skillsAndTraits: e.target.value})}/></Field>
+                            <Field label="Primary Growth Areas"><TextInput value={c.playerData.primary}
+                                                          onChange={e => updatePlayer(cardDeckNo, {primary: e.target.value})}/></Field>
+                            <Field label="Secondary Growth Areas"><TextInput value={c.playerData.secondary}
+                                                            onChange={e => updatePlayer(cardDeckNo, {secondary: e.target.value})}/></Field>
+                            <Field label="Card Footer"><TextInput value={c.playerData.footer}
+                                                             onChange={e => updatePlayer(cardDeckNo, {footer: e.target.value})}/></Field>
+                            <Field label="Notes"><TextArea rows={4} value={c.playerData.notes || ''}
+                                                             placeholder="Player notes (not visible on card)"
+                                                             onChange={e => updatePlayer(cardDeckNo, {notes: e.target.value})}/></Field>
+                        </div>
+
+                        <Field label="Stats">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                            <Field label="MA"><TextInput value={c.playerData.ma}
+                                                         onChange={e => updatePlayer(cardDeckNo, {ma: e.target.value})}/></Field>
+                            <Field label="ST"><TextInput value={c.playerData.st}
+                                                         onChange={e => updatePlayer(cardDeckNo, {st: e.target.value})}/></Field>
+                            <Field label="AG"><TextInput value={c.playerData.ag}
+                                                         onChange={e => updatePlayer(cardDeckNo, {ag: e.target.value})}/></Field>
+                            <Field label="PA"><TextInput value={c.playerData.pa}
+                                                         onChange={e => updatePlayer(cardDeckNo, {pa: e.target.value})}/></Field>
+                            <Field label="AV"><TextInput value={c.playerData.av}
+                                                         onChange={e => updatePlayer(cardDeckNo, {av: e.target.value})}/></Field>
+                        </div>
+                        </Field>
+                    </CollapsibleSection>
+
+                    <CollapsibleSection title="Imagery" defaultOpen={false}>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+                            <Field label="Holo Effect">
+                                <select
+                                    className="px-2.5 py-2 rounded-md border border-neutral-700 bg-neutral-900 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500"
+                                    value={selectedHolo}
+                                    onChange={e => {
+                                        const v = e.target.value;
+                                        updateCard(cardDeckNo, {rarity: v as CardRarity})
+                                    }}>
+                                    <option value="">(none)</option>
+                                    {CardHoloTypes.map((typ) => (
+                                        <option key={typ.label} value={typ.rarity}>{typ.label}</option>
+                                    ))}
+                                </select>
+                            </Field>
+                            <Field label="Glow Color">
+                                <select
+                                    className="px-2.5 py-2 rounded-md border border-neutral-700 bg-neutral-900 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500"
+                                    value={selectedGlow}
+                                    onChange={e => {
+                                        const v = e.target.value;
+                                        updateCard(cardDeckNo, { types: v ? v : undefined });
+                                    }}>
+                                    <option value="">White</option>
+                                    {glowOptions.map((name) => (
+                                        <option key={name} value={name}>{name}</option>
+                                    ))}
+                                </select>
+                            </Field>
+                        </div>
+
+                        <div className="text-xs mb-2 mt-4">
+                            Input a cloud hosted url for maximum portability or use a local image file. Use the offsets to move the image
+                            around and center the player on the card.
+                        </div>
+                        <div>
+                            <div className="grid gap-2 mt-2">
+                                <Field label="Player Image">
+                                    {Object.keys(c.imagery.lenticularUrls).map((u, j) => (
+                                        <div key={j} className="flex flex-col gap-1">
+                                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+                                                <TextInput placeholder={`Image URL ${j + 1}`} value={c.imagery.lenticularUrls[u]}
+                                                           onChange={e => updateLenticularUrl(cardDeckNo, u, e.target.value)} />
+                                                <label className="inline-flex items-center gap-1 text-xs">
+                                                    <span className="sr-only">Upload image for slot {j + 1}</span>
+                                                    <input
+                                                        type="file"
+                                                        accept="image/*"
+                                                        onChange={async (e) => {
+                                                            const file = e.target.files?.[0];
+                                                            if (!file) return;
+                                                            try {
+                                                                const img = await saveImageFile(file);
+                                                                updateLenticularUrl(cardDeckNo, u, localImageUrl(img.id));
+                                                                toast(`Image uploaded to this device only`);
+                                                            } catch (err) {
+                                                                toast(`Failed to load image`, { type: 'error' });
+                                                            } finally {
+                                                            }
+                                                        }}
+                                                        className="text-xs file:mr-2 file:py-1 file:px-2 file:rounded-md file:border file:border-neutral-700 file:bg-neutral-900 file:text-white"
+                                                    />
+                                                </label>
+                                            </div>
+                                            {isLocalImageUrl(c.imagery.lenticularUrls[u]) && (
+                                                <div className="text-amber-300 text-xs mb-2">
+                                                    This card will only display correctly on this device.
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </Field>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+                            <Field label="Image Offset X"><TextInput type="number" inputMode="numeric" value={c.imagery.imageProperties.offsetX}
+                                                           onChange={e => updateImageProps(cardDeckNo, {offsetX: Number(e.target.value)})}/></Field>
+                            <Field label="Image Offset Y"><TextInput type="number" inputMode="numeric" value={c.imagery.imageProperties.offsetY}
+                                                           onChange={e => updateImageProps(cardDeckNo, {offsetY: Number(e.target.value)})}/></Field>
+                            <Field label="Scale %"><TextInput type="number"
+                                                              value={c.imagery.imageProperties.scalePercent}
+                                                              onChange={e => updateImageProps(cardDeckNo, {scalePercent: Number(e.target.value)})}/></Field>
+                        </div>
+                    </CollapsibleSection>
+                </div>
             </div>
         </div>;
     }
 
     return (
         <div className="pt-1 px-3 md:px-4 pb-28">
-            <div className="max-w-[900px] mx-auto space-y-4">
+            <div className="max-w-[900px] lg:max-w-[1400px] mx-auto space-y-4">
                 <div
                     className="rounded-xl border border-neutral-700/60 bg-neutral-800/60 backdrop-blur-sm shadow-lg px-4 py-3">
                     <h2 className="text-neutral-100 text-2xl font-semibold">Deck Editor</h2>
