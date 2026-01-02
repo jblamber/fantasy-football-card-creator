@@ -75,6 +75,8 @@ function toArray(x) {
   return Array.isArray(x) ? x : (x == null ? [] : [x]);
 }
 
+const positionRegex = /lineman|blitzer|catcher|big guy|blocker|thrower/i;
+
 function textOf(node) {
   // fast-xml-parser returns text content directly unless there are attributes,
   // in which case text may be under '#text'. Handle both.
@@ -154,7 +156,8 @@ for (const p of playerProfiles) {
         const tl = t.toLowerCase();
         return tl !== 'special' && tl !== 'big guy' && tl !== teamLower;
       });
-      if (filtered[0]) positionName = filtered[0];
+      const position = filtered.find(t => t.toLowerCase().match(positionRegex));
+      if (filtered[0]) positionName = position;
     }
   }
 
