@@ -24,6 +24,14 @@ export const CardHoloTypes = [
         label: "Vertical Bars"
     },
     {
+        rarity: "rare rainbow bball",
+        label: "Holo Ball"
+    },
+    {
+        rarity: "rare rainbow bblogo",
+        label: "Holo Logo"
+    },
+    {
         rarity: "rare holo v",
         label: "Diagonal Shine"
     },

@@ -23,6 +23,8 @@
 @import "./css/cards/shiny-v.css";
 @import "./css/cards/shiny-vmax.css";
 @import "./css/cards/swsh-pikachu.css";
+@import "./css/cards/bball-holo.css";
+@import "./css/cards/bb-logo-holo.css";
 
 /* App shell background and fonts */
 @layer base {
