@@ -2,7 +2,7 @@ import {
     FantasyFootballCardSerializable, type CardSetPayloadV1, FantasyFootballPlayerData, AnyPayload, CardGlowType,
     CardHoloTypes
 } from "../types";
-import React, {useCallback, useEffect, useMemo, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {isSignedIn, signIn, signOut} from "../services/auth";
 import {base64UrlEncode, base64UrlDecode} from "../utils/codec";
 import {saveSet, loadSet} from "../services/backend";
@@ -22,9 +22,10 @@ import {
 } from "../services/localDecks";
 import {
     ArrowRightEndOnRectangleIcon,
-    CloudArrowUpIcon,
     DocumentDuplicateIcon,
-    DocumentPlusIcon
+    DocumentPlusIcon,
+    ArrowDownTrayIcon,
+    ArrowUpTrayIcon
 } from "@heroicons/react/16/solid";
 import {toast} from "react-toastify";
 import {isLocalImageUrl, localImageUrl, saveImageFile} from "../services/localImages";
@@ -127,6 +128,75 @@ export function CardCreator() {
         playerData: emptyPlayer,
         imagery: emptyImagery
     }]);
+
+    // Import/Export helpers
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+    const downloadDeckJson = useCallback(() => {
+        try {
+            const payload: CardSetPayloadV1 = { v: 1, cards };
+            const json = JSON.stringify(payload, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const safeName = (deckName || 'Untitled').replace(/[^a-z0-9-_ ]/gi, '').trim() || 'Untitled';
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${safeName}-deck.ffcg.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        } catch (e) {
+            console.error(e);
+            toast('Failed to download deck JSON', { type: 'error' });
+        }
+    }, [cards, deckName]);
+
+    const handleImportClick = useCallback(() => {
+        fileInputRef.current?.click();
+    }, []);
+
+    const handleImportFile = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        try {
+            if (!file) return;
+            const text = await file.text();
+            const parsed: AnyPayload = JSON.parse(text);
+            if (!(parsed && (parsed as any).v === 1 && Array.isArray((parsed as any).cards))) {
+                throw new Error('Invalid deck JSON: expected { v: 1, cards: [...] }');
+            }
+            const payload = parsed as CardSetPayloadV1;
+
+            // Basic sanity checks on cards
+            const ok = payload.cards.every(c => c && typeof c === 'object' && c.playerData && c.imagery);
+            if (!ok) throw new Error('Invalid cards array in deck JSON.');
+
+            setCards(payload.cards);
+            setDeckId(null);
+            setDeckName('');
+            setCurrentDeckId(null);
+
+            // Reflect imported deck in URL so the viewer link works immediately
+            try {
+                const d = base64UrlEncode(payload);
+                const [, rq] = (window.location.hash || '#/create').split('#');
+                const [r, qs] = (rq || '/create').split('?');
+                const params = new URLSearchParams(qs || '');
+                params.set('d', d);
+                params.delete('s');
+                history.replaceState(null, '', `${window.location.pathname}#/create?${params.toString()}`);
+                window.dispatchEvent(new HashChangeEvent('hashchange'));
+            } catch {}
+
+            toast(`Deck imported: ${payload.cards.length} cards`);
+        } catch (err) {
+            console.error(err);
+            toast((err as Error)?.message || 'Failed to import deck JSON', { type: 'error' });
+        } finally {
+            // reset the input so the same file can be selected again
+            if (e.target) e.target.value = '';
+        }
+    }, []);
 
     // Available glow types (from enum)
     const glowOptions = Object.keys(CardGlowType).filter(k => isNaN(Number(k as any)));
@@ -457,18 +527,21 @@ export function CardCreator() {
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
                             <Field label="Image Offset X"><TextInput type="number" inputMode="numeric" value={c.imagery.imageProperties.offsetX}
+                                                                     className={'field-sizing-fixed w-25'}
                                                            onChange={e => updateImageProps(cardDeckNo, {offsetX: Number(e.target.value)})}/></Field>
                             <Field label="Image Offset Y"><TextInput type="number" inputMode="numeric" value={c.imagery.imageProperties.offsetY}
+                                                                     className={'field-sizing-fixed w-25'}
                                                            onChange={e => updateImageProps(cardDeckNo, {offsetY: Number(e.target.value)})}/></Field>
                             <Field label="Scale %"><TextInput type="number"
                                                               value={c.imagery.imageProperties.scalePercent}
+                                                              className={'field-sizing-fixed w-25'}
                                                               onChange={e => updateImageProps(cardDeckNo, {scalePercent: Number(e.target.value)})}/></Field>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+                        <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-3 mt-3">
                             <Field label="Holo Effect">
                                 <select
-                                    className="px-2.5 py-2 rounded-md border border-neutral-700 bg-neutral-900 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500"
+                                    className="field-sizing-fixed lg:w-45 md:w-65 px-2.5 py-2 rounded-md border border-neutral-700 bg-neutral-900 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500"
                                     value={selectedHolo}
                                     onChange={e => {
                                         const v = e.target.value;
@@ -482,7 +555,7 @@ export function CardCreator() {
                             </Field>
                             <Field label="Glow Color">
                                 <select
-                                    className="px-2.5 py-2 rounded-md border border-neutral-700 bg-neutral-900 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500"
+                                    className="field-sizing-fixed lg:w-45 md:w-65 px-2.5 py-2 rounded-md border border-neutral-700 bg-neutral-900 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500"
                                     value={selectedGlow}
                                     onChange={e => {
                                         const v = e.target.value;
@@ -527,7 +600,7 @@ export function CardCreator() {
                                                            }
                                                        }}/></Field>
 
-                        <div className={'mt-5.5'}>
+                        <div className={'mt-5.5 flex flex-wrap items-center gap-2'}>
                             <button
                                 onClick={() => {
                                     try {
@@ -549,9 +622,12 @@ export function CardCreator() {
                                         console.error(e)
                                     }
                                 }}
-                                className="bg-emerald-700 text-white border border-emerald-600 rounded-md px-3 py-1.5 mr-2 hover:bg-emerald-600">
-                                <ArrowRightEndOnRectangleIcon title={'Save to Device'} className={'h-7 w-7'}/>
+                                className="bg-emerald-700 text-white border border-emerald-600 rounded-md px-3 py-1.5 hover:bg-emerald-600"
+                                title="Save to Device"
+                            >
+                                <ArrowRightEndOnRectangleIcon className={'h-7 w-7'}/>
                             </button>
+
                             <button
                                 onClick={() => {
                                     const name = nextUntitledName();
@@ -569,9 +645,12 @@ export function CardCreator() {
                                     history.replaceState(null, '', `${window.location.pathname}#/create?d=${saved.data}`);
                                     window.dispatchEvent(new HashChangeEvent('hashchange'));
                                 }}
-                                className="bg-sky-800 text-white border border-sky-700 rounded-md px-3 py-1.5 mr-2 hover:bg-sky-700">
-                                <PlusIcon title={'Create new Deck'} className="h-7 w-7"/>
+                                className="bg-sky-800 text-white border border-sky-700 rounded-md px-3 py-1.5 hover:bg-sky-700"
+                                title="Create new Deck"
+                            >
+                                <PlusIcon className="h-7 w-7"/>
                             </button>
+
                             <button
                                 onClick={() => {
                                     if (!deckId) {
@@ -620,9 +699,35 @@ export function CardCreator() {
                                     }
                                     window.dispatchEvent(new HashChangeEvent('hashchange'));
                                 }}
-                                className="bg-red-800 text-white border border-red-700 rounded-md px-3 py-1.5 mr-2 hover:bg-red-700"
+                                className="bg-red-800 text-white border border-red-700 rounded-md px-3 py-1.5 hover:bg-red-700"
+                                title="Delete Deck"
                             >
-                                <TrashIcon title={'Delete Deck'} className="h-7 w-7"/>
+                                <TrashIcon className="h-7 w-7"/>
+                            </button>
+
+                            <span className="mx-1 w-px h-7 bg-neutral-700/70 inline-block" />
+
+                            <button
+                                onClick={downloadDeckJson}
+                                className="bg-neutral-800 text-white border border-neutral-700 rounded-md px-3 py-1.5 hover:bg-neutral-700"
+                                title="Download JSON"
+                            >
+                                <ArrowDownTrayIcon className="h-7 w-7" />
+                            </button>
+
+                            <input
+                                ref={fileInputRef}
+                                type="file"
+                                accept="application/json,.json"
+                                className="hidden"
+                                onChange={handleImportFile}
+                            />
+                            <button
+                                onClick={handleImportClick}
+                                className="bg-neutral-800 text-white border border-neutral-700 rounded-md px-3 py-1.5 hover:bg-neutral-700"
+                                title="Import JSON"
+                            >
+                                <ArrowUpTrayIcon className="h-7 w-7" />
                             </button>
                         </div>
                     </div>
