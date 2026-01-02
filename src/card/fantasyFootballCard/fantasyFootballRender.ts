@@ -170,8 +170,8 @@ export async function renderCard(
             const scale = (data.imageProperties?.scalePercent ?? 100) / 100;
             const width = (playerImg as any).width ? (playerImg as any).width * scale : undefined;
             const height = (playerImg as any).height ? (playerImg as any).height * scale : undefined;
-            const x = 350 + (data.imageProperties?.offsetX ?? 0);
-            const y = 150 + (data.imageProperties?.offsetY ?? 0);
+            const x = 275 + (data.imageProperties?.offsetX ?? 0);
+            const y = 50 + (data.imageProperties?.offsetY ?? 0);
 
             if (width && height) {
                 ctx.drawImage(playerImg!, x, y, width, height);
@@ -225,7 +225,7 @@ export async function renderCard(
         drawWrappedParagraph(ctx, data.skillsAndTraits ?? '', 365, yStart, {
             baseFont: opts.fonts.bodyFont,
             maxLines: 3,
-            fitWidth: 800,
+            fitWidth: 650,
             minFontPx: 24,
             expandToFourLinesThreshold: 140,
         });
