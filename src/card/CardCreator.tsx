@@ -28,8 +28,7 @@ import {
 } from "@heroicons/react/16/solid";
 import {toast} from "react-toastify";
 import {isLocalImageUrl, localImageUrl, saveImageFile} from "../services/localImages";
-
-
+import { TeamData } from "./data";
 
 function Field({label, children}: { label: string; children: React.ReactNode }) {
     return (
@@ -120,7 +119,7 @@ export function CardCreator() {
 
     const emptyImagery = {
         imageProperties: {offsetX: -100, offsetY: 0, scalePercent: 100},
-        lenticularUrls: {'0': '/img/players/grail1.jpg'}
+        lenticularUrls: {'0': '/img/players/blank-player.jpg'}
     }
 
     const [cards, setCards] = useState<FantasyFootballCardSerializable[]>([{
@@ -131,6 +130,32 @@ export function CardCreator() {
 
     // Available glow types (from enum)
     const glowOptions = Object.keys(CardGlowType).filter(k => isNaN(Number(k as any)));
+
+    // Team/Template selection for new cards
+    const teamNames = useMemo(() => Object.keys(TeamData), []);
+    const initialTeam = useMemo(() => {
+        if (deckName && teamNames.includes(deckName)) return deckName;
+        return teamNames[0] || '';
+    }, [deckName, teamNames]);
+    const [selectedTeam, setSelectedTeam] = useState<string>(initialTeam);
+    const selectedTeamPlayers = useMemo(() => {
+        const mod = (TeamData as any)[selectedTeam] as any;
+        const data = mod?.default ?? mod;
+        return Array.isArray(data) ? data : [];
+    }, [selectedTeam]);
+    const [selectedTemplateIdx, setSelectedTemplateIdx] = useState<number>(0);
+
+    useEffect(() => {
+        // Reset player template to first when team changes
+        setSelectedTemplateIdx(0);
+    }, [selectedTeam]);
+
+    useEffect(() => {
+        // If deckName matches a team, set as selected when deck changes
+        if (deckName && teamNames.includes(deckName)) {
+            setSelectedTeam(deckName);
+        }
+    }, [deckName, teamNames]);
 
     // Remix support: if arriving on /create with ?d= or ?s=, preload those cards for editing
     const hash = useHashRoute();
@@ -225,12 +250,18 @@ export function CardCreator() {
             }]);
             return;
         }
+        const template = selectedTeamPlayers[selectedTemplateIdx] as Partial<FantasyFootballPlayerData> | undefined;
+        const playerData: FantasyFootballPlayerData = template
+            ? { ...(template as any) }
+            : { ...emptyPlayer };
         setCards(prev => [...prev, {
             rarity: 'common',
-            playerData: {...emptyPlayer},
-            imagery: {imageProperties: {offsetX: 0, offsetY: 0, scalePercent: 100}, lenticularUrls: {'0' : '/img/players/grail2.jpg'}}
+            playerData,
+            imagery: {
+                ...emptyImagery
+            }
         }]);
-    }, [cards]);
+    }, [cards, selectedTeamPlayers, selectedTemplateIdx]);
 
     const updateCard = useCallback((idx: number, patch: Partial<FantasyFootballCardSerializable>) => {
         setCards(prev => prev.map((c, i) => i === idx ? {
@@ -525,7 +556,7 @@ export function CardCreator() {
                                     const defaultCards: FantasyFootballCardSerializable[] = [{
                                         rarity: 'common',
                                         playerData: emptyPlayer,
-                                        imagery: { imageProperties: { offsetX: 0, offsetY: 0, scalePercent: 100 }, lenticularUrls: { '0': '/img/players/grail1.jpg' } }
+                                        imagery: emptyImagery
                                     }];
                                     const d = base64UrlEncode({ v: 1, cards: defaultCards });
                                     const saved = saveDeckLs({ name, data: d });
@@ -596,38 +627,49 @@ export function CardCreator() {
                 </div>
                 {cards.map((c, idx) => cardForm(idx, c))}
                 <div className="flex justify-between items-center gap-2 mt-4 flex-wrap">
-                    <div className="flex gap-2">
+                    <div className="flex items-end gap-3 flex-wrap">
+                        <Field label="From Team">
+                            <select
+                                value={selectedTeam}
+                                onChange={(e) => setSelectedTeam(e.target.value)}
+                                className="px-2.5 py-2 rounded-md border border-neutral-700 bg-neutral-900 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500"
+                            >
+                                {teamNames.map(t => (
+                                    <option key={t} value={t}>{t}</option>
+                                ))}
+                            </select>
+                        </Field>
+                        <Field label="Player Type">
+                            <select
+                                value={String(selectedTemplateIdx)}
+                                onChange={(e) => setSelectedTemplateIdx(Number(e.target.value))}
+                                className="px-2.5 py-2 rounded-md border border-neutral-700 bg-neutral-900 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500"
+                            >
+                                {selectedTeamPlayers.length === 0 && (
+                                    <option value={0}>No templates</option>
+                                )}
+                                {selectedTeamPlayers.map((p: any, i: number) => (
+                                    <option key={i} value={i}>
+                                        {(p.cardName || p.positionName || `Player ${i+1}`)}{p.cost ? ` — ${p.cost}` : ''}
+                                    </option>
+                                ))}
+                            </select>
+                        </Field>
                         <button onClick={()=> {
                             addCard()
                         }}
+                        title="Add New Player"
                                 className="bg-green-900 text-white border border-green-700 rounded-md px-3 py-2 hover:bg-green-800">
-                            <DocumentPlusIcon className="h-4 w-4"/>
+                            <DocumentPlusIcon className="h-4 w-4" />
                         </button>
                         <button onClick={() => {
                             addCard(true)
                         }}
+                        title="Duplicate Last"
                                 className="bg-green-900 text-white border border-green-700 rounded-md px-3 py-2 hover:bg-green-800">
-                            <DocumentDuplicateIcon className="h-4 w-4"/>
+                            <DocumentDuplicateIcon className="h-4 w-4" />
                         </button>
-                        {/*<button onClick={generateLink}
-                                className="bg-sky-900 text-white border border-sky-700 rounded-md px-3 py-2 hover:bg-sky-800">Generate
-                            Viewer Link
-                        </button>*/}
                     </div>
-                   {/* <div className="flex gap-2 items-center">
-                        <span className="text-neutral-400 text-xs">Backend save (optional)</span>
-                        {signedInState ? (
-                            <button onClick={handleSignOut}
-                                    className="bg-red-900 text-white border border-red-700 rounded-md px-3 py-2 hover:bg-red-800">Sign
-                                out</button>
-                        ) : (
-                            <button onClick={handleSignIn}
-                                    className="bg-sky-900 text-white border border-sky-700 rounded-md px-3 py-2 hover:bg-sky-800">Sign
-                                in</button>
-                        )}
-                        <button onClick={saveToBackend} disabled={!signedInState || saving}
-                                className="bg-green-900 text-white border border-green-700 rounded-md px-3 py-2 hover:bg-green-800 disabled:opacity-60 disabled:cursor-not-allowed">{saving ? 'Saving…' : 'Save & get shortcode'}</button>
-                    </div>*/}
                 </div>
                 {saveError && <div className="text-rose-300 mt-2">Error: {saveError}</div>}
             </div>
