@@ -22,7 +22,7 @@ export function CardsCarousel({cards}: { cards: any[] }) {
         setLocalCards(cards);
     }, [cards]);
 
-    // Debounced URL hash sync (1s): persist edits (like notes) into ?d= so Edit button carries them to Creator
+    // Debounced URL hash sync (1s): persist edits (like notes) into ?d= so the edit button carries them to Creator
     React.useEffect(() => {
         // Only run if there are cards
         if (!localCards || localCards.length === 0) return;
