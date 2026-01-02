@@ -126,7 +126,7 @@ export function CardsCarousel({cards}: { cards: any[] }) {
                 onClick={(e) => e.stopPropagation()}
             >
                 {skills.length > 0 && (
-                    <div className="flex items-center gap-1 max-w-[90vw] overflow-scroll pl-1">
+                    <div className="flex flex-wrap items-center gap-1 max-w-[90vw] pl-1">
                         {skills.map((skill) => (
                             <button
                                 key={skill}
@@ -189,7 +189,8 @@ export function CardsCarousel({cards}: { cards: any[] }) {
                         </div>
                         <div className="px-3 py-3 text-sm text-neutral-200">
                             <p>{skillData?.description}</p>
-                            <p className="mt-2 opacity-75">{skillData?.notes}</p>
+                            {skillData?.restrictions && <hr className={'mt-1'}/>}
+                            <p className="mt-2 opacity-75">{skillData?.restrictions}</p>
                         </div>
                     </div>
                 </div>
