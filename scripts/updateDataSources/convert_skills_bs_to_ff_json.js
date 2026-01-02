@@ -166,7 +166,21 @@ function walkGroup(group, parentCategoryName) {
   for (const cg of childGroups) walkGroup(cg, catName);
 }
 
+function findUncategorizedRules() {
+    ruleById.entries().forEach(([id, rule]) => {
+        if (!results.some(exr => exr.name === rule.alias)) {
+            results.push({
+                category: '',
+                name: rule.alias,
+                type: detectTypeFromName(rule.name),
+                description: rule.description,
+            });
+        }
+    })
+}
+
 for (const g of groups) walkGroup(g, '');
+findUncategorizedRules();
 
 // Sort results by category then name
 results.sort((a, b) => (a.category === b.category ? a.name.localeCompare(b.name) : a.category.localeCompare(b.category)));

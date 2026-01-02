@@ -1,5 +1,215 @@
 [
   {
+    "category": "",
+    "name": "",
+    "type": "ACTIVE",
+    "description": "During League Play, a team with this special rule will earn SPP slightly differently. Players on this team will earn 3 SPP for causing a Casualty rather than the usual 2. Additionally, players on this team will only earn 2 SPP for scoring a Touchdown rather than the usual 3."
+  },
+  {
+    "category": "",
+    "name": "Always Hungry",
+    "type": "ACTIVE",
+    "description": "Whenever this player performs a Throw Team-mate Action, before making the Passing Ability Test, they must roll a D6. On a 2+, they may continue with the Throw Team-mate Action as normal. On a 1, the player will attempt to eat their team-mate - they must roll a further D6.\n\n\nOn a 2+, the team-mate will squirm free and the Throw Team-mate Action will automatically result in a Fumbled Throw. On a 1, the player will eat their team-mate - immediately remove them from your Team Draft List. No Apothecary can be used to try and save them, and no Regeneration rolls can be made. If the team-mate was in possession of the ball, it will Bounce from the square this player occupies. A Turnover is then caused."
+  },
+  {
+    "category": "",
+    "name": "Animal Savagery",
+    "type": "PASSIVE",
+    "description": "Whenever this player is activated, after declaring their action they must roll a D6. They may apply a +2 modifier to the roll if they have declared a Block Action or a Blitz Action. On a 4+, the player may perform the declared action as normal.\n\n\nOn a 1-3, this player lashes out at one of their team-mates. Choose one Standing team-mate adjacent to this player; the chosen player is immediately Knocked Down. This will not cause a Turnover unless the player was holding the ball. If this player has either the Claws or Mighty Blow Skill, then they must use them when making the Armour Roll for the Knocked Down player.\n\n\nIf this player rolls a 1-3 and there are no Standing team-mates adjacent to them, then they are Distracted."
+  },
+  {
+    "category": "",
+    "name": "Ball & Chain",
+    "type": "ACTIVE",
+    "description": "When this player is activated, the only action they can declare is a Ball & Chain Special Action; there is no limit to the number of players that can declare this Special Action each turn.\n\n\nWhen a player performs a Ball & Chain Special Action, position the Throw-in Template over this player so it faces one of the two End Zones or either Sideline. Then roll a D6 and move this player into the square as indicated by the Throw-in Template.\n\n\nA player that moves in this manner does not have to make an Agility Test to Dodge away from another player's Tackle Zone; they will automatically pass. Opposition players cannot use the Shadowing or Tentacles Skills against a player performing a Ball & Chain Action.\n\n\n• If this move takes this player off the pitch, they will risk injury by the Crowd.\n• If this move takes this player into a square containing a standing player (from either team) they will automatically perform a Block Action against that player; this Block Action will ignore the Foul Appearance Skill. If this is a team-mate, then this player's coach will choose which result to apply after the Block Dice have been rolled.\n• If this move takes this player into a square containing a Prone or Stunned player, that player is Pushed Back and an Armour Roll is made against them.\n• If this move takes this player into a square containing the ball, it will immediately Bounce. This will not cause a Turnover.\n\n\nA player performing a Ball & Chain Special Action can move a number of squares up to their MA. They may Rush as normal, though if they roll a 1, they will move into the square as normal first, including performing any Block Actions, Pushing Back any players or causing the ball to Bounce, before Falling Over in the square they have moved into.\n\n\nIf this player is Knocked Down, Falls Over or Placed Prone for any reason, immediately make an Injury Roll for them treating any result of Stunned as Knocked-out instead.\n\n\nA player with this Trait cannot have any of the following Skills: Diving Tackle, Eye Gouge, Frenzy, Grab, Hit & Run, Leap, Multiple Block, On the Ball, Shadowing, Steady Footing."
+  },
+  {
+    "category": "",
+    "name": "Bombardier",
+    "type": "ACTIVE",
+    "description": "When this player is activated, they can declare a Throw Bomb Special Action; only one player can declare this Special Action each Turn.\n\n\nWhen a player performs a Throw Bomb Special Action, they throw a bomb in the same manner as when a player performs a Pass Action, following all the usual rules for a Pass Action. Though this is not a Pass Action itself, any Skills or Traits that come into play when a player performs a Pass Action will also apply to a Throw Bomb Special Action, with the exception of the On the Ball Skill. A player that declared a Throw Bomb Special Action may not perform a Move Action before throwing the bomb.\n\n\nIf at any point a bomb comes to rest on the ground then it will immediately explode in that square. Should a bomb be Fumbled by the thrower, or dropped when a player attempts to Catch it, then it will not Bounce and will instead explode in that player's square. When a bomb explodes, any player in the square it exploded in is hit by the explosion. Additionally, roll a D6 for each player adjacent to the square in which the bomb exploded. On a 4+, they are hit by the explosion.\n\n\nAny standing player that is hit by the explosion is Knocked Down. Additionally, make an Armour Roll for any Prone or Stunned players hit by the explosion.\n\n\nIf a player successfully Catches or Intercepts a thrown bomb, the player that caught the bomb must immediately throw it again, following all the same rules for making a Throw Bomb Special Action as described above."
+  },
+  {
+    "category": "",
+    "name": "Bone Head",
+    "type": "PASSIVE",
+    "description": "Whenever this player is activated, after declaring their Action they must roll a D6. On a 2+ the player may perform the declared Action as normal. On a 1, the player becomes Distracted."
+  },
+  {
+    "category": "",
+    "name": "Breathe Fire",
+    "type": "ACTIVE",
+    "description": "When this player is activated, they can declare a Breathe Fire Special Action; there is no limit to the number of players that can declare this Special Action each Turn.\n\n\nWhen a player makes a Breathe Fire Special Action, they may choose one Standing opposition player they are Marking and roll a D6, applying a -1 modifier if the target has a ST of 5 or higher. On a 1, this player is immediately Knocked Down. On a 2-3, nothing happens. On a 4+, the opposition player is immediately Placed Prone. If the roll is a natural 6, the opposition player is Knocked Down instead. After the Breathe Fire Special Action has been resolved, this player's activation immediately ends.\n\n\nThis player may use the Breathe Fire Special Action to replace the Block Action made as part of a Blitz Action if they wish, though their activation will still end as soon as they have performed the Breathe Fire Special Action."
+  },
+  {
+    "category": "",
+    "name": "Chainsaw",
+    "type": "ACTIVE",
+    "description": "When this player is activated, they can declare a Chainsaw Attack Special Action; there is no limit to the number of players that can declare this Special Action each Turn.\n\n\nWhen a player performs a Chainsaw Attack Special Action, roll a D6. On a 2+, this player may immediately make an Armour Roll against one adjacent Standing opposition player, applying a +3 modifier to the Armour Roll.\n\n\nOn a 1, the Chainsaw will Kick-back and this player is Knocked Down instead.\n\n\nIf this player is Knocked Down or Falls Over for any reason, regardless of how it occurred, then a +3 modifier is applied when the opposition Coach makes an Armour Roll for this player, this +3 modifier must always be applied.\n\n\nShould they wish, this player may also use their chainsaw when performing a Foul Action, in which case they may apply a +3 modifier when making the Armour Roll for the opposition player. They will still need to roll for Kick-back as normal.\n\n\nThis player may use the Chainsaw Attack Special Action to replace the Block Action made as part of a Blitz Action if they wish, though their activation will still end as soon as they have performed the Chainsaw Attack Special Action."
+  },
+  {
+    "category": "",
+    "name": "Decay",
+    "type": "PASSIVE",
+    "description": "Apply a +1 modifier to any Casualty Roll made against this player."
+  },
+  {
+    "category": "",
+    "name": "Drunkard",
+    "type": "PASSIVE",
+    "description": "This player applies a -1 modifier to test whenever they attempt to Rush."
+  },
+  {
+    "category": "",
+    "name": "Favoured of (choose any)",
+    "type": "ACTIVE",
+    "description": "Some teams may automatically have a specific alignment (e.g., Favoured of Khorne), whilst others may have a choice. If a team has a choice of alignment, it will be listed in brackets following the special rule - for example, Favoured of (Khorne, Nurgle, Slaanesh or Tzeentch).\n\n\nWhen creating a Team Draft List, a team with this special rule that has a choice must choose an alignment from the options given and cannot change it later on.\n\n\nSome Star Players will only be able to play for teams that are Favoured of specific Chaos Gods. For example, a Star Player's profile may say they can play for teams with the Favoured of Khorne special rule. Such a Star Player could not therefore play for any team with the Favoured of Nurgle, Slaanesh, etc., special rule.\n\n\nIf a team has a choice of any alignment, they can choose from any of the following: Hashut, Khorne, Nurgle, Slaanesh, Tzeentch, Undivided."
+  },
+  {
+    "category": "",
+    "name": "Frenzy",
+    "type": "ACTIVE",
+    "description": "Every time this player performs a Block Action, if the target is Pushed Back, then this player must Follow-up if able. Additionally if after the target is Pushed Back they are still standing, then this player must perform a second Block Action targeting the same opposition player and must again Follow-up if the target is pushed back.\n\n\nIf this player is performing a Blitz Action, performing a second Block Action will also cost the player a square of movement. If this player has no movement left, then they must Rush. If this player cannot Rush then they cannot perform the second Block Action.\n\n\nA player with this Skill cannot have the Grab, Hit & Run or Multiple Block Skills."
+  },
+  {
+    "category": "",
+    "name": "Hypnotic Gaze",
+    "type": "ACTIVE",
+    "description": "When this player is activated, they can declare a Hypnotic Gaze Special Action; there is no limit to the number of players that declare this Special Action each Turn. When a player declares a Hypnotic Gaze Special Action they are first allowed to make a Move Action, though they cannot continue to move after the Hypnotic Gaze Special Action has been attempted.\n\n\nWhen a player performs a Hypnotic Gaze Special Action, they select a Standing opposition player adjacent to them and roll a D6. On a 1-2, nothing happens and this player's activation immediately ends. On a 3+, the selected opposition player becomes Distracted and this player's activation immediately ends."
+  },
+  {
+    "category": "",
+    "name": "Insignificant",
+    "type": "PASSIVE",
+    "description": "When creating a Team Draft List, you may not include more players with this Trait than players without this Trait."
+  },
+  {
+    "category": "",
+    "name": "Kick Team-mate",
+    "type": "PASSIVE",
+    "description": "When this player is activated, they can declare a Kick Team-mate Special Action; only one player can declare this Special Action each Turn.\n\n\nA Kick Team-mate Special Action works exactly the same as a Throw Team-mate Action, with the following exceptions:\n\n\nPerforming a Kick Team-mate Special Action does not count as a team's Throw Team-mate Action for the Turn, and so a team can perform both a Kick Team-mate Special Action and a Throw Team-mate Action in the same turn if they wish.\n\n\nHowever, if a Kick Team-mate Special Action results in a Fumbled Throw, immediately make an Injury Roll for the team-mate being kicked, treating any result of Stunned as Knocked Out. If the kicked player was holding the ball, it will Bounce from the square they were in.\n\n\nAny Skills or Traits that come into play when a player performs a Throw Team-mate Action will also apply to a Kick Team-mate Special Action. This player will also gain Star Player Points in the same manner as a Throw Team-mate Action."
+  },
+  {
+    "category": "",
+    "name": "My Ball",
+    "type": "PASSIVE",
+    "description": "A player with this Trait may not willingly give up the ball when in possession of it, and so may not declare Pass Actions, Hand-off Actions, or use any other Skill or Trait that would allow them to relinquish possession of the ball. The only way they can lose possession of the ball is by being Knocked Down, Placed Prone, Falling Over or by the effect of a Skill, Trait, or Special Rule of an opposing model."
+  },
+  {
+    "category": "",
+    "name": "No Ball",
+    "type": "PASSIVE",
+    "description": "A player with this Trait may never have possession of the ball. If this player would be required to attempt to Catch or Pick-up the ball, they will automatically fail to do so as if they had rolled a natural 1.\n\n\nA player with this Trait may not attempt to Intercept a Pass."
+  },
+  {
+    "category": "",
+    "name": "Pick-me-up",
+    "type": "ACTIVE",
+    "description": "At the end of each of the opposition's Turns, roll a D6 for each Prone team-mate within 3 squares of one or more Standing players with this Trait. On a 5+, the Prone player may immediately stand up. Should a player with this Trait stand up as a result of a team-mate using this Trait, they may not also use this Trait during the same Turn."
+  },
+  {
+    "category": "",
+    "name": "Plague Ridden",
+    "type": "PASSIVE",
+    "description": "Once per game, when a player with this Trait causes a Casualty against an opposition player as a result of a Block Action, and that player suffers a Dead result on their Casualty roll and is not saved by an Apothecary, you may immediately add one new **Lineman** player from your team's Team Roster to your Reserves Box. This may cause your team to have more than 16 players for the remainder of the game.\n\n\nDuring the Post-game Sequence, this player may be hired in the same manner as any Journeymen players.\n\n\nThis Trait cannot be used against **Big Guy** players, or any player with the Decay, Regeneration, or Stunty Traits."
+  },
+  {
+    "category": "",
+    "name": "Pogo",
+    "type": "ACTIVE",
+    "description": "During their movement, a player with this Trait can attempt to Pogo over a single adjacent square regardless of what is in the square. Pogoing works the same was as Jumping, as described on page 56, with the exception that the Pogoing player may ignore all negative modifiers they would receive by Jumping.\n\n\nA player with this Trait cannot also have the Leap Skill."
+  },
+  {
+    "category": "",
+    "name": "Projectile Vomit",
+    "type": "ACTIVE",
+    "description": "When this player is activated, they can declare a Projectile Vomit Special Action; there is no limit to the number of players that can declare this Special Action each turn.\n\n\nWhen this player performs a Projectile Vomit Special Action, select a Standing opposition player adjacent to this player and roll a D6. On a 2+, this player vomits on their target; make an Armour Roll for the selected player. This Armour Roll cannot be modified in any way. If the player's armour is broken, make an Injury Roll for them, otherwise nothing happens.\n\n\nOn a 1, this player covers themselves in acidic bile; make an Armour Roll for this player. If this player's armour is broken, make an Injury Roll for them, otherwise nothing happens.\n\n\nThis player may use the Projectile Vomit Special Action to replace the Block Action made as part of a Blitz Action if they wish, though their activation will still end as soon as they have performed the Projectile Vomit Special Action."
+  },
+  {
+    "category": "",
+    "name": "Really Stupid",
+    "type": "PASSIVE",
+    "description": "Whenever this player is activated, after declaring their Action, they must roll a D6. They may apply a +2 modifier to the roll if they have any Standing team-mates who are not Distracted, and do not have the Really Stupid Trait, adjacent to them. On a 4+, the player may perform the declared Action as normal. On a 1-3, this player becomes Distracted."
+  },
+  {
+    "category": "",
+    "name": "Regeneration",
+    "type": "PASSIVE",
+    "description": "Whenever this player suffers a Casualty, before making the Casualty Roll for them, roll a D6.\n\n\nOn a 1-3, this player suffers the Casualty; make the Casualty Roll as normal. On a 4+, this player regenerates and ignores the Casualty (though any Star Player Points earned for causing the Casualty are still earned) and is instead placed in their team's Reserves Box."
+  },
+  {
+    "category": "",
+    "name": "Right Stuff",
+    "type": "PASSIVE",
+    "description": "This player can be thrown by a team-mate with the Throw Team-mate Trait, even if this player is Prone."
+  },
+  {
+    "category": "",
+    "name": "Secret Weapon",
+    "type": "PASSIVE",
+    "description": "At the end of a Drive in which this player took part, even if they are not on the pitch at the end of the Drive, they are Sent-off for committing a Foul."
+  },
+  {
+    "category": "",
+    "name": "Stab",
+    "type": "ACTIVE",
+    "description": "When this player is activated, they can declare a Stab Special Action; there is no limit to the number of players that can declare this Special Action each Turn.\n\n\nWhen this player performs a Stab Special Action, select a Standing opposition player adjacent to this player and make an Armour Roll for the selected player. This Armour Roll cannot be modified in any way. If the player's armour is broken, make an Injury Roll for them, otherwise nothing happens.\n\n\nThis player may use the Stab Special Action to replace the Block Action made as part of a Blitz Action if they wish, though their activation will still end as soon as they have performed the Stab Special Action."
+  },
+  {
+    "category": "",
+    "name": "Stunty",
+    "type": "PASSIVE",
+    "description": "When this player attempts to Dodge, they do not suffer any negative modifiers to their Agility Test for being Marked by opposition players.\n\n\nAdditionally, this player applies a -1 modifier to the Agility Test when attempting to Intercept the ball.\n\n\nA player with this Trait is more prone to injury and so if an Injury Roll is made for them, roll on the Stunty Injury Table instead."
+  },
+  {
+    "category": "",
+    "name": "Swoop",
+    "type": "ACTIVE",
+    "description": "When this player is thrown by a Throw Team-mate Action, they may choose not to Scatter before landing as normal. If they do, position the Throw-in Template over this player so it faces one of the two End Zones or either Sideline. Roll a D6 to determine the direction this player will travel, and then a second D6 to determine how many squares in that direction this player will travel.\n\n\nAdditionally, if they choose not to Scatter as normal, this player may re-roll the Agility Test when attempting to land."
+  },
+  {
+    "category": "",
+    "name": "Take Root",
+    "type": "PASSIVE",
+    "description": "Whenever this player is activated, after declaring their Action, if they are Standing they must roll a D6. On a 2+, the player may perform the declared Action as Normal.\n\n\nOn a 1, the player becomes Rooted. Whilst Rooted, a player cannot perform Move Actions, may not Follow-up after performing a Block Action, cannot be Pushed Back, and may not leave their current square for any reason, with the exception of being Knocked Out or suffering a Casualty.\n\n\nA Rooted player will immediately stop being Rooted at the end of a Drive, or if they are ever Knocked Down or Placed Prone."
+  },
+  {
+    "category": "",
+    "name": "Throw Team-mate",
+    "type": "ACTIVE",
+    "description": "This player may declare the Throw Team-mate Action as described on page 76."
+  },
+  {
+    "category": "",
+    "name": "Timmm-ber!",
+    "type": "PASSIVE",
+    "description": "If this player has an MA of 2 or less and attempts to stand up, apply a +1 modifier to the roll for standing up for each Open Standing team-mate adjacent to this player. A roll of a natural 1 will still fail as normal."
+  },
+  {
+    "category": "",
+    "name": "Titchy",
+    "type": "PASSIVE",
+    "description": "A player with this Trait may apply a +1 modifier to the Agility Test when attempting to Dodge.\n\n\nHowever, when an opposition player attempts to Dodge into a square within this player's Tackle Zone, this player will not apply a -1 modifier to the opposition player's Agility Test for Marking the opposition player."
+  },
+  {
+    "category": "",
+    "name": "Trickster",
+    "type": "ACTIVE",
+    "description": "Whenever an opposition player attempts to perform a Block Action against this player, or a Special Action that targets this player directly (with the exception of a Block Action caused by the Ball & Chain Special Action), this player may use this Trait.\n\n\nBefore determining how many dice are rolled, this player may be removed from the pitch and placed in any other unoccupied square adjacent to the player performing the Action. The Action then takes place as normal. If the player using this Trait is holding the ball and places themselves in the opposition End Zone, the Action will still be fully resolved before any Touchdown is resolved.\n\n\nIf this player uses this trait to be placed on the ball, they may attempt to pick it up before any dice are rolled."
+  },
+  {
+    "category": "",
+    "name": "Unchannelled Fury",
+    "type": "ACTIVE",
+    "description": "Whenever this player is activated, after declaring their Action, they must roll a D6. They may apply a +2 modifier to the roll if they have declared a Block Action or Blitz Action. On a 4+, the player may perform the declared Action as normal.\n\n\nOn a 1-3, this player rages incoherently but nothing really happens. Their activation immediately ends."
+  },
+  {
+    "category": "",
+    "name": "Unsteady",
+    "type": "PASSIVE",
+    "description": "This player may not declare Secure the Ball Actions."
+  },
+  {
     "category": "AGILITY",
     "name": "Catch",
     "type": "ACTIVE",
