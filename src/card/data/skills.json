@@ -3,64 +3,76 @@
     "category": "AGILITY",
     "name": "Catch",
     "type": "ACTIVE",
-    "description": "This player may re-roll any failed Agility Test when attempting to catch the ball."
-  },
-  {
-    "category": "AGILITY",
-    "name": "Dodge",
-    "type": "ACTIVE",
-    "description": "Once per turn, this player may re-roll a single Agility Test when attempting to dodge. Additionally, this skill will impact the Stumble result when an opposition player performs a Block Action against this player, as described on page 62."
-  },
-  {
-    "category": "AGILITY",
-    "name": "Diving Catch",
-    "type": "ACTIVE",
-    "description": "This player may attempt to catch the ball if it lands in a square in their Tackle Zone as a result of a Pass, Throw-in or Kick-off. They may not use this skill to attempt to catch the ball if it lands in a square in their Tackle Zone as a result of a bounce. Additionally, this player may apply a +1 modifier to their Agility Test when attempting to catch the ball as part of a Pass Action if they are in the target square."
-  },
-  {
-    "category": "AGILITY",
-    "name": "Diving Tackle",
-    "type": "ACTIVE",
-    "description": "When an opposition player attempts to leave this player’s Tackle Zone as a result of a dodge, leap or jump, after the Agility Test has been rolled and any modifiers and re-rolls have been applied, this player may use this skill. Immediately apply a -2 modifier to the opposition player’s Agility Test and place this player Prone in the square the opposition player vacated. If a player tries to leave the Tackle Zone of multiple players with this skill at the same time, only one of those players may use this skill."
+    "description": "This player may re-roll any failed Agility Test when attempting to Catch the ball."
   },
   {
     "category": "AGILITY",
     "name": "Defensive",
     "type": "ACTIVE",
-    "description": "During your opponent’s turn, opposition players Marked by this player cannot use the Guard or Put the Boot In skills."
-  },
-  {
-    "category": "AGILITY",
-    "name": "Hit & Run",
-    "type": "ACTIVE",
-    "description": "When a player with this skill performs a Block Action or a Stab Special Action, after fully resolving the action, they may immediately move one free square ignoring Tackle Zones, so long as they are still Standing. The player must ensure that after this free move they are not Marked by or Marking any opposition players."
-  },
-  {
-    "category": "AGILITY",
-    "name": "Leap",
-    "type": "ACTIVE",
-    "description": "During their Move Action, a player with this skill can attempt to leap over a single adjacent square regardless of what is in the square. Leaping works the same way as jumping, with the exception that the leaping player may reduce the negative modifiers they would receive by leaping by 1, to a minimum of -1.",
+    "description": "During your opponent's Turns, opposition players Marked by this player cannot use the Guard or Put the Boot In Skills.",
     "restrictions": [
-      "A player with this skill cannot also have the Pogo trait."
+      "During your opponent's Turns, opposition players Marked by this player cannot use the Guard or Put the Boot In Skills."
+    ]
+  },
+  {
+    "category": "AGILITY",
+    "name": "Diving Catch",
+    "type": "ACTIVE",
+    "description": "This player may attempt to Catch the ball if it lands in a square in their Tackle Zone as a result of a Pass, Throw-in or Kick-off. Additionally, this player may apply a +1 modifier to their Agility Test when attempting to Catch the ball as part of a Pass Action if they are in the target square.",
+    "restrictions": [
+      "They may not use this Skill to attempt to Catch the ball if it lands in a square in their Tackle Zone as a result of a Bounce."
+    ]
+  },
+  {
+    "category": "AGILITY",
+    "name": "Diving Tackle",
+    "type": "ACTIVE",
+    "description": "When an opposition player attempts to leave this player's Tackle Zone as a result of a Dodge, Leap or Jump, after the Agility Test has been rolled and any modifiers and re-rolls have been applied, this player may use this Skill. Immediately apply a -2 modifier to the opposition player's Agility Test and place this player Prone in the square the opposition player vacated. If this player tries to leave the Tackle Zone of multiple players with this Skill at the same time, only one of those players may use this Skill."
+  },
+  {
+    "category": "AGILITY",
+    "name": "Dodge",
+    "type": "ACTIVE",
+    "description": "Once per Turn, this player may re-roll a single Agility Test when attempting to Dodge. Additionally, this Skill will impact the Stumble result when an opposition player performs a Block Action against this player, as described on page 62."
+  },
+  {
+    "category": "AGILITY",
+    "name": "Hit and Run",
+    "type": "ACTIVE",
+    "description": "When a player with this Skill performs a Block Action or a Stab Action, after fully resolving the Action, they may immediately move one free square ignoring Tackle Zones, so long as they are still Standing. The player must ensure that after this free move they are not Marked by or Marking any opposition players.",
+    "restrictions": [
+      "A player with this Skill cannot also have the Frenzy Skill."
     ]
   },
   {
     "category": "AGILITY",
     "name": "Jump Up",
     "type": "ACTIVE",
-    "description": "This skill can be used whilst a player is Prone. A Prone player with this skill can stand up for free without having to spend 3 squares of movement to do so. Additionally, a Prone player with this skill can declare a Block Action whilst Prone. If they do, they must make an Agility Test, applying a +1 modifier to the result; if the Agility Test is passed, they may immediately stand up and perform the Block Action. If the Agility Test fails, the player remains Prone and their activation immediately ends."
+    "description": "This Skill can be used whilst a player is Prone. A Prone player with this Skill can stand up for free without having to spend 3 squares of movement to do so. Additionally, a Prone player with this Skill can declare a Block Action whilst Prone. If they do, they must make an Agility Test, applying a +1 modifier to the result. If the Agility Test is passed, they may immediately stand up and perform the Block Action. If the Agility Test is failed, the player remains Prone and their activation immediately ends."
+  },
+  {
+    "category": "AGILITY",
+    "name": "Leap",
+    "type": "ACTIVE",
+    "description": "During their Move Action, a player with this Skill can attempt to Leap over a single adjacent square regardless of what is in the square. Leaping works the same way as Jumping, as described on page 56, with the exception that the Leaping player may reduce the negative modifiers they would receive by Leaping by 1, to a minimum of -1.",
+    "restrictions": [
+      "A player with this Skill cannot also have the Pogo Trait."
+    ]
   },
   {
     "category": "AGILITY",
     "name": "Safe Pair of Hands",
     "type": "ACTIVE",
-    "description": "If this player would be Knocked Down, Fall Over or be placed Prone whilst in possession of the ball then, before they become Prone, they may place the ball in any adjacent unoccupied square to the square they will become Prone in instead of bouncing the ball as normal."
+    "description": "If this player would be Knocked Down, Fall Over or be Placed Prone whilst in possession of the ball then, before they become Prone, they may place the ball in any adjacent unoccupied square to the square they will become Prone in instead of Bouncing the ball as normal."
   },
   {
     "category": "AGILITY",
     "name": "Sidestep",
     "type": "ACTIVE",
-    "description": "Whenever this player is pushed back for any reason, then instead of the opposing Coach choosing where this player is pushed back to, this player’s Coach may choose any adjacent unoccupied square for this player to be pushed back into instead. If there are no adjacent unoccupied squares, then this skill cannot be used."
+    "description": "Whenever this player is Pushed Back for any reason, then instead of the opposing coach choosing where this player is Pushed Back to, this player's Coach may choose any adjacent unoccupied square for this player to be Pushed Back into instead.",
+    "restrictions": [
+      "If there are no adjacent unoccupied squares, then this Skill cannot be used."
+    ]
   },
   {
     "category": "AGILITY",
@@ -72,154 +84,184 @@
     "category": "AGILITY",
     "name": "Sure Feet",
     "type": "ACTIVE",
-    "description": "Once per turn, this player may re-roll a single D6 when attempting to Rush."
+    "description": "Once per Turn, this player may re-roll a single D6 when attempting to Rush."
   },
   {
-    "category": "AGILITY",
+    "category": "DEVIOUS",
     "name": "Dirty Player",
     "type": "ACTIVE",
     "description": "When this player performs a Foul Action, they may apply a +1 modifier to either the Armour Roll or Injury Roll. This modifier may be applied after the roll has been made."
   },
   {
-    "category": "AGILITY",
+    "category": "DEVIOUS",
     "name": "Eye Gouge",
     "type": "ACTIVE",
-    "description": "When an opposition player is pushed back by this player, the opposition player cannot provide Offensive or Defensive Assists until after they are next activated."
-  },
-  {
-    "category": "AGILITY",
-    "name": "Fumblerooski",
-    "type": "ACTIVE",
-    "description": "When this player performs a Move Action while they are in possession of the ball, they may choose to place the ball on the ground in any square they move out of during their Move Action. This will not cause a Turnover. No longer works on a Blitz Action."
-  },
-  {
-    "category": "AGILITY",
-    "name": "Lethal Flight",
-    "type": "ACTIVE",
-    "description": "When this player is thrown as part of a Throw Team-mate Action, if they land in a square that contains an opposition player, including if they bounce into a square containing an opposition player, and the opposition player is Knocked Down, then they may apply a +1 modifier to either the Armour Roll or Injury Roll. This modifier may be applied after the roll has been made. If an opposition player suffers a Casualty as a result of being Knocked Down by the thrown player with this skill, then this player will count as having caused that Casualty and will receive Star Player Points as appropriate.",
+    "description": "When an opposition player is Pushed Back by this player, the opposition player cannot provide Offensive or Defensive Assists until after they are next activated.",
     "restrictions": [
-      "A player without the Right Stuff trait cannot have this skill."
+      "When an opposition player is Pushed Back by this player, the opposition player cannot provide Offensive or Defensive Assists until after they are next activated."
     ]
   },
   {
-    "category": "AGILITY",
+    "category": "DEVIOUS",
+    "name": "Fumblerooski",
+    "type": "ACTIVE",
+    "description": "When this player performs a Move Action whilst they are in possession of the ball, they may choose to place the ball on the ground in any square they move out of during their Move Action. This will not cause a Turnover."
+  },
+  {
+    "category": "DEVIOUS",
+    "name": "Lethal Flight",
+    "type": "ACTIVE",
+    "description": "When this player is thrown as part of a Throw Team-mate Action, if they land in a square that contains an opposition player, including if they Bounce into a square containing an opposition player, and the opposition player is Knocked Down, then they may apply a +1 modifier to either the Armour Roll or Injury Roll. This modifier may be applied after the roll has been made. If an opposition player suffers a Casualty as a result of being Knocked Down by the thrown player with this Skill, then this player will count as having caused that Casualty and will receive Star Player Points as appropriate.",
+    "restrictions": [
+      "A player without the Right Stuff Trait cannot have this Skill."
+    ]
+  },
+  {
+    "category": "DEVIOUS",
     "name": "Lone Fouler",
     "type": "ACTIVE",
     "description": "When this player performs a Foul Action, if there are no players providing an Offensive or Defensive Assist, then this player may re-roll a failed Armour Roll."
   },
   {
-    "category": "AGILITY",
-    "name": "Pile Diver",
+    "category": "DEVIOUS",
+    "name": "Pile Driver",
     "type": "ACTIVE",
-    "description": "When an opposition player is Knocked Down by this player during a Block Action, this player may perform a free Foul Action against the opposition player so long as they are still Standing and are still Marking the opposition player. This player is then placed Prone and their activation immediately ends."
+    "description": "When an opposition player is Knocked Down by this player during a Block Action, this player may perform a free Foul Action against the opposition player so long as they are still Marking the opposition player. This player is then Placed Prone and their activation immediately ends."
   },
   {
-    "category": "AGILITY",
+    "category": "DEVIOUS",
     "name": "Put the Boot In",
     "type": "ACTIVE",
-    "description": "This player can provide Offensive Assist when a team-mate performs a Foul Action regardless of how many opposition players are Marking this player."
+    "description": "This player can provide Offensive Assists when a team-mate performs a Foul Action regardless of how many opposition players are Marking this player."
   },
   {
-    "category": "AGILITY",
+    "category": "DEVIOUS",
     "name": "Quick Foul",
     "type": "ACTIVE",
-    "description": "This player’s activation does not end after performing a Foul Action, and they may continue with their Move Action with any movement they have remaining."
+    "description": "This player's activation does not end after performing a Foul Action, and they may continue with their Move Action with any movement they have remaining."
   },
   {
-    "category": "AGILITY",
+    "category": "DEVIOUS",
     "name": "Saboteur",
     "type": "ACTIVE",
-    "description": "When this player is Knocked Down as a result of an opposition player’s Block Action, before the Armour Roll is made, they may roll a D6. On 1-3, nothing happens and the Armour Roll is made as normal. On a 4+, this player’s sabotaged weapon goes off and the opposition player is also Knocked Down, though this will not cause a Turnover unless the opposition player was holding the ball. If this player’s sabotaged weapon goes off, then they are automatically Knocked Out and the Armour Roll is not made for them.",
+    "description": "When this player is Knocked Down as a result of an opposition player's Block Action, before the Armour Roll is made, they may roll a D6. On a 1-3, nothing happens and the Armour Roll is made as normal. On a 4+, this player's sabotaged weapon goes off and the opposition player is also Knocked Down, though this will not cause a Turnover unless the opposition player was holding the ball. If this player's sabotaged weapon goes off, then they are automatically Knocked Out and the Armour Roll is not made for them.",
     "restrictions": [
-      "A player without the Secret Weapon trait cannot have this skill."
+      "A player without the Secret Weapon Trait cannot have this Skill."
     ]
   },
   {
-    "category": "AGILITY",
+    "category": "DEVIOUS",
     "name": "Shadowing",
     "type": "ACTIVE",
-    "description": "Each time an opposing player attempts to dodge out of a square within this player’s Tackle Zone, this player may use this skill. When this player uses this skill, roll a D6. On a 1-3, nothing happens. On a 4+, this player is immediately placed into the square that the opposition player vacated. This player may only use this skill a number of times per turn equal to their MA. If a player tries to leave the Tackle Zone of multiple players with this skill at the same time, only one of those players may use this skill."
+    "description": "Each time an opposing player attempts to Dodge out of a square within this player's Tackle Zone, this player may use this Skill. When this player uses this Skill, roll a D6. On a 1-3, nothing happens. On a 4+, this player is immediately placed into the square that the opposition player vacated. This player may only use this Skill a number of times per Turn equal to their MA. If a player tries to leave the Tackle Zone of multiple players with this Skill at the same time, only one of those players may use this Skill."
   },
   {
-    "category": "AGILITY",
+    "category": "DEVIOUS",
     "name": "Sneaky Git",
     "type": "ACTIVE",
-    "description": "This player is not sent off when performing a Foul Action if a natural double is rolled for the Armour Roll, so long as the target player’s armour is not broken. If the target player’s armour is broken, this player will still be sent off as normal."
+    "description": "This player is not Sent-off when performing a Foul Action if a natural double is rolled for the Armour Roll, so long as the target player's Armour is not broken. If the target player's Armour is broken, this player will be sent off as normal."
   },
   {
-    "category": "AGILITY",
+    "category": "DEVIOUS",
     "name": "Violent Innovator",
     "type": "ACTIVE",
-    "description": "If an opposition player suffers a Casualty as a result of a Special Action this player performed, this player will earn Star Player Points for causing a Casualty as appropriate.",
-    "restrictions": [
-      "A player can only have this skill if they have a trait that allows them to perform a Special Action."
-    ]
+    "description": "If an opposition player suffers a Casualty as a result of a Special Action this player performed, this player will earn Star Player Points for causing a Casualty as appropriate. A player can only have this Skill if they have a Trait that allows them to perform a Special Action."
   },
   {
     "category": "GENERAL",
     "name": "Block",
     "type": "ACTIVE",
-    "description": "A player with this skill may choose not to be Knocked Down when a Both Down result is applied during a Block Action that they are part of."
+    "description": "A player with this Skill may choose not to be Knocked Down when a Both Down result is applied during a Block Action that they are part of."
   },
   {
     "category": "GENERAL",
     "name": "Dauntless",
     "type": "ACTIVE",
-    "description": "When a player with this skill performs a Block Action against an opposition player with a higher Strength characteristic (before any modifiers are applied to either player), this player may roll a D6 and add their own Strength characteristic. If the result is higher than the opposition player’s unmodified Strength characteristic, then this player increases their unmodified Strength characteristic to match that of the opposition player for the duration of the Block Action. Modifiers are then applied as normal. If this player also has a skill that allows them to perform multiple Block Actions, such as Frenzy, they must make a separate roll for each Block Action."
+    "description": "When a player with this skill performs a Block Action against an opposition player with a higher Strength Characteristic (before any modifiers are applied to either player), this player may roll a D6 and add their own Strength Characteristic. If the result is higher than the opposition player's unmodified Strength Characteristic, then this player increases their unmodified Strength Characteristic to match that of the opposition player for the duration of the Block Action. Modifiers are then applied as normal. If this player also has a Skill that allows them to perform multiple Block Actions, such as the Frenzy Skill, then they must make a separate roll for each Block Action."
   },
   {
     "category": "GENERAL",
     "name": "Fend",
     "type": "ACTIVE",
-    "description": "(No description provided in source.)"
+    "description": "When a player with this skill is Pushed Back as a result of a Block Action performed against them, then the opposition player may not Follow-up.\n\n\nThis Skill cannot be used against a player with the Ball & Chain Trait or against a player with the Juggernaut Skill that is performing a Blitz Action.",
+    "restrictions": [
+      "When a player with this skill is Pushed Back as a result of a Block Action performed against them, then the opposition player may not Follow-up.",
+      "This Skill cannot be used against a player with the Ball & Chain Trait or against a player with the Juggernaut Skill that is performing a Blitz Action."
+    ]
   },
   {
     "category": "GENERAL",
-    "name": "Fury",
+    "name": "Kick",
     "type": "ACTIVE",
-    "description": "(No description provided in source.)"
+    "description": "If this player is nominated as the kicking player, then when the kick Deviates this player's Coach may choose for it to only Deviate D3 squares rather than the usual D6."
   },
   {
     "category": "GENERAL",
     "name": "Pro",
     "type": "ACTIVE",
-    "description": "During this player’s activation, they may attempt to re-roll a single dice. This can be a dice rolled on its own, as part of a multiple dice roll or as a dice pool. To use this skill, the player must roll a D6; on a 3+ the dice may be re-rolled, on a 1-2 the dice may not be re-rolled. The skill cannot be used to re-roll a dice made as part of an Armour Roll, Injury Roll, Casualty Roll, a roll made outside of the player’s activation, or any dice roll not made on the player’s behalf (such as Argue the Call or if the Crowd Takes Action). Once a player has attempted to use this skill, they cannot use a re-roll from any other source to re-roll the dice."
+    "description": "During this player's activation, they may attempt to re-roll a single dice. This can be a dice rolled on its own, as part of a multiple dice roll or as a dice pool.",
+    "restrictions": [
+      "To use this Skill, the player must roll a D6; on a 3+ the dice may be re-rolled, on a 1-2 the dice may not be re-rolled.",
+      "This skill cannot be used to re-roll a dice made as part of an Armour Roll, Injury Roll, Casualty Roll, a roll made outside of the player's activation, or any dice not made on the player's behalf (such as Argue the Call or if the Crowd Takes Action).",
+      "Once a player has attempted to use this Skill, they cannot use a re-roll from any other source to re-roll the dice."
+    ]
   },
   {
     "category": "GENERAL",
     "name": "Steady Footing",
-    "type": "PASSIVE",
+    "type": "ACTIVE",
     "description": "Whenever this player would be Knocked Down or Fall Over, roll a D6. On a 6, this player does not get Knocked Down or Fall Over. If this happens during their activation, they may continue their activation as normal and no Turnover will be caused."
   },
   {
     "category": "GENERAL",
     "name": "Strip Ball",
     "type": "ACTIVE",
-    "description": "When this player performs a Block Action against an opposition player holding the ball, if the opposition player is pushed back, then they will drop the ball in the square they are pushed back into, at which point it will bounce from that square. This bounce will happen before the opposition player becomes Prone (if applicable) but after this player chooses to follow-up."
+    "description": "When this player performs a Block Action against an opposition player holding the ball, if the opposition player is Pushed Back then they will drop the ball in the square they are Pushed Back into, at which point it will Bounce from that square. This Bounce will happen before the opposition player becomes Prone (if applicable) but after this player chooses to Follow-up."
   },
   {
     "category": "GENERAL",
     "name": "Sure Hands",
     "type": "ACTIVE",
-    "description": "This player may re-roll the D6 when attempting to pick up the ball, though not when making a Secure the Ball Action. Additionally, the Strip Ball skill cannot be used against this player."
+    "description": "This player may re-roll the D6 when attempting to pick up the ball, though not when making a Secure the Ball Action.",
+    "restrictions": [
+      "Additionally, the Strip Ball Skill cannot be used against this player."
+    ]
   },
   {
     "category": "GENERAL",
     "name": "Tackle",
     "type": "ACTIVE",
-    "description": "When an opposition player attempts to dodge away from a square in this player’s Tackle Zone, they cannot use the Dodge skill. Additionally, when this player performs a Block Action against an opposition player, the opposition player does not count as having the Dodge skill if a Stumble result is selected."
+    "description": "Additionally, when this player performs a Block Action against an opposition player, the opposition player does not count as having the Dodge Skill if a Stumble result is selected.",
+    "restrictions": [
+      "When an opposition player attempts to Dodge away from a square in this player's Tackle Zone, they cannot use the Dodge Skill."
+    ]
   },
   {
     "category": "GENERAL",
     "name": "Taunt",
     "type": "ACTIVE",
-    "description": "When a player with this skill is pushed back as a result of a Block Action performed against them, this player’s Coach may choose to make the opposition player follow-up. This skill cannot be used against an opposition player with the Take Root trait that has become Rooted."
+    "description": "When a player with this Skill is Pushed Back as a result of a Block Action performed against them, this player's Coach may choose to make the opposition player Follow-up.",
+    "restrictions": [
+      "This Skill cannot be used against an opposition player with the Take Root Trait that has become Rooted."
+    ]
+  },
+  {
+    "category": "GENERAL",
+    "name": "Violent Innovator",
+    "type": "ACTIVE",
+    "description": "If an opposition player suffers a Casualty as a result of a Special Action this player performed, this player will earn Star Player Points for causing a Casualty as appropriate. A player can only have this Skill if they have a Trait that allows them to perform a Special Action."
   },
   {
     "category": "GENERAL",
     "name": "Wrestle",
     "type": "ACTIVE",
-    "description": "When this player performs a Block Action, or is the target of a Block Action, if the Both Down result is selected then this player can choose to use this skill. If they do, both players in the Block Action are placed Prone, regardless of any other skills they may possess."
+    "description": "When this player performs a Block Action, or is the target of a Block Action, if the Both Down result is selected then this player can choose to use this Skill. If they do, both players in the Block Action are Placed Prone, regardless of any other Skills they may possess."
+  },
+  {
+    "category": "INJURIES",
+    "name": "Niggling Injury",
+    "type": "ACTIVE",
+    "description": "When making a Casualty Roll for a player with a Niggling Injury, apply a +1 modifier to the roll for each Niggling Injury the player has."
   },
   {
     "category": "MUTATION",
@@ -231,67 +273,75 @@
     "category": "MUTATION",
     "name": "Claws",
     "type": "PASSIVE",
-    "description": "Whenever an Armour Roll is made for an opposition player that has been Knocked Down by this player during a Block Action, even if this player is also Knocked Down, then any roll of a natural 8+ on the Armour Roll will break the opposition player’s armour regardless of their actual Armour Value."
+    "description": "Whenever an Armour Roll is made for an opposition player that has been Knocked Down by this player during a Block Action, even if this player is also Knocked Down, then any roll of a natural 8+ on the Armour Roll will break the opposition player's armour regardless of their actual Armour Value."
   },
   {
     "category": "MUTATION",
     "name": "Disturbing Presence",
-    "type": "PASSIVE",
-    "description": "Any opposition player that performs a Pass Action, Throw Team-mate Action or a Throw Bomb Special Action, or attempts to intercept or catch the ball, applies a -1 modifier to the Passing Ability Test or Agility Test, for each player on your team with this skill within 3 squares of them."
+    "type": "ACTIVE",
+    "description": "Any opposition player that performs a Pass Action, Throw Team-mate Action, or a Throw Bomb Special Action, or attempts to Intercept or Catch the ball, applies a -1 modifier to the Passing Ability Test or Agility Test for each player on your team with this Skill within 3 squares of them."
   },
   {
     "category": "MUTATION",
     "name": "Extra Arms",
     "type": "ACTIVE",
-    "description": "This player may add a +1 modifier to their Agility Test when attempting to pick up, catch or intercept the ball."
+    "description": "This player applies a +1 modifier to the Agility Test whenever they attempt to Catch, Pick Up or Intercept the ball."
   },
   {
     "category": "MUTATION",
     "name": "Foul Appearance",
     "type": "PASSIVE",
-    "description": "When an opposition player attempts to make a Block Action against this player, or a Special Action that targets this player directly, they must roll 1D6 before making any other rolls. On a 2+ the actions may continue as normal. On a 1 the action is canceled and the opposition player’s activation ends immediately."
+    "description": "Whenever an opposition player attempts to perform a Block Action against this player, or a Special Action that targets this player directly, they must roll a D6 before any other dice are rolled. On a 2+, the Block Action continues as normal. On a 1, the Block Action is immediately cancelled and the opposition player's activation immediately ends."
   },
   {
     "category": "MUTATION",
     "name": "Horns",
     "type": "ACTIVE",
-    "description": "Whenever this player declares a Blitz Action, they apply a +1 modifier to their Strength characteristic for any Block Actions performed during that Blitz Action."
+    "description": "Whenever this player declares a Blitz Action, then they apply a +1 modifier to their Strength Characteristic for any Block Actions performed during that Blitz Action."
   },
   {
     "category": "MUTATION",
     "name": "Iron Hard Skin",
-    "type": "ACTIVE",
-    "description": "Opposition players cannot apply any modifiers when making an Armour Roll against this player. Additionally, the Claws skill cannot be used against this player."
+    "type": "PASSIVE",
+    "description": "Opposition players cannot apply any modifiers when making an Armour Roll against this player. Additionally, the Claws Skill cannot be used against this player.",
+    "restrictions": [
+      "Opposition players cannot apply any modifiers when making an Armour Roll against this player.",
+      "Additionally, the Claws Skill cannot be used against this player."
+    ]
   },
   {
     "category": "MUTATION",
     "name": "Monstrous Mouth",
     "type": "ACTIVE",
-    "description": "When this player is activated, they may declare a Chomp Special Action; there is no limit to the number of players that can declare this Special Action each turn. When this player declares a Chomp Special Action, they may select one Standing opposition player they are marking and roll a D6. On a 1-2 nothing happens. On a 3+, the opposition player is considered to be Chomped. Whilst Chomped, the opposition player cannot leave the square they are in whilst this player remains marking them. This condition ends immediately if this player is no longer marking the opposition player for any reason. This player may use the Chomp Special Action to replace the Block Action made as part of a Blitz Action if they wish. Additionally, the Strip Ball skill cannot be used against this player."
+    "description": "When this player is activated, they may declare a Chomp Special Action; there is no limit to the number of players that can declare this Special Action each Turn. When this player declares a Chomp Special Action, they may select one Standing opposition player they are Marking and roll a D6. On a 1-2 nothing happens. On a 3+, the opposition player is considered to be Chomped. This condition ends immediately if this player is no longer Marking the opposition player for any reason. This player may use the Chomp Special Action to replace the Block Action made as part of a Blitz Action if they wish.",
+    "restrictions": [
+      "Whilst Chomped, the opposition player cannot leave the square they are in whilst this player remains Marking them.",
+      "Additionally, the Strip Ball Skill cannot be used against this player."
+    ]
   },
   {
     "category": "MUTATION",
     "name": "Prehensile Tail",
     "type": "ACTIVE",
-    "description": "When an opposition player attempts to dodge, jump or leap away from a square in this player’s Tackle Zone, they apply an additional -1 modifier to the Agility Test. If a player tries to leave the Tackle Zone of multiple players with this skill at the same time, only one of those players may use this skill."
+    "description": "When an opposition player attempts to Dodge, Jump or Leap away from a square in this player's Tackle Zone, they apply an additional -1 modifier to the Agility Test. If a player tries to leave the Tackle Zone of multiple players with this Skill at the same time, only one of those players may use this Skill."
   },
   {
     "category": "MUTATION",
     "name": "Tentacles",
     "type": "ACTIVE",
-    "description": "When an opposition player attempts to dodge, jump, or leap away from a square in this player’s Tackle Zone, this player may use this skill. When a player uses this skill they roll a D6 and add their Strength characteristic to the roll; they then subtract the Strength characteristic of the opposition player from the result. If the result is a 6 or higher, or the roll is a natural 6, then the opposition player does not leave the square they attempted to leave and their activation comes to an end. If the result is a 5 or lower, or the roll is a natural 1, this skill has no effect. If a player tries to leave the Tackle Zone of multiple players with this skill at the same time, only one of those players may use this skill."
+    "description": "When an opposition player attempts to Dodge, Jump or Leap away from a square in this player's Tackle Zone, this player may use this Skill. When a player uses this Skill they roll a D6 and add their Strength Characteristic to the roll; then they subtract the Strength Characteristic of the opposition player from the result. If the result is 6 or higher, or the roll is a natural 6, then the opposition player does not leave the square they attempted to leave and their activation comes to an end. If the result is 5 or lower, or the roll is a natural 1, this Skill has no effect. If a player tries to leave the Tackle Zone of multiple players with this Skill at the same time, only one of those players may use this Skill."
   },
   {
     "category": "MUTATION",
     "name": "Two Heads",
     "type": "ACTIVE",
-    "description": "This player may apply a +1 modifier to the Agility Test whenever they attempt to dodge."
+    "description": "This player may apply a +1 modifier to the Agility Test whenever they attempt to Dodge."
   },
   {
     "category": "MUTATION",
     "name": "Very Long Legs",
     "type": "ACTIVE",
-    "description": "This player may apply a +1 modifier to the Agility Test whenever they attempt to leap or jump, and may apply a +2 modifier to the Agility Test whenever they attempt to intercept the ball. Additionally, this player ignores the Cloud Burster skill."
+    "description": "This player may apply a +1 modifier to the Agility Test whenever they attempt to Leap or Jump, and may apply a +2 modifier to the Agility Test when they attempt to Intercept the ball. Additionally, this player ignores the Cloud Burster Skill."
   },
   {
     "category": "PASSING",
@@ -309,49 +359,61 @@
     "category": "PASSING",
     "name": "Cloud Burster",
     "type": "ACTIVE",
-    "description": "When this player performs a Pass Action, the opposition players may not attempt to intercept the ball."
+    "description": "When this player performs a Pass Action, opposition players may not attempt to Intercept the ball.",
+    "restrictions": [
+      "When this player performs a Pass Action, opposition players may not attempt to Intercept the ball."
+    ]
   },
   {
     "category": "PASSING",
-    "name": "Dump-Off",
+    "name": "Dump-off",
     "type": "ACTIVE",
-    "description": "(No description provided in source.)"
+    "description": "Whenever an opposition player attempts to perform a Block Action against this player, or a Special Action that targets this player directly, this player may use this Skill. When they do, this player may immediately perform a Quick Pass before the Action targeting them is resolved. Once the Quick Pass has been resolved, this Action targeting this player continues.",
+    "restrictions": [
+      "This Quick Pass cannot cause a Turnover, but otherwise follows all the normal rules for making a Quick Pass."
+    ]
   },
   {
     "category": "PASSING",
     "name": "Give and Go",
     "type": "ACTIVE",
-    "description": "If this player performs a Pass Action that is a Quick Pass, or performs a Hand-off Action, then, so long as a Turnover isn’t caused, their activation does not end once the Pass or Hand-off is resolved. Instead they may continue with their Move Action using any movement they have remaining."
+    "description": "If this player performs a Pass Action that is a Quick Pass, or performs a Hand-off Action, then, so long as a Turnover isn't caused, their activation does not end once the Pass or Hand-off is resolved. Instead, they may continue with their Move Action using any movement they have remaining."
   },
   {
     "category": "PASSING",
     "name": "Hail Mary Pass",
     "type": "ACTIVE",
-    "description": "When this player performs a Pass Action or a Throw Bomb Special Action, they may declare any square on the pitch as the target square rather than using the Range Ruler. Make a Passing Ability Test as normal treating the throw as a Long Bomb, and treating any result of an Accurate Pass as an Inaccurate Pass. A Hail Mary Pass cannot be intercepted."
-  },
-  {
-    "category": "PASSING",
-    "name": "Kick",
-    "type": "ACTIVE",
-    "description": "If this player is nominated as the kicking player, then when the kick deviates this player’s Coach may choose to only deviate D3 squares rather than the usual D6."
+    "description": "When this player performs a Pass Action or a Throw Bomb Special Action, they may declare any square on the pitch as the target square rather than using the Range Ruler. Make a Passing Ability Test as normal, treating the throw as a Long Bomb, and treating any result of an Accurate Pass as an Inaccurate Pass.",
+    "restrictions": [
+      "A Hail Mary Pass cannot be Intercepted."
+    ]
   },
   {
     "category": "PASSING",
     "name": "Leader",
     "type": "PASSIVE",
-    "description": "A team that have one or more players with this skill on the pitch at the start of a half may gain a single extra Team Re-roll – this is called a Leader Re-roll. A team can only use a Leader Re-roll if they have a player with the Leader skill on the pitch, and if all players with this skill are removed from play, either as a Casualty or by being sent off, before the Leader Re-roll is used then it is lost. A Leader Re-roll follows all of the usual rules for standard Team Re-rolls, with the exception that it cannot be lost as a result of a Halfling Master Chef."
+    "description": "A team that has one or more players with this Skill on the pitch a the start of a half may gain a single extra Team Re-roll - this is called a Leader Re-roll. A team can only use a Leader Re-roll if they have a player with the Leader Skill on the pitch, and if all players with the Leader Skill are removed from play, either as a Casualty or being Sent-off, before the Leader Re-roll is used then it is lost.",
+    "restrictions": [
+      "A Leader Re-roll follows all of the usual rules for standard Team Re-rolls, with the exception that it cannot be lost as a result of a Halfling Master Chef."
+    ]
   },
   {
     "category": "PASSING",
     "name": "Nerves of Steel",
     "type": "ACTIVE",
-    "description": "This player may ignore any modifiers for being Marked when making an Agility Test to catch the ball, or when making a Passing Ability Test to pass the ball."
+    "description": "This player may ignore any modifiers for being Marked when making an Agility Test to Catch the ball, or when making a Passing Ability Test to Pass the ball."
   },
   {
     "category": "PASSING",
     "name": "On the Ball",
     "type": "ACTIVE",
-    "description": "When an opposition player performs a Pass Action, after the target square has been declared but before the Passing Ability Test is rolled, this player may move 3 squares following all the usual rules for a Move Action with the exception that they cannot Rush. Should this player fall over during this move, then their move immediately ends and the Pass Action resumes. If multiple players have this skill, then they may all use it during the same Pass Action, though they must do so one at a time, and if one of them falls over before the others have had the chance to move, then they may not do so. Additionally, during the start of drive sequence, after the kick deviates but before the Kick-off Event is rolled, a single Open player on the receiving team with this skill may move up to 3 squares, following all the usual rules for a Move Action, with the exception that they cannot Rush. A player may not use this skill if a Touchback is caused and may not move into the opposition half. Should this player fall over during this move, then their move immediately ends and the Kick-off Event is rolled."
+    "description": "Should this player Fall Over during this move, then their move immediately ends and the Pass Action resumes. Should this player Fall Over during this move, then their move immediately ends and the Kick-off Event is rolled.",
+    "restrictions": [
+      "When an opposition player performs a Pass Action, after the target square has been declared but before the Passing Ability Test is rolled, this player may move up to 3 squares, following all the usual rules for a Move Action, with the exception that they cannot Rush.",
+      "If multiple players have this Skill, then they may all use it during the same Pass Action, though they must do so one at a time, and if one of them Falls Over before the others have had the chance to move, then they may not do so.",
+      "Additionally, during the Start of Drive sequence, after the Kick Deviates but before the Kick-off Event is rolled, a single Open player on the receiving team with this Skill may move up to 3 squares, following all the usual rules for a Move Action, with the exception that they cannot Rush.",
+      "A player may not use this Skill if a Touchback is caused and may not move into the opposition half."
+    ]
   },
   {
     "category": "PASSING",
@@ -363,9 +425,9 @@
     "category": "PASSING",
     "name": "Punt",
     "type": "ACTIVE",
-    "description": "This player may declare a Punt Special Action; only a single player may declare a Punt Special Action each turn. When a player declares a Punt Special Action, they are first allowed to make a Move Action, though they cannot continue to move after the Punt Special Action has been resolved. If after their Move Action this player is in possession of the ball, they can Punt it downfield. Position the Throw-in Template over this player so it faces one of the two End Zones or either Sideline. Roll a D6 to determine the direction the ball is kicked, and then a second D6 to determine how many squares in that direction the ball will travel. If this player has the Kick skill, they may re-roll either one or both of these dice – though they must decide whether to re-roll the direction or not before rolling for the distance. If the ball lands in a square containing a player, then they must attempt to catch the ball, otherwise it will bounce. When performing a Punt Special Action, no Turnover is caused if the ball comes to rest on the ground; however, if after the Punt Special Action is resolved the ball is in possession of an opposition player, or the crowd, a Turnover is caused.",
-    "notes": [
-      "If this player has the Kick skill, they may re-roll either one or both of the dice when determining punt direction/distance."
+    "description": "This player may declare a Punt Special Action; only a single player may declare a Punt Special Action each Turn. If after their Move Action this player is in possession of the ball, they can Punt it downfield. Position the Throw-in Template over this player so it faces one of the two End Zones or either Sideline. Roll a D6 to determine the direction the ball is kicked, and then a second D6 to determine how many squares in that direction the ball will travel. If this player has the Kick skill, they may re-roll either one or both of these dice - though they must decide whether to re-roll the direction or not before rolling for the distance. If the ball lands in a square containing a player, then they must attempt to Catch the ball, otherwise it will Bounce. When performing a Punt Special Action, no Turnover is caused if the ball comes to rest on the ground; however, if after the Punt Special Action is resolved the ball is in possession of an opposition player or the crowd, a Turnover is caused.",
+    "restrictions": [
+      "When a player declares a Punt Special Action they are first allowed to make a Move Action, though they cannot continue to move after the Punt Special Action has been resolved."
     ]
   },
   {
@@ -378,7 +440,7 @@
     "category": "STRENGTH",
     "name": "Arm Bar",
     "type": "ACTIVE",
-    "description": "If an opposing player falls over as a result of attempting to dodge, leap or jump away from a square in this player’s Tackle Zone, this player may use this skill. If they do, they may apply a +1 modifier to either the Armour Roll or Injury Roll. This modifier may be applied after the roll has been made. If the opposition player suffers a Casualty as a result of a failed dodge, leap or jump away from a square in this player’s Tackle Zone, then this player will count as having caused that Casualty and will receive Star Player Points as appropriate. If a player tries to leave the Tackle Zone of multiple players with this skill at the same time, only one of those players may use this skill."
+    "description": "If an opposing player Falls Over as a result of attempting to Dodge, Leap or Jump away from a square in this player's Tackle Zone, this player may use this Skill. If they do, they may apply a +1 modifier to either the Armour Roll or Injury Roll. This modifier may be applied after the roll has been made. If the opposition player suffers a Casualty as a result of a failed Dodge, Leap or Jump away from a square in this player's Tackle Zone, then this player will count as having caused that Casualty and will receive Star Player Points as appropriate. If a player tries to leave the Tackle Zone of multiple players with this Skill at the same time, only one of those players may use this Skill."
   },
   {
     "category": "STRENGTH",
@@ -390,58 +452,64 @@
     "category": "STRENGTH",
     "name": "Break Tackle",
     "type": "ACTIVE",
-    "description": "Once per turn, when this player attempts to dodge, they may apply a +1 modifier to the Agility Test if they have a Strength characteristic of 3 or lower, a +2 modifier to the Agility Test if they have a Strength characteristic of 4, or a +3 modifier to the Agility Test if they have a Strength characteristic of 5 or higher."
+    "description": "Once per Turn, when this player attempts to Dodge, they may apply a +1 modifier to the Agility Test if they have a Strength Characteristic of 3 or lower, a +2 modifier to the Agility Test if they have a Strength Characteristic of 4, or a +3 modifier to the Agility Test if they have a Strength Characteristic of 5 or higher."
   },
   {
     "category": "STRENGTH",
     "name": "Bullseye",
     "type": "ACTIVE",
-    "description": "When this player performs a Throw Team-mate Action, if the result of the throw is a Superb Throw then the thrown player will not scatter before landing and will instead land in the target square.",
+    "description": "When this player performs a Throw Team-mate Action, if the result of the throw is a Superb Throw then the thrown player will not Scatter before landing and will instead land in the target square.",
     "restrictions": [
-      "A player without the Throw Team-mate trait cannot have this skill."
+      "A player without the Throw Team-mate Trait cannot have this skill."
     ]
   },
   {
     "category": "STRENGTH",
     "name": "Grab",
     "type": "ACTIVE",
-    "description": "When this player declares a Block Action, if the opposition player is pushed back, then this…"
+    "description": "When this player declares a Block Action, if the opposition player is Pushed Back, then this player's Coach may choose any unoccupied square adjacent to the target for them to be pushed back into.",
+    "restrictions": [
+      "If there are no adjacent unoccupied squares, then this Skill cannot be used.",
+      "Additionally, when this player performs a Block Action, opposition players cannot use the Sidestep Skill.",
+      "A player with this Skill cannot have the Frenzy Skill."
+    ]
   },
   {
     "category": "STRENGTH",
     "name": "Guard",
     "type": "ACTIVE",
-    "description": "This player can provide Offensive and Defensive Assists when a player performs a Block Action regardless of how many opposition players are marking this player."
+    "description": "This player can provide Offensive and Defensive Assists when a player performs a Block Action regardless of how many opposition players are Marking this player."
   },
   {
     "category": "STRENGTH",
     "name": "Juggernaut",
     "type": "ACTIVE",
-    "description": "When this player declares a Blitz Action, they may treat any result of Both Down as Pushed Back during any Block Action they perform during the Blitz Action. Additionally, when this player performs a Block Action as part of a Blitz Action, opposition players cannot use the Fend, Stand Firm or Wrestle skills."
+    "description": "When this player declares a Blitz Action, they may treat any result of Both Down as Pushed Back during any Block Action they perform during the Blitz Action.",
+    "restrictions": [
+      "Additionally, when this player performs a Block Action as part of a Blitz Action, opposition players cannot use Fend, Stand Firm or Wrestle Skills."
+    ]
   },
   {
     "category": "STRENGTH",
     "name": "Mighty Blow",
     "type": "ACTIVE",
-    "description": "Whenever this player knocks down an opposition player during a Block Action, even if this player is also knocked down, they may apply a +1 modifier to either the Armour Roll or Injury Roll. This modifier may be applied after the roll has been made.",
-    "notes": [
-      "ELITE"
-    ]
+    "description": "Whenever this player Knocks Down an opposition player during a Block Action, even if this player is also Knocked Down, they may apply a +1 modifier to either the Armour Roll or Injury Roll. This modifier may be applied after the roll has been made."
   },
   {
     "category": "STRENGTH",
     "name": "Multiple Block",
     "type": "ACTIVE",
-    "description": "When this player declares a Block Action, they may perform two Block Actions each targeting a different opposition player they are marking. If they do, then this player will reduce their Strength characteristic by 2 for the duration of the Block Actions. These Block Actions happen simultaneously, though you may wish to roll them separately for clarity. This means that both Block Actions are resolved in full, even if one of them results in a Turnover. This player cannot follow-up during either of these Block Actions.",
+    "description": "When this player declares a Block Action, they may perform two Block Actions each targeting a different opposition player they are Marking. If they do, then this player will reduce their Strength Characteristic by 2 for the duration of the Block Actions. These Block Actions happen simultaneously, though you may wish to roll them separately for clarity. This means that both Block Actions are resolved in full, even if one of them results in a Turnover.",
     "restrictions": [
-      "A player with this skill cannot also have the Frenzy skill."
+      "This player cannot Follow-up during either of these Block Actions.",
+      "A player with this Skill cannot also have the Frenzy Skill."
     ]
   },
   {
     "category": "STRENGTH",
     "name": "Stand Firm",
     "type": "ACTIVE",
-    "description": "When this player would be pushed back during a Block Action, including during a Chain Push, they can choose to not be pushed back and instead remain in their current square. Using this skill will not prevent a player with the Frenzy skill from performing a second Block Action, so long as this player is still Standing."
+    "description": "When this player would be Pushed Back during a Block Action, including during a Chain Push, they can choose to not be Pushed Back and instead remain in their current square. Using this Skill will not prevent a player with the Frenzy Skill from performing a second Block Action, so long as this player is still Standing."
   },
   {
     "category": "STRENGTH",
@@ -449,238 +517,13 @@
     "type": "ACTIVE",
     "description": "When this player performs a Throw Team-mate Action, this player may apply a +1 modifier to the Passing Ability Test.",
     "restrictions": [
-      "A player without the Throw Team-mate trait cannot have this skill."
+      "A player without the Throw Team-mate Trait cannot have this Skill."
     ]
   },
   {
     "category": "STRENGTH",
     "name": "Thick Skull",
-    "type": "ACTIVE",
-    "description": "When an Injury Roll is made for this player, they will only be Knocked Out on the roll of a 9; a roll of an 8 will be treated as a Stunned result. If this player also has the Stunty trait then they will only be Knocked Out on the roll of an 8; a roll of a 7 will be treated as a Stunned result."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Always Hungry",
-    "type": "ACTIVE",
-    "description": "Whenever this player performs a Throw Team-mate Action, before making the Passing Ability Test, they must roll a D6. On a 2+, they may continue with the Throw Team-mate Action as normal. On a 1, the player will attempt to eat their team-mate – they must roll a further D6. On a 2+, the team-mate will squirm free and the Throw Team-mate Action will automatically result in a Fumbled Throw. On a 1, the player will eat their team-mate – immediately remove them from your Team Draft List. No Apothecary can be used to try to save them, and no Regeneration rolls can be made. If the team-mate was in possession of the ball, it will bounce from the square this player occupies. A Turnover is then caused."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Animal Savagery",
     "type": "PASSIVE",
-    "description": "Whenever this player is activated, after declaring their action they must roll a D6. They may apply a +2 modifier to the roll if they have declared a Block Action or a Blitz Action. On a 4+, the player may perform the declared action as normal. On a 1-3, this player lashes out at one of their team-mates. Choose one Standing team-mate adjacent to this player; the chosen player is immediately Knocked Down. This will not cause a Turnover unless the player was holding the ball. If this player has either the Claws or Mighty Blow skill, then they must use them when making the Armour roll for the Knocked Down player. If this player rolls a 1-3 and there are no Standing team-mates adjacent to them, they are Distracted."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Animosity",
-    "type": "ACTIVE",
-    "description": "Whenever this player attempts to perform a Pass Action or a Hand-off Action to a team-mate with the same keyword as the one shown in brackets, roll a D6. On a 1, the player refuses to perform the action and their activation immediately ends. Some players may have the Animosity (all) trait, in which case they will apply this rule to all of their team-mates, regardless of the keywords they have."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Ball & Chain",
-    "type": "ACTIVE",
-    "description": "When this player is activated, the only action they can declare is a Ball & Chain Special Action; there is no limit to the number of players that can declare this Special Action each turn. When a player performs a Ball & Chain Special Action, position the Throw-in Template over this player so it faces one of the two End Zones or either Sideline. Then roll a D6 and move this player into the square as indicated by the Throw-in Template. A player that moves in this manner does not have to make an Agility Test to dodge away from another player’s Tackle Zone; they will automatically pass. Opposition players cannot use the Shadowing or Tentacles skill against a player performing a Ball & Chain action. If this move takes this player off the pitch they will risk injury by the crowd. If this move takes this player into a square containing a Standing player (from either team) they will automatically perform a Block Action against that player; this Block Action will ignore the Foul Appearance skill. If this is a team-mate, then this player’s Coach will choose which result to apply after the Block Dice have been rolled. If this move takes this player into a square containing a Prone or Stunned player, that player is pushed back and an Armour Roll is made against them. If this move takes this player into a square containing the ball, it will immediately bounce. This will not cause a Turnover. A player performing a Ball & Chain Special Action can move a number of squares up to their MA. They may Rush as normal, though if they roll a 1, they will move into the square as normal first, including performing any Block Actions, pushing back any players or causing the ball to bounce, before falling over in the square they have moved into. If a player is Knocked Down, Falls Over or placed Prone for any reason, immediately make an Injury Roll for them treating any result of Stunned as Knocked Out instead.",
-    "restrictions": [
-      "A player with this trait cannot have any of the following skills: Diving Tackle, Eye Gouge, Frenzy, Grab, Hit & Run, Leap, Multiple Block, On the Ball, Shadowing, Steady Footing."
-    ]
-  },
-  {
-    "category": "TRAITS",
-    "name": "Bloodlust",
-    "type": "PASSIVE",
-    "description": "Whenever this player is activated, after declaring their action, they must roll a D6, adding 1 to the roll if they declared a Block Action or a Blitz Action. If they roll equal to or higher than the number shown in brackets, they may activate as normal. If the player rolls lower than the number shown in brackets, or rolls a natural 1, they may continue their action as normal though they may change their declared action to a Move Action if they wish. If the player declared an action that can only be performed once per turn (such as a Blitz Action), this will still count as the one Blitz Action for the turn. At the end of their activation, this player may bite an adjacent Thrall Lineman team-mate regardless of the status of the Thrall Lineman. If they do, immediately make an Injury Roll for the Thrall Lineman, treating any Casualty result as Badly Hurt – this will not cause a Turnover unless the player was holding the ball. If this player does not bite a Thrall Lineman for any reason, then a Turnover is caused, this player becomes Distracted, and will immediately drop the ball if they were holding it. If this player was in the opposing End Zone, no Touchdown is scored. If a player who failed this roll wants to perform a Pass Action, Hand-off Action, or score then they must bite a Thrall Lineman before they perform the action or score."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Bombardier",
-    "type": "ACTIVE",
-    "description": "When this player is activated, they can declare a Throw Bomb Special Action – only one player can declare this Special Action each turn. When a player performs a Throw Bomb Special Action, they throw a bomb in the same manner as when a player performs a Pass Action, following all the usual rules for a Pass Action. Though this is not a Pass Action itself, any skills or traits that come into play when a player performs a Pass Action will also apply to a Throw Bomb Special Action, with the exception of the On the Ball skill. A player that declared a Throw Bomb Special Action may not perform a Move Action before throwing the bomb. If at any point a bomb comes to rest on the ground then it will immediately explode in that square. Should a bomb be fumbled by the thrower, or dropped when a player attempts to catch it, then it will not bounce and will instead explode in that player’s square. When a bomb explodes, any player in the square it exploded in is hit by the explosion. Additionally, roll a D6 for each player adjacent to the square in which the bomb exploded. On a 4+ they are hit by the explosion. Any Standing player that is hit by the explosion is immediately Knocked Down. Additionally, make an Armour Roll for any Prone or Stunned players hit by the explosion. If a player successfully catches or intercepts a thrown bomb, the player that caught the bomb must immediately throw it again, following all the same rules for making a Throw Bomb Special Action as described above."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Bone Head",
-    "type": "PASSIVE",
-    "description": "Whenever this player is activated, after declaring their action they must roll a D6. On a 2+ the player may perform the declared action as normal. On a 1, the player becomes Distracted."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Breathe Fire",
-    "type": "ACTIVE",
-    "description": "When this player is activated, they can declare a Breathe Fire Special Action; there is no limit to the number of players that can declare this Special Action each turn. When a player makes a Breathe Fire Special Action, they may choose one Standing opposition player they are marking and roll…"
-  },
-  {
-    "category": "TRAITS",
-    "name": "Chainsaw",
-    "type": "ACTIVE",
-    "description": "When this player is activated, they can declare a Chainsaw Attack Special Action; there is no limit to the number of players that can declare this Special Action each turn. When a player performs a Chainsaw Attack Special Action, roll a D6. On 2+, this player may immediately make an Armour Roll against one adjacent Standing opposition player applying a +3 modifier to the Armour Roll. On a 1, the chainsaw will kick back and this player is Knocked Down instead. If this player is Knocked Down or Falls Over for any reason, regardless of how it occurred, then a +3 modifier is applied when the opposition Coach makes an Armour Roll for this player. This +3 modifier must always be applied. Should they wish, this player may also use the chainsaw when performing a Foul Action, in which case they may apply a +3 modifier when making the Armour Roll for the opposition player. They will still need to roll for kick back as normal. This player may use the Chainsaw Attack Special Action to replace the Block Action made as part of a Blitz Action if they wish, though their activation will still end as soon as they have performed the Chainsaw Attack Special Action."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Decay",
-    "type": "PASSIVE",
-    "description": "Apply a +1 modifier to any Casualty Roll made against this player."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Drunkard",
-    "type": "PASSIVE",
-    "description": "This player applies a -1 modifier to tests whenever they attempt to Rush."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Hatred",
-    "type": "PASSIVE",
-    "description": "Whenever this player performs a Block Action against a player with the same keyword as that shown in brackets, this player may re-roll a single Player Down result."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Hypnotic Gaze",
-    "type": "ACTIVE",
-    "description": "When this player is activated, they can declare a Hypnotic Gaze Special Action; there is no limit to the number of players that can declare this Special Action each turn. When a player declares a Hypnotic Gaze Special Action they are first allowed to make a Move Action, though they cannot continue to move after the Hypnotic Gaze Special Action has been attempted. When a player performs a Hypnotic Gaze Special Action, they select a Standing opposition player adjacent to them and roll a D6. On a 1-2, nothing happens and this player’s activation immediately ends. On a 3+, the selected opposition player becomes Distracted and this player’s activation immediately ends."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Infected",
-    "type": "PASSIVE",
-    "description": "Once per game, when a player with this trait causes a Casualty against an opposition player as a result of a Block Action, and that player suffers a Dead result on their Casualty Roll and is not saved by an Apothecary, you may immediately add one new Lineman player from your team’s Team Roster to your Reserves Box. This may cause you to have more than 16 players for the remainder of the game. During the Post-game Sequence, this player may be hired in the same manner as any Journeymen players.",
-    "restrictions": [
-      "This trait cannot be used against Big Guy players, or any player with the Decay, Regeneration, or Stunty traits."
-    ]
-  },
-  {
-    "category": "TRAITS",
-    "name": "Insignificant",
-    "type": "PASSIVE",
-    "description": "When creating a Team Draft List, you may not include more players with this trait than players without this trait."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Kick Team-mate",
-    "type": "ACTIVE",
-    "description": "When this player is activated, they can declare a Kick Team-mate Special Action; only one player can declare this Special Action each turn. A Kick Team-mate Special Action works exactly the same as a Throw Team-mate Action, with the following exceptions: Performing a Kick Team-mate Special Action does not count as a team’s Throw Team-mate Action for the turn, and so a team can perform both a Kick Team-mate Special Action and a Throw Team-mate Action in the same turn if they wish. However, if a Kick Team-mate Special Action results in a Fumbled Throw, immediately make an Injury Roll for the team-mate being kicked, treating any result of Stunned as Knocked Out. If the kicked player was holding the ball, it will bounce from the square they were in. Any skills or traits that come into play when a player performs a Throw Team-mate Action will also apply to a Kick Team-mate Special Action. This player will also gain Star Player Points in the same manner as a Throw Team-mate Action."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Loner",
-    "type": "PASSIVE",
-    "description": "Whenever this player wishes to use a Team Re-roll, they must roll a D6. If they roll equal to or higher than the number shown in brackets, then they may use the Team Re-roll as normal. If they roll lower than the number shown in brackets, then they may not re-roll the dice and the Team Re-roll is lost just as if it had been used."
-  },
-  {
-    "category": "TRAITS",
-    "name": "My Ball",
-    "type": "PASSIVE",
-    "description": "A player with this trait may not willingly give up the ball when in possession of it, and so may not declare Pass Actions, Hand-off Actions, or use any other skill or trait that would allow them to relinquish possession of the ball. The only way they can lose possession of the ball is by being Knocked Down, placed Prone, falling over or by the effect of a skill, trait, or special rule of an opposing model."
-  },
-  {
-    "category": "TRAITS",
-    "name": "No Ball",
-    "type": "PASSIVE",
-    "description": "A player with this trait may never have possession of the ball. If this player would be required to attempt to catch or pick up the ball, they will automatically fail to do so as if they had rolled a natural 1. A player with this trait may not attempt to intercept a pass."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Pick-Me-Up",
-    "type": "ACTIVE",
-    "description": "At the end of each of the opposition’s turns, roll a D6 for each Prone team-mate within 3 squares of one or more Standing players with this trait. On a 5+, the Prone player may immediately stand up. Should a player with this trait stand up as a result of a team-mate using this trait, they may not also use this trait during the same turn."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Pogo",
-    "type": "ACTIVE",
-    "description": "During their movement, a player with this trait can attempt to pogo over a single adjacent square regardless of what is in the square. Pogoing works the same way as jumping, with the exception that the pogoing player may ignore all negative modifiers they would receive by jumping.",
-    "restrictions": [
-      "A player with this trait cannot also have the Leap skill."
-    ]
-  },
-  {
-    "category": "TRAITS",
-    "name": "Projectile Vomit",
-    "type": "ACTIVE",
-    "description": "When this player is activated, they can declare a Projectile Vomit Special Action; there is no limit to the number of players that can declare this Special Action each turn. When this player performs a Projectile Vomit Special Action, select a Standing opposition player adjacent to this player and roll a D6. On a 2+, this player vomits on their target; make an Armour Roll for the selected player. This Armour Roll cannot be modified in any way. If the player’s armour is broken, make an Injury Roll for them; otherwise nothing happens. On a 1, this player covers themselves in acidic bile; make an Armour Roll for this player. This Armour Roll cannot be modified in any way. If this player’s armour is broken, make an Injury Roll for them; otherwise nothing happens. This player may use the Projectile Vomit Special Action to replace the Block Action made as part of a Blitz Action if they wish, though their activation will end as soon as they have performed the Projectile Vomit Special Action."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Really Stupid",
-    "type": "PASSIVE",
-    "description": "Whenever this player is activated, after declaring their action, they must roll a D6. They may apply a +2 modifier to the roll if they have any Standing team-mates who are not Distracted, and do not have the Really Stupid trait, adjacent to them. On a 4+, the player may perform the declared action as normal. On a 1-3, this player becomes Distracted."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Regeneration",
-    "type": "PASSIVE",
-    "description": "Whenever this player suffers a Casualty, before making the Casualty Roll for them, roll a D6. On a 1-3, this player suffers the Casualty; make the Casualty Roll as normal. On a 4+, this player regenerates and ignores the Casualty (though any Star Player Points earned for causing the Casualty are still earned) and is instead placed in their team’s Reserves Box."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Right Stuff",
-    "type": "PASSIVE",
-    "description": "This player can be thrown by a team-mate with the Throw Team-mate trait, even if this player is Prone."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Secret Weapon",
-    "type": "PASSIVE",
-    "description": "At the end of a drive in which this player took part, even if they are not on the pitch at the end of the drive, they are sent off for committing a Foul."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Stab",
-    "type": "ACTIVE",
-    "description": "When this player is activated, they can declare a Stab Special Action; there is no limit to the number of players that can declare this Special Action each turn. When this player performs a Stab Special Action, select a Standing opposition player adjacent to this player and make an Armour Roll for the selected player. This Armour Roll cannot be modified in any way. If the player’s armour is broken, make an Injury Roll for them; otherwise nothing happens. This player may use the Stab Special Action to replace the Block Action made as part of a Blitz Action if they wish, though their activation will still end as soon as they have performed the Stab Special Action."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Stunty",
-    "type": "PASSIVE",
-    "description": "When this player attempts to dodge, they do not suffer any negative modifiers to their Agility Test for being marked by opposition players. Additionally this player applies a -1 modifier to the Agility Test when attempting to intercept the ball. A player with this trait is more prone to injury and so if an Injury Roll is made for them, roll on the Stunty Injury Table instead."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Swoop",
-    "type": "ACTIVE",
-    "description": "When this player is thrown by a Throw Team-mate Action, they may choose not to scatter before landing as normal. If they do, position the Throw-in Template over this player so it faces one of the two End Zones or either Sideline. Roll a D6 to determine the direction this player will travel, and then a second D6 to determine how many squares in that direction this player will travel. Additionally, if they choose not to scatter as normal, this player may re-roll the Agility Test when attempting to land."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Take Root",
-    "type": "PASSIVE",
-    "description": "Whenever this player is activated, after declaring their action, if they are Standing they must roll a D6. On a 2+ the player may perform the declared action as normal. On a 1, the player becomes Rooted. Whilst Rooted, a player cannot perform Move Actions, may not follow-up after performing a Block Action, cannot be pushed back, and may not leave their current square for any reason, with the exception of being Knocked Out or suffering a Casualty. A Rooted player will immediately stop being Rooted at the end of a drive, or if they are ever Knocked Down or placed Prone."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Throw Team-mate",
-    "type": "ACTIVE",
-    "description": "During each turn, a single player on the active team may declare a Throw Team-mate Action in order to attempt to launch a team-mate across the pitch. A player may only declare this Action if they have the Throw Team-mate trait. When a player declares a Throw Team-mate Action they are first allowed to make a Move Action, though they cannot continue to move after the Throw Team-mate Action has been attempted. When a player performs a Throw Team-mate Action they may pick up an adjacent team-mate with the Right Stuff trait to be thrown, and then follow these steps in order: Declare Target Square; Measure Range (Max 6 Squares); Test for Accuracy (Passing Ability Test); Landing."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Timm-ber!",
-    "type": "PASSIVE",
-    "description": "If this player has an MA of 2 or less and attempts to stand up, apply a +1 modifier to the roll for standing up for each Open Standing team-mate adjacent to this player. A roll of a natural 1 will still fail as normal."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Titchy",
-    "type": "ACTIVE",
-    "description": "A player with this trait may apply a +1 modifier to the Agility Test when attempting to dodge. However, when an opposition player attempts to dodge into a square within this player’s Tackle Zone, this player will not apply a -1 modifier to the opposition player’s Agility Test for marking the opposition player."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Trickster",
-    "type": "PASSIVE",
-    "description": "Whenever an opposition player attempts to perform a Block Action against this player, or a Special Action that targets this player directly (with the exception of a Block Action caused by the Ball & Chain Special Action), this player may use this trait. Before determining how many dice are rolled, this player may be removed from the pitch and placed in any other unoccupied square adjacent to the player performing the Action. The Action then takes place as normal. If the player using this trait is holding the ball and places themselves in the opposition End Zone, the Action will still be fully resolved before any touchdown is resolved. If this player uses this trait to be placed on the ball, they may attempt to pick it up before any dice are rolled."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Unchanneled Fury",
-    "type": "PASSIVE",
-    "description": "Whenever this player is activated, after declaring their action, they must roll a D6. They may apply a +1 modifier to the roll if they have declared a Block Action or a Blitz Action. On a 4+, the player may perform the declared action as normal. On a 1-3, this player rages incoherently but nothing really happens. Their activation immediately ends."
-  },
-  {
-    "category": "TRAITS",
-    "name": "Unsteady",
-    "type": "PASSIVE",
-    "description": "This player may not declare Secure the Ball Actions."
+    "description": "When an Injury Roll is made for this player, they will only be Knocked-out on the roll of a 9; a roll of an 8 will be treated as a Stunned result. If this player also has the Stunty Trait, then they will only be Knocked-out on the roll of an 8; a roll of a 7 will be treated as a Stunned result."
   }
 ]

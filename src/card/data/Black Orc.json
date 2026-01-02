@@ -1,0 +1,53 @@
+[
+  {
+    "ag": "3+",
+    "av": "8+",
+    "ma": "",
+    "pa": "4+",
+    "st": "",
+    "playerType": "normal",
+    "teamName": "Black Orc",
+    "cost": "45,000",
+    "cardName": "Goblin Bruiser",
+    "skillsAndTraits": "Dodge, Right Stuff, Stunty, Thick Skull",
+    "positionName": "Goblin",
+    "primary": "AD",
+    "secondary": "GPS",
+    "footer": "Goblin, Lineman",
+    "notes": ""
+  },
+  {
+    "ag": "4+",
+    "av": "10+",
+    "ma": "",
+    "pa": "5+",
+    "st": "",
+    "playerType": "normal",
+    "teamName": "Black Orc",
+    "cost": "90,000",
+    "cardName": "Black Orc",
+    "skillsAndTraits": "Brawler, Grab",
+    "positionName": "Blocker",
+    "primary": "GS",
+    "secondary": "AD",
+    "footer": "Blocker, Orc",
+    "notes": ""
+  },
+  {
+    "ag": "5+",
+    "av": "10+",
+    "ma": "",
+    "pa": "5+",
+    "st": "",
+    "playerType": "normal",
+    "teamName": "Black Orc",
+    "cost": "115,000",
+    "cardName": "Trained Troll",
+    "skillsAndTraits": "Always Hungry, Mighty Blow, Projectile Vomit, Really Stupid, Regeneration, Throw Team-mate",
+    "positionName": "Troll",
+    "primary": "S",
+    "secondary": "AGP",
+    "footer": "Big Guy, Troll",
+    "notes": ""
+  }
+]

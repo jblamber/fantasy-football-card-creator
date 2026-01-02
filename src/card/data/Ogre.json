@@ -1,0 +1,53 @@
+[
+  {
+    "ag": "3+",
+    "av": "6+",
+    "ma": "",
+    "pa": "4+",
+    "st": "",
+    "playerType": "normal",
+    "teamName": "Ogre",
+    "cost": "15,000",
+    "cardName": "Gnoblar Lineman",
+    "skillsAndTraits": "Dodge, Right Stuff, Sidestep, Stunty, Titchy",
+    "positionName": "Gnoblar",
+    "primary": "AD",
+    "secondary": "G",
+    "footer": "Gnoblar, Lineman",
+    "notes": ""
+  },
+  {
+    "ag": "4+",
+    "av": "10+",
+    "ma": "",
+    "pa": "5+",
+    "st": "",
+    "playerType": "normal",
+    "teamName": "Ogre",
+    "cost": "140,000",
+    "cardName": "Ogre Blocker",
+    "skillsAndTraits": "Bone Head, Mighty Blow, Thick Skull, Throw Team-mate",
+    "positionName": "Blocker",
+    "primary": "S",
+    "secondary": "ADGP",
+    "footer": "Big Guy, Blocker, Ogre",
+    "notes": ""
+  },
+  {
+    "ag": "4+",
+    "av": "10+",
+    "ma": "",
+    "pa": "4+",
+    "st": "",
+    "playerType": "normal",
+    "teamName": "Ogre",
+    "cost": "145,000",
+    "cardName": "Ogre Runt Punter",
+    "skillsAndTraits": "Bone Head, Kick Team-mate, Mighty Blow, Thick Skull",
+    "positionName": "Thrower",
+    "primary": "PS",
+    "secondary": "ADG",
+    "footer": "Big Guy, Ogre, Thrower",
+    "notes": ""
+  }
+]
