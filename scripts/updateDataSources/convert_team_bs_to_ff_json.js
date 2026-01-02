@@ -83,6 +83,7 @@ function textOf(node) {
   if (typeof node === 'number') return String(node);
   if (typeof node === 'object') {
     if (typeof node['#text'] === 'string') return node['#text'].trim();
+    if (typeof node['#text'] === 'number') return String(node['#text'])
     // Some BS data places the text directly when attributes exist; try valueOf
     const v = node.valueOf?.();
     if (typeof v === 'string') return v.trim();
