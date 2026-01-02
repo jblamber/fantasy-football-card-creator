@@ -118,7 +118,7 @@ export function CardCreator() {
     };
 
     const emptyImagery = {
-        imageProperties: {offsetX: -100, offsetY: 0, scalePercent: 100},
+        imageProperties: {offsetX: 0, offsetY: 0, scalePercent: 100},
         lenticularUrls: {'0': '/img/players/blank-player.jpg'}
     }
 
@@ -408,39 +408,7 @@ export function CardCreator() {
                         </Field>
                     </CollapsibleSection>
 
-                    <CollapsibleSection title="Imagery" defaultOpen={false}>
-
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
-                            <Field label="Holo Effect">
-                                <select
-                                    className="px-2.5 py-2 rounded-md border border-neutral-700 bg-neutral-900 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500"
-                                    value={selectedHolo}
-                                    onChange={e => {
-                                        const v = e.target.value;
-                                        updateCard(cardDeckNo, {rarity: v as CardRarity})
-                                    }}>
-                                    <option value="">(none)</option>
-                                    {CardHoloTypes.map((typ) => (
-                                        <option key={typ.label} value={typ.rarity}>{typ.label}</option>
-                                    ))}
-                                </select>
-                            </Field>
-                            <Field label="Glow Color">
-                                <select
-                                    className="px-2.5 py-2 rounded-md border border-neutral-700 bg-neutral-900 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500"
-                                    value={selectedGlow}
-                                    onChange={e => {
-                                        const v = e.target.value;
-                                        updateCard(cardDeckNo, { types: v ? v : undefined });
-                                    }}>
-                                    <option value="">White</option>
-                                    {glowOptions.map((name) => (
-                                        <option key={name} value={name}>{name}</option>
-                                    ))}
-                                </select>
-                            </Field>
-                        </div>
-
+                    <CollapsibleSection title="Imagery and Effects" defaultOpen={false}>
                         <div className="text-xs mb-2 mt-4">
                             Input a cloud hosted url for maximum portability or use a local image file. Use the offsets to move the image
                             around and center the player on the card.
@@ -492,6 +460,37 @@ export function CardCreator() {
                             <Field label="Scale %"><TextInput type="number"
                                                               value={c.imagery.imageProperties.scalePercent}
                                                               onChange={e => updateImageProps(cardDeckNo, {scalePercent: Number(e.target.value)})}/></Field>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mt-3">
+                            <Field label="Holo Effect">
+                                <select
+                                    className="px-2.5 py-2 rounded-md border border-neutral-700 bg-neutral-900 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500"
+                                    value={selectedHolo}
+                                    onChange={e => {
+                                        const v = e.target.value;
+                                        updateCard(cardDeckNo, {rarity: v as CardRarity})
+                                    }}>
+                                    <option value="">(none)</option>
+                                    {CardHoloTypes.map((typ) => (
+                                        <option key={typ.label} value={typ.rarity}>{typ.label}</option>
+                                    ))}
+                                </select>
+                            </Field>
+                            <Field label="Glow Color">
+                                <select
+                                    className="px-2.5 py-2 rounded-md border border-neutral-700 bg-neutral-900 text-white focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500"
+                                    value={selectedGlow}
+                                    onChange={e => {
+                                        const v = e.target.value;
+                                        updateCard(cardDeckNo, { types: v ? v : undefined });
+                                    }}>
+                                    <option value="">White</option>
+                                    {glowOptions.map((name) => (
+                                        <option key={name} value={name}>{name}</option>
+                                    ))}
+                                </select>
+                            </Field>
                         </div>
                     </CollapsibleSection>
                 </div>
