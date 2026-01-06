@@ -106,6 +106,7 @@ export function CardsCarousel({cards}: { cards: any[] }) {
     return (
         <section
             className="card-viewport h-screen flex p-1 justify-center [touch-action:manipulation]"
+            data-tour-id="deck-preview"
             onClick={onViewportClick}>
             {/* Sticky controls bottom-right */}
 
@@ -122,6 +123,7 @@ export function CardsCarousel({cards}: { cards: any[] }) {
             </div>
 
             <div
+                data-tour-id="skills"
                 className="fixed bottom-28 right-2 z-20 rounded-md py-1 text-white text-sm shadow-md select-none flex items-center gap-2"
                 onClick={(e) => e.stopPropagation()}
             >
@@ -152,6 +154,7 @@ export function CardsCarousel({cards}: { cards: any[] }) {
                 </div>
                 <button
                     type="button"
+                    data-tour-id="download-card"
                     onClick={handleDownload}
                     title="Download this card as PNG"
                     aria-label="Download card image"
@@ -202,7 +205,7 @@ export function CardsCarousel({cards}: { cards: any[] }) {
             >
                 <div className="mx-auto max-w-screen-md">
                     <textarea
-                        id="card-notes"
+                        data-tour-id="card-notes"
                         rows={3}
                         placeholder="Add player notes here"
                         value={(localCards[index]?.playerData?.notes ?? '') as string}

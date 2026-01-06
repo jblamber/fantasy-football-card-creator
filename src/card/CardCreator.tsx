@@ -456,9 +456,13 @@ export function CardCreator() {
                                                             onChange={e => updatePlayer(cardDeckNo, {secondary: e.target.value})}/></Field>
                             <Field label="Card Footer"><TextInput value={c.playerData.footer}
                                                              onChange={e => updatePlayer(cardDeckNo, {footer: e.target.value})}/></Field>
-                            <Field label="Notes"><TextArea rows={4} value={c.playerData.notes || ''}
-                                                             placeholder="Player notes (not visible on card)"
-                                                             onChange={e => updatePlayer(cardDeckNo, {notes: e.target.value})}/></Field>
+                            <Field label="Notes">
+                            <div data-tour-id="notes">
+                                <TextArea rows={4} value={c.playerData.notes || ''}
+                                          placeholder="Player notes (not visible on card)"
+                                          onChange={e => updatePlayer(cardDeckNo, {notes: e.target.value})}/>
+                            </div>
+                        </Field>
                         </div>
                         <Field label="Stats">
                         <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-3 gap-3">
@@ -578,8 +582,12 @@ export function CardCreator() {
         <div className="pt-1 px-3 md:px-4 pb-28">
             <div className="max-w-[900px] lg:max-w-[1400px] mx-auto space-y-4">
                 <div
-                    className="rounded-xl border border-neutral-700/60 bg-neutral-800/60 backdrop-blur-sm shadow-lg px-4 py-3">
-                    <h2 className="text-neutral-100 text-2xl font-semibold">Deck Editor</h2>
+                    className="rounded-xl border border-neutral-700/60 bg-neutral-800/60 backdrop-blur-sm shadow-lg px-4 py-3"
+                    data-tour-id="deck-editor">
+                    <div className="flex items-center justify-between">
+                                            <h2 className="text-neutral-100 text-2xl font-semibold">Deck Editor</h2>
+
+                                        </div>
                     <p className="text-neutral-300 text-sm mt-1">Build one or more cards into a deck. All fields are optional unless your card art requires specific properties.</p>
 
                     {/* Deck storage controls */}
@@ -624,11 +632,13 @@ export function CardCreator() {
                                 }}
                                 className="bg-emerald-700 text-white border border-emerald-600 rounded-md px-3 py-1.5 hover:bg-emerald-600"
                                 title="Save to Device"
+                                data-tour-id="save"
                             >
                                 <ArrowRightEndOnRectangleIcon className={'h-7 w-7'}/>
                             </button>
 
                             <button
+                                data-tour-id={"new-deck"}
                                 onClick={() => {
                                     const name = nextUntitledName();
                                     const defaultCards: FantasyFootballCardSerializable[] = [{
@@ -709,6 +719,7 @@ export function CardCreator() {
 
                             <button
                                 onClick={downloadDeckJson}
+                                data-tour-id={"download-deck"}
                                 className="bg-neutral-800 text-white border border-neutral-700 rounded-md px-3 py-1.5 hover:bg-neutral-700"
                                 title="Download JSON"
                             >
