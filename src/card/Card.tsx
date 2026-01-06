@@ -12,7 +12,6 @@ import React, {useCallback, useEffect, useMemo, useRef} from "react";
 
 export type TradingCardProps = {
     children?: React.ReactNode;
-    // data / pokemon props (metadata is unused visually but kept for parity & data-attrs)
     id?: string;
     name?: string;
     number?: string;
