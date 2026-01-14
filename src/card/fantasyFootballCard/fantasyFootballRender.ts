@@ -246,13 +246,14 @@ export async function renderCard(
             });
         } else {
             // Position
+            const positionSuffix = data.number !== undefined ? ` #${data.number}` : '';
             ctx.font = opts.fonts.positionFont;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillStyle = opts.colors.shadow;
-            fillText(ctx, data.positionName ?? '', 595, 1425);
+            fillText(ctx, `${data.positionName}${positionSuffix}`, 595, 1425);
             ctx.fillStyle = opts.colors.title;
-            fillText(ctx, data.positionName ?? '', 590, 1420);
+            fillText(ctx, `${data.positionName}${positionSuffix}`, 590, 1420);
 
 
             // Development labels

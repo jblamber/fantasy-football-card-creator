@@ -481,6 +481,10 @@ export function CardCreator() {
                             <Field label="AV"><TextInput value={c.playerData.av}
                                                          className={'field-sizing-fixed w-15 '}
                                                          onChange={e => updatePlayer(cardDeckNo, {av: e.target.value})}/></Field>
+                            <Field label="#"><TextInput value={c.playerData.number}
+                                                         className={'field-sizing-fixed w-15 '}
+                                                         onChange={e => updatePlayer(cardDeckNo, {number: e.target.value})}/></Field>
+
                         </div>
                         </Field>
                     </CollapsibleSection>
