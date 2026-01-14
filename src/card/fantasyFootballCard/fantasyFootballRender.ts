@@ -505,17 +505,3 @@ export function loadImage(url: string): Promise<HTMLImageElement> {
         img.src = url;
     });
 }
-
-function mergeOptions<T extends object>(base: T, extra?: Partial<T>): T {
-    if (!extra) return base;
-    // shallow merge then shallow-merge nested objects where present
-    const out: any = {...base};
-    for (const [k, v] of Object.entries(extra)) {
-        if (v && typeof v === 'object' && !Array.isArray(v)) {
-            out[k] = {...(out as any)[k], ...v};
-        } else {
-            out[k] = v as any;
-        }
-    }
-    return out;
-}
