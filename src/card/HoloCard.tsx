@@ -11,7 +11,7 @@ import { useAppSettings } from "../appSettings/AppSettingsProvider";
  *   Consumers should ensure those styles are available (in the example src, we link them in index.html).
  */
 
-export type TradingCardProps = {
+export type HoloCardProps = {
     children?: React.ReactNode;
     id?: string;
     name?: string;
@@ -58,7 +58,7 @@ function adjust(n: number, a: number, b: number, x: number, y: number) {
     return x + (n - a) * ((y - x) / (b - a));
 }
 
-export const TradingCard: React.FC<TradingCardProps> = ({
+export const HoloCard: React.FC<HoloCardProps> = ({
                                                             children,
                                                             id = '',
                                                             name = '',
@@ -485,7 +485,7 @@ export const TradingCard: React.FC<TradingCardProps> = ({
                     <img
                         className="card__back"
                         src={back}
-                        alt={`The back of the ${name || 'Trading'} Card`}
+                        alt={`The back of the ${name || 'Holo'} Card`}
                         width={822}
                         height={1122}
                         style={{width: '100%', height: 'auto', display: 'block'}}
@@ -493,7 +493,7 @@ export const TradingCard: React.FC<TradingCardProps> = ({
                     <div className="card__front" ref={frontRef} style={{display: showBack? 'none' : ''}}>
                         {img ? (<img
                             src={img}
-                            alt={`Front design of the ${name || 'Trading'} Card, with the stats and info around the edge`}
+                            alt={`Front design of the ${name || 'Holo'} Card, with the stats and info around the edge`}
                             width={822}
                             height={1122}
                         />) : children}
@@ -509,4 +509,4 @@ export const TradingCard: React.FC<TradingCardProps> = ({
     );
 };
 
-export default TradingCard;
+export default HoloCard;

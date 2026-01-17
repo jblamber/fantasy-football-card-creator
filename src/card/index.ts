@@ -1,2 +1,2 @@
-export {default as HoloCard} from './Card';
-export type {TradingCardProps} from './Card';
+export {default as HoloCard} from './HoloCard';
+export type {HoloCardProps} from './HoloCard';
