@@ -80,7 +80,7 @@ export const TradingCard: React.FC<TradingCardProps> = ({
                                                             lenticularLength = 0,
                                                             onSwipe,
                                                         }) => {
-    const { powerSaving } = useAppSettings();
+    const { powerSaving, tiltMode } = useAppSettings();
     const cardRef = useRef<HTMLDivElement | null>(null);
     const frontRef = useRef<HTMLDivElement | null>(null);
     const rotatorRef = useRef<HTMLButtonElement | null>(null);
@@ -259,6 +259,34 @@ export const TradingCard: React.FC<TradingCardProps> = ({
         el.style.setProperty('--cosmosbg', `${cosmosPosition.x}px ${cosmosPosition.y}px`);
     };
 
+    // Device tilt support: when enabled and not in power-saving, use deviceorientation to drive targets
+    useEffect(() => {
+        if (powerSaving || !tiltMode) return;
+        let active = true;
+        const handleOrientation = (e: DeviceOrientationEvent) => {
+            if (!active) return;
+            if (pointerActiveRef.current) return; // do not fight pointer interaction
+            // gamma: left/right tilt (-90..90). beta: front/back tilt (-180..180)
+            let gamma = typeof e.gamma === 'number' ? e.gamma : 0; // left/right
+            let beta = typeof e.beta === 'number' ? e.beta : 0; // front/back
+            // Constrain to sensible ranges for mapping
+            gamma = Math.max(-45, Math.min(45, gamma));
+            beta = Math.max(-45, Math.min(45, beta));
+            const x = clamp(round(((gamma + 45) / 90) * 100));
+            const y = clamp(round(((beta + 45) / 90) * 100));
+            applyPercentToTargets({ x, y });
+        };
+        try {
+            window.addEventListener('deviceorientation', handleOrientation, true);
+        } catch {}
+        return () => {
+            active = false;
+            try {
+                window.removeEventListener('deviceorientation', handleOrientation, true);
+            } catch {}
+        };
+    }, [tiltMode, powerSaving]);
+
     useEffect(() => {
         setStaticSeeds();
     }, [rng, cosmosPosition]);
@@ -280,6 +308,24 @@ export const TradingCard: React.FC<TradingCardProps> = ({
     }, [foil, mask]);
 
     const swipeRef = useRef<{ x: number; y: number; t: number } | null>(null);
+    const pointerActiveRef = useRef<boolean>(false);
+
+    const applyPercentToTargets = (percent: { x: number; y: number }) => {
+        const center = {
+            x: percent.x - 50,
+            y: percent.y - 50,
+        };
+        target.current.bgx = adjust(percent.x, 0, 100, 37, 63);
+        target.current.bgy = adjust(percent.y, 0, 100, 33, 67);
+        target.current.rx = round(-(center.x / 3.5));
+        target.current.ry = round(center.y / 2);
+        target.current.gx = round(percent.x);
+        target.current.gy = round(percent.y);
+        target.current.go = 1;
+        if (rafRef.current === null) {
+            rafRef.current = requestAnimationFrame(tick);
+        }
+    };
 
     const onPointerMove: React.PointerEventHandler = (e) => {
         if (powerSaving) return; // disable interaction updates in power-saving mode
@@ -295,23 +341,7 @@ export const TradingCard: React.FC<TradingCardProps> = ({
             x: clamp(round((100 / rect.width) * abs.x)),
             y: clamp(round((100 / rect.height) * abs.y)),
         };
-        const center = {
-            x: percent.x - 50,
-            y: percent.y - 50,
-        };
-
-        //Update animation values and request animation frame
-        target.current.bgx = adjust(percent.x, 0, 100, 37, 63);
-        target.current.bgy = adjust(percent.y, 0, 100, 33, 67);
-        target.current.rx = round(-(center.x / 3.5));
-        target.current.ry = round(center.y / 2);
-        target.current.gx = round(percent.x);
-        target.current.gy = round(percent.y);
-        target.current.go = 1;
-
-        if (rafRef.current === null) {
-            rafRef.current = requestAnimationFrame(tick);
-        }
+        applyPercentToTargets(percent);
     };
 
     const resetInteraction = useCallback((delay = 500) => {
@@ -366,6 +396,14 @@ export const TradingCard: React.FC<TradingCardProps> = ({
                             targetEl.setPointerCapture?.(e.pointerId);
                         } catch {
                         }
+                        pointerActiveRef.current = true;
+                        // iOS permission request for motion sensors
+                        try {
+                            const AnyDO = (window as any).DeviceOrientationEvent;
+                            if (tiltMode && AnyDO && typeof AnyDO.requestPermission === 'function') {
+                                AnyDO.requestPermission().catch(() => {}).then(() => {});
+                            }
+                        } catch {}
                         // record swipe start
                         swipeRef.current = {x: e.clientX, y: e.clientY, t: Date.now()};
                         onPointerMove(e);
@@ -393,6 +431,7 @@ export const TradingCard: React.FC<TradingCardProps> = ({
                             }
                         }
                         swipeRef.current = null;
+                        pointerActiveRef.current = false;
                         resetInteraction(200);
                     }}
                     onPointerCancel={(e) => {
@@ -400,10 +439,11 @@ export const TradingCard: React.FC<TradingCardProps> = ({
                             e.currentTarget.releasePointerCapture?.(e.pointerId);
                         } catch {
                         }
+                        pointerActiveRef.current = false;
                         resetInteraction(200);
                     }}
-                    onPointerLeave={onPointerLeave}
-                    onBlur={onBlur}
+                    onPointerLeave={(e) => { pointerActiveRef.current = false; onPointerLeave(e); }}
+                    onBlur={(e) => { pointerActiveRef.current = false; onBlur(e as any); }}
                 >
                     <img
                         className="card__back"

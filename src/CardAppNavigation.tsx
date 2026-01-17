@@ -1,6 +1,5 @@
 import {
     PencilSquareIcon,
-    Battery0Icon,
     CodeBracketIcon,
     PlayIcon,
     QuestionMarkCircleIcon,
@@ -11,6 +10,7 @@ import {getDeck, setCurrentDeckId} from "./services/localDecks";
 import {useTour} from "./tour/TourProvider";
 import {parseQuery, useHashRoute} from "./utils/UseHashRoute";
 import { useAppSettings } from "./appSettings/AppSettingsProvider";
+import {DeviceMoveIcon} from "./buttons/device-move";
 
 export interface CardAppNavigationProps {
     currentId: string | null;
@@ -20,7 +20,7 @@ export interface CardAppNavigationProps {
 
 export const CardAppNavigation = ({setCurrentId, currentId, decks}: CardAppNavigationProps) => {
 
-    const { powerSaving, togglePowerSaving } = useAppSettings();
+    const { powerSaving, togglePowerSaving, tiltMode, toggleTiltMode } = useAppSettings();
     const hash = useHashRoute();
     const [, routeAndQuery] = hash.split("#");
     const [route, queryString] = (routeAndQuery || "/viewer").split("?");
@@ -102,6 +102,22 @@ export const CardAppNavigation = ({setCurrentId, currentId, decks}: CardAppNavig
         )
     }
 
+    function TiltModeBtn() {
+        const { tiltMode, toggleTiltMode } = useAppSettings();
+        return (
+            <button
+                id={"tilt-mode"}
+                onClick={toggleTiltMode}
+                aria-pressed={tiltMode}
+                title={tiltMode ? 'Device Tilt: ON' : 'Device Tilt: OFF'}
+                className={`md:hidden text-white no-underline px-2.5 py-1.5 rounded-md transition-colors ${tiltMode ? 'bg-sky-700 hover:bg-sky-600' : 'bg-white/10 hover:bg-white/20'}`}
+            >
+                <DeviceMoveIcon className="size-5" />
+            </button>
+        );
+    }
+
+
     function ViewerBtn() {
         return (
             <a
@@ -116,7 +132,8 @@ export const CardAppNavigation = ({setCurrentId, currentId, decks}: CardAppNavig
 
     return (
         <nav
-            className="fixed top-2 left-2 z-20 flex gap-2 rounded-md border border-neutral-700/80 bg-neutral-800/80 backdrop-blur px-1.5 py-1 shadow-md">
+            className="fixed top-2 left-2 z-20 flex gap-2 rounded-md border border-neutral-700/80
+             bg-neutral-800/80 backdrop-blur px-1.5 py-1 shadow-md">
 
             <div className="px-2.5 py-1.5 bg-neutral-800/80 rounded-md text-white title">
                 <label className="sr-only" htmlFor="deck-select">Current deck</label>
@@ -139,11 +156,14 @@ export const CardAppNavigation = ({setCurrentId, currentId, decks}: CardAppNavig
                 </div>)}
             </div>
 
+
             <ViewerBtn/>
             <EditBtn/>
-            <SourceBtn/>
             <PowerSavingBtn/>
+            <TiltModeBtn/>
             <StartTourBtn />
+            <SourceBtn/>
+
         </nav>
     )
 }

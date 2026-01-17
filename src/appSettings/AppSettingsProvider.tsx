@@ -4,6 +4,8 @@ export type AppSettings = {
   powerSaving: boolean;
   setPowerSaving: (v: boolean) => void;
   togglePowerSaving: () => void;
+  tiltMode: boolean;
+  toggleTiltMode: () => void;
 };
 
 const AppSettingsContext = createContext<AppSettings | undefined>(undefined);
@@ -20,6 +22,7 @@ function getInitialPowerSaving(): boolean {
 
 export const AppSettingsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [powerSaving, setPowerSavingState] = useState<boolean>(getInitialPowerSaving);
+  const [tiltMode, setTiltModeState] = useState<boolean>(false);
 
   useEffect(() => {
     try {
@@ -29,8 +32,9 @@ export const AppSettingsProvider: React.FC<{ children: React.ReactNode }> = ({ c
 
   const setPowerSaving = useCallback((v: boolean) => setPowerSavingState(v), []);
   const togglePowerSaving = useCallback(() => setPowerSavingState(p => !p), []);
+  const toggleTiltMode = useCallback(() => setTiltModeState(t => !t), []);
 
-  const value = useMemo<AppSettings>(() => ({ powerSaving, setPowerSaving, togglePowerSaving }), [powerSaving, setPowerSaving, togglePowerSaving]);
+  const value = useMemo<AppSettings>(() => ({ powerSaving, setPowerSaving, togglePowerSaving, tiltMode, toggleTiltMode }), [powerSaving, setPowerSaving, togglePowerSaving, tiltMode, toggleTiltMode]);
 
   return (
     <AppSettingsContext.Provider value={value}>

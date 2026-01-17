@@ -4,7 +4,6 @@ Feature Ideas
 - Double tap cards to flip them to their back.
 - Create a menu bar to reduce icon spam
 - Allow login and cloud image uploads
-- Allow accelerometer to flip cards
 - Reduce URL spam by saving data only in local storage
 - Create short links after login
 - Have selectable card backs
