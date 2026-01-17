@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useRef} from "react";
+import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import { useAppSettings } from "../appSettings/AppSettingsProvider";
 
 /**
@@ -88,6 +88,8 @@ export const TradingCard: React.FC<TradingCardProps> = ({
     const showIntervalRef = useRef<number | null>(null);
     const showTimeoutRef = useRef<number | null>(null);
     const lenticularState = useRef<{ x: number, y: number }>({x: 0, y: 0})
+    const [showBack, setShowBack] = useState(false);
+    const lastTapRef = useRef<{ x: number; y: number; t: number } | null>(null);
 
     const rng = useMemo(() => ({x: Math.random(), y: Math.random()}), []);
     const cosmosPosition = useMemo(() => ({
@@ -130,8 +132,8 @@ export const TradingCard: React.FC<TradingCardProps> = ({
     };
 
     const tick = () => {
-        // If power-saving is enabled, do not animate or schedule frames
-        if (powerSaving) {
+        // If power-saving or back-of-card is showing, do not animate or schedule frames
+        if (powerSaving || showBack) {
             rafRef.current = null;
             return;
         }
@@ -214,6 +216,30 @@ export const TradingCard: React.FC<TradingCardProps> = ({
         applyVars();
     }, [powerSaving]);
 
+    // When showing the back, stop animations and reset interaction; resume when returning to front
+    useEffect(() => {
+        if (showBack) {
+            if (rafRef.current) {
+                cancelAnimationFrame(rafRef.current);
+                rafRef.current = null;
+            }
+            target.current.rx = 0;
+            target.current.ry = 0;
+            target.current.gx = 50;
+            target.current.gy = 50;
+            target.current.go = 0;
+            target.current.bgx = 50;
+            target.current.bgy = 50;
+            current.current = { ...target.current };
+            applyVars();
+        } else {
+            // resume animation loop if needed
+            if (rafRef.current === null && !powerSaving) {
+                rafRef.current = requestAnimationFrame(tick);
+            }
+        }
+    }, [showBack, powerSaving]);
+
     useEffect(() => {
         // showcase idle animation like Svelte version (subtle sine-wave motion)
         if (!showcase || powerSaving) return;
@@ -261,7 +287,7 @@ export const TradingCard: React.FC<TradingCardProps> = ({
 
     // Device tilt support: when enabled and not in power-saving, use deviceorientation to drive targets
     useEffect(() => {
-        if (powerSaving || !tiltMode) return;
+        if (powerSaving || !tiltMode || showBack) return;
         let active = true;
         const handleOrientation = (e: DeviceOrientationEvent) => {
             if (!active) return;
@@ -328,7 +354,7 @@ export const TradingCard: React.FC<TradingCardProps> = ({
     };
 
     const onPointerMove: React.PointerEventHandler = (e) => {
-        if (powerSaving) return; // disable interaction updates in power-saving mode
+        if (powerSaving || showBack) return; // disable interaction updates in power-saving mode or when back is shown
         const rot = rotatorRef.current;
         if (!rot) return;
 
@@ -391,6 +417,17 @@ export const TradingCard: React.FC<TradingCardProps> = ({
                     ref={rotatorRef}
                     style={{touchAction: 'none', width: '100%', height: '100%'}}
                     onPointerDown={(e) => {
+                        // Double-tap detection (mobile) and double-click (some browsers expose via detail)
+                        const now = Date.now();
+                        const last = lastTapRef.current;
+                        if (e.detail >= 2 || (last && (now - last.t) < 300 && Math.hypot(e.clientX - last.x, e.clientY - last.y) < 15)) {
+                            setShowBack(v => !v);
+                            lastTapRef.current = null;
+                            // Do not start swipe/tilt for this gesture
+                            return;
+                        }
+                        lastTapRef.current = { x: e.clientX, y: e.clientY, t: now };
+
                         const targetEl = e.currentTarget;
                         try {
                             targetEl.setPointerCapture?.(e.pointerId);
@@ -448,12 +485,12 @@ export const TradingCard: React.FC<TradingCardProps> = ({
                     <img
                         className="card__back"
                         src={back}
-                        alt={`The back of the ${name || 'Trading'} Card Card`}
+                        alt={`The back of the ${name || 'Trading'} Card`}
                         width={822}
                         height={1122}
                         style={{width: '100%', height: 'auto', display: 'block'}}
                     />
-                    <div className="card__front" ref={frontRef}>
+                    <div className="card__front" ref={frontRef} style={{display: showBack? 'none' : ''}}>
                         {img ? (<img
                             src={img}
                             alt={`Front design of the ${name || 'Trading'} Card, with the stats and info around the edge`}
