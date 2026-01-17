@@ -138,7 +138,7 @@ export default function FantasyFootballCard({
             supertype={supertype}
             showcase={false}
             onLenticularChange={(lenticularX: number) => setLenticular({x: lenticularX, y: 0})}
-            lenticularLength={Object.keys(imagery?.lenticularUrls?.size || {}).length ?? 0}
+            lenticularLength={Object.keys(imagery?.lenticularUrls || {}).length ?? 0}
             onSwipe={onSwipe}
             className={className}
         >

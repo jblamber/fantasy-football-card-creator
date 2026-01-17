@@ -368,10 +368,13 @@ export function CardCreator() {
 
     const updateLenticularUrl = useCallback((idx: number, key: string, url: string) => {
         setCards(prev => prev.map((c, i) => {
-            if (i===idx) {
-                c.imagery.lenticularUrls[key] = url
+            const n = {
+                ...c
             }
-            return c;
+            if (i===idx) {
+                n.imagery.lenticularUrls[key] = url
+            }
+            return n;
         }))
     }, []);
 
