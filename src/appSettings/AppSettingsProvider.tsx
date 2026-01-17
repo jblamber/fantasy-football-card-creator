@@ -1,4 +1,5 @@
 import React, {createContext, useCallback, useContext, useEffect, useMemo, useState} from 'react';
+import {toast} from "react-toastify";
 
 export type AppSettings = {
   powerSaving: boolean;
@@ -31,8 +32,14 @@ export const AppSettingsProvider: React.FC<{ children: React.ReactNode }> = ({ c
   }, [powerSaving]);
 
   const setPowerSaving = useCallback((v: boolean) => setPowerSavingState(v), []);
-  const togglePowerSaving = useCallback(() => setPowerSavingState(p => !p), []);
-  const toggleTiltMode = useCallback(() => setTiltModeState(t => !t), []);
+  const togglePowerSaving = useCallback(() => setPowerSavingState((p) => {
+      toast.info('Power saving mode is now ' + (p ? 'off' : 'on'));
+      return !p
+  }), []);
+  const toggleTiltMode = useCallback(() => setTiltModeState((t) => {
+      toast.info('Tilt mode is now ' + (t ? 'off' : 'on when animations are enabled.'));
+      return !t
+  }), []);
 
   const value = useMemo<AppSettings>(() => ({ powerSaving, setPowerSaving, togglePowerSaving, tiltMode, toggleTiltMode }), [powerSaving, setPowerSaving, togglePowerSaving, tiltMode, toggleTiltMode]);
 
