@@ -1,9 +1,16 @@
-import {CodeBracketIcon, PlayIcon, QuestionMarkCircleIcon} from "@heroicons/react/16/solid";
-import {PencilSquareIcon} from "@heroicons/react/24/solid";
+import {
+    PencilSquareIcon,
+    Battery0Icon,
+    CodeBracketIcon,
+    PlayIcon,
+    QuestionMarkCircleIcon,
+    BoltIcon, BoltSlashIcon
+} from "@heroicons/react/16/solid";
 import React from "react";
 import {getDeck, setCurrentDeckId} from "./services/localDecks";
 import {useTour} from "./tour/TourProvider";
 import {parseQuery, useHashRoute} from "./utils/UseHashRoute";
+import { useAppSettings } from "./appSettings/AppSettingsProvider";
 
 export interface CardAppNavigationProps {
     currentId: string | null;
@@ -13,7 +20,7 @@ export interface CardAppNavigationProps {
 
 export const CardAppNavigation = ({setCurrentId, currentId, decks}: CardAppNavigationProps) => {
 
-
+    const { powerSaving, togglePowerSaving } = useAppSettings();
     const hash = useHashRoute();
     const [, routeAndQuery] = hash.split("#");
     const [route, queryString] = (routeAndQuery || "/viewer").split("?");
@@ -79,6 +86,22 @@ export const CardAppNavigation = ({setCurrentId, currentId, decks}: CardAppNavig
         )
     }
 
+    function PowerSavingBtn() {
+        return (
+            <button
+                id={"power-saving-mode"}
+                onClick={togglePowerSaving}
+                aria-pressed={powerSaving}
+                data-tour-id="power-saving-mode"
+                title={powerSaving ? 'Power Saving: ON' : 'Power Saving: OFF'}
+                className={`text-white no-underline px-2.5 py-1.5 rounded-md transition-colors ${powerSaving ? 'bg-emerald-700 hover:bg-emerald-600' : 'bg-white/10 hover:bg-white/20'}`}
+            >
+                {powerSaving && (<BoltSlashIcon className="size-5"/>)}
+                {!powerSaving && (<BoltIcon className="size-5"/>)}
+            </button>
+        )
+    }
+
     function ViewerBtn() {
         return (
             <a
@@ -108,17 +131,18 @@ export const CardAppNavigation = ({setCurrentId, currentId, decks}: CardAppNavig
                         <option key={d.id} value={d.id}>{d.name}</option>
                     ))}
                 </select>
-                <div className="aurora">
+               {!powerSaving && (<div className="aurora">
                     <div className="aurora__item"></div>
                     <div className="aurora__item"></div>
                     <div className="aurora__item"></div>
                     <div className="aurora__item"></div>
-                </div>
+                </div>)}
             </div>
 
             <ViewerBtn/>
             <EditBtn/>
             <SourceBtn/>
+            <PowerSavingBtn/>
             <StartTourBtn />
         </nav>
     )

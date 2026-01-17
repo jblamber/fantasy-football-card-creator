@@ -1,0 +1,46 @@
+import React, {createContext, useCallback, useContext, useEffect, useMemo, useState} from 'react';
+
+export type AppSettings = {
+  powerSaving: boolean;
+  setPowerSaving: (v: boolean) => void;
+  togglePowerSaving: () => void;
+};
+
+const AppSettingsContext = createContext<AppSettings | undefined>(undefined);
+
+function getInitialPowerSaving(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    const v = window.localStorage.getItem('ffcg:powerSaving');
+    return v === '1' || v === 'true';
+  } catch {
+    return false;
+  }
+}
+
+export const AppSettingsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [powerSaving, setPowerSavingState] = useState<boolean>(getInitialPowerSaving);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem('ffcg:powerSaving', powerSaving ? '1' : '0');
+    } catch {}
+  }, [powerSaving]);
+
+  const setPowerSaving = useCallback((v: boolean) => setPowerSavingState(v), []);
+  const togglePowerSaving = useCallback(() => setPowerSavingState(p => !p), []);
+
+  const value = useMemo<AppSettings>(() => ({ powerSaving, setPowerSaving, togglePowerSaving }), [powerSaving, setPowerSaving, togglePowerSaving]);
+
+  return (
+    <AppSettingsContext.Provider value={value}>
+      {children}
+    </AppSettingsContext.Provider>
+  );
+};
+
+export function useAppSettings(): AppSettings {
+  const ctx = useContext(AppSettingsContext);
+  if (!ctx) throw new Error('useAppSettings must be used within AppSettingsProvider');
+  return ctx;
+}

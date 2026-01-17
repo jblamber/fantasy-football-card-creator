@@ -1,4 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useRef} from "react";
+import { useAppSettings } from "../appSettings/AppSettingsProvider";
 
 /**
  * Trading Card
@@ -79,6 +80,7 @@ export const TradingCard: React.FC<TradingCardProps> = ({
                                                             lenticularLength = 0,
                                                             onSwipe,
                                                         }) => {
+    const { powerSaving } = useAppSettings();
     const cardRef = useRef<HTMLDivElement | null>(null);
     const frontRef = useRef<HTMLDivElement | null>(null);
     const rotatorRef = useRef<HTMLButtonElement | null>(null);
@@ -128,6 +130,11 @@ export const TradingCard: React.FC<TradingCardProps> = ({
     };
 
     const tick = () => {
+        // If power-saving is enabled, do not animate or schedule frames
+        if (powerSaving) {
+            rafRef.current = null;
+            return;
+        }
         const s = 0.05; // smoothing for spring-like behavior (0..1) closer to 0, more smooth.
         const c = current.current;
         const t = target.current;
@@ -169,17 +176,47 @@ export const TradingCard: React.FC<TradingCardProps> = ({
     };
 
     useEffect(() => {
-        rafRef.current = requestAnimationFrame(tick);
+        if (!powerSaving) {
+            rafRef.current = requestAnimationFrame(tick);
+        }
         return () => {
             if (rafRef.current) cancelAnimationFrame(rafRef.current);
             if (showIntervalRef.current) window.clearInterval(showIntervalRef.current);
             if (showTimeoutRef.current) window.clearTimeout(showTimeoutRef.current as unknown as number);
+            rafRef.current = null;
         };
-    }, []);
+    }, [powerSaving]);
+
+    // When power-saving toggles on, immediately stop and reset animated values
+    useEffect(() => {
+        if (!powerSaving) return;
+        if (rafRef.current) {
+            cancelAnimationFrame(rafRef.current);
+            rafRef.current = null;
+        }
+        if (showIntervalRef.current) {
+            window.clearInterval(showIntervalRef.current);
+            showIntervalRef.current = null;
+        }
+        if (showTimeoutRef.current) {
+            window.clearTimeout(showTimeoutRef.current as unknown as number);
+            showTimeoutRef.current = null;
+        }
+        // Reset target and current to neutral and apply CSS vars once
+        target.current.rx = 0;
+        target.current.ry = 0;
+        target.current.gx = 50;
+        target.current.gy = 50;
+        target.current.go = 0;
+        target.current.bgx = 50;
+        target.current.bgy = 50;
+        current.current = { ...target.current };
+        applyVars();
+    }, [powerSaving]);
 
     useEffect(() => {
         // showcase idle animation like Svelte version (subtle sine-wave motion)
-        if (!showcase) return;
+        if (!showcase || powerSaving) return;
         // wait 2s to start
         showTimeoutRef.current = window.setTimeout(() => {
             let r = 0;
@@ -202,7 +239,17 @@ export const TradingCard: React.FC<TradingCardProps> = ({
                 resetInteraction(0);
             }, 4000);
         }, 2000);
-    }, [showcase]);
+        return () => {
+            if (showIntervalRef.current) {
+                window.clearInterval(showIntervalRef.current);
+                showIntervalRef.current = null;
+            }
+            if (showTimeoutRef.current) {
+                window.clearTimeout(showTimeoutRef.current as unknown as number);
+                showTimeoutRef.current = null;
+            }
+        };
+    }, [showcase, powerSaving]);
 
     const setStaticSeeds = () => {
         const el = cardRef.current as HTMLElement | null;
@@ -235,6 +282,7 @@ export const TradingCard: React.FC<TradingCardProps> = ({
     const swipeRef = useRef<{ x: number; y: number; t: number } | null>(null);
 
     const onPointerMove: React.PointerEventHandler = (e) => {
+        if (powerSaving) return; // disable interaction updates in power-saving mode
         const rot = rotatorRef.current;
         if (!rot) return;
 
@@ -252,6 +300,7 @@ export const TradingCard: React.FC<TradingCardProps> = ({
             y: percent.y - 50,
         };
 
+        //Update animation values and request animation frame
         target.current.bgx = adjust(percent.x, 0, 100, 37, 63);
         target.current.bgy = adjust(percent.y, 0, 100, 33, 67);
         target.current.rx = round(-(center.x / 3.5));

@@ -38,6 +38,11 @@ function useStableSteps() {
             disableBeacon: true,
         },
         {
+            target: '[data-tour-id="power-saving-mode"]',
+            content:
+                "If you want to disable fancy effects and save a little power, toggle power saving mode with this button.",
+        },
+        {
             target: '[data-tour-id="skills"]',
             content:
                 "Tap on your player's skills to remind yourself of the rules",
