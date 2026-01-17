@@ -1,7 +1,7 @@
 {
   "name": "fantasy-football-holo-cards",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "node_modules/.bin/vite",
