@@ -129,7 +129,7 @@ export const defaultOptions: Required<RenderOptions<Required<FontOptions>, Requi
 
 export async function renderCard(
     ctx: CanvasRenderingContext2D,
-    data: FantasyFootballCardData,
+    cardData: FantasyFootballCardData,
     assets: ImageAssets,
     opts: AllOptions
 ): Promise<void> {
@@ -158,20 +158,20 @@ export async function renderCard(
 
     // Optional player image
     let playerImg: CanvasImageSource | undefined = assets.playerImage;
-    if (!playerImg && data.imageUrl) {
+    if (!playerImg && cardData.imageUrl) {
         try {
-            playerImg = await loadImage(data.imageUrl);
+            playerImg = await loadImage(cardData.imageUrl);
         } catch {
             // ignore load error; proceed without model image
         }
     }
     if (playerImg) {
         withDesignSpace(() => {
-            const scale = (data.imageProperties?.scalePercent ?? 100) / 100;
+            const scale = (cardData.imageProperties?.scalePercent ?? 100) / 100;
             const width = (playerImg as any).width ? (playerImg as any).width * scale : undefined;
             const height = (playerImg as any).height ? (playerImg as any).height * scale : undefined;
-            const x = 175 + (data.imageProperties?.offsetX ?? 0);
-            const y = 50 + (data.imageProperties?.offsetY ?? 0);
+            const x = 175 + (cardData.imageProperties?.offsetX ?? 0);
+            const y = 50 + (cardData.imageProperties?.offsetY ?? 0);
 
             if (width && height) {
                 ctx.drawImage(playerImg!, x, y, width, height);
@@ -182,11 +182,16 @@ export async function renderCard(
         });
     }
 
+    const playerFrame =
+        cardData.cardBackground ? await loadImage(cardData.cardBackground) : null;
+
     // Frame + border
-    withDesignSpace(() => {
-        const frame = data.playerType === 'star' ? assets.star_frame : assets.frame;
+    await withDesignSpace(async () => {
+        const frame =
+            playerFrame ? playerFrame :
+                (cardData.playerType === 'star' ? assets.star_frame : assets.frame);
         ctx.drawImage(frame, 0, 0, opts.designWidth, opts.designHeight);
-        if (!data.removeBorder && assets.border) {
+        if (!cardData.removeBorder && assets.border) {
             ctx.drawImage(assets.border, 0, 0, opts.designWidth, opts.designHeight);
         }
     });
@@ -201,28 +206,28 @@ export async function renderCard(
         ctx.rotate(-6 * Math.PI / 180);
         ctx.font = opts.fonts.nameFont;
         ctx.fillStyle = opts.colors.shadow;
-        fillText(ctx, data.cardName, 70, 260);
+        fillText(ctx, cardData.cardName, 70, 260);
         ctx.fillStyle = opts.colors.title;
-        fillText(ctx, data.cardName, 75, 260);
+        fillText(ctx, cardData.cardName, 75, 260);
 
         // Team name
         ctx.font = opts.fonts.teamFont;
         ctx.fillStyle = opts.colors.shadow;
-        fillText(ctx, data.teamName, 100, 190);
+        fillText(ctx, cardData.teamName, 100, 190);
         ctx.fillStyle = opts.colors.title;
-        fillText(ctx, data.teamName, 105, 190);
+        fillText(ctx, cardData.teamName, 105, 190);
         ctx.rotate(6 * Math.PI / 180);
 
         // Footer
         ctx.font = opts.fonts.footerFont;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        fillText(ctx, data.footer, 595, 1500);
+        fillText(ctx, cardData.footer, 595, 1500);
 
         // Body text, dynamic wrapping and size scaling similar to original
-        const yStart = data.playerType === 'star' ? 670 : 1020;
+        const yStart = cardData.playerType === 'star' ? 670 : 1020;
 
-        drawWrappedParagraph(ctx, data.skillsAndTraits ?? '', 365, yStart, {
+        drawWrappedParagraph(ctx, cardData.skillsAndTraits ?? '', 365, yStart, {
             baseFont: opts.fonts.bodyFont,
             maxLines: 3,
             fitWidth: 650,
@@ -231,14 +236,14 @@ export async function renderCard(
         });
 
 
-        if (data.playerType === 'star') {
-            if (data.playsFor) drawWrappedParagraph(ctx, data.playsFor, 365, 840, {
+        if (cardData.playerType === 'star') {
+            if (cardData.playsFor) drawWrappedParagraph(ctx, cardData.playsFor, 365, 840, {
                 baseFont: opts.fonts.bodyFont,
                 maxLines: 1,
                 fitWidth: 400,
                 fillStyle: opts.colors.text
             });
-            if (data.specialRules) drawWrappedParagraph(ctx, data.specialRules, 365, 1250, {
+            if (cardData.specialRules) drawWrappedParagraph(ctx, cardData.specialRules, 365, 1250, {
                 baseFont: opts.fonts.bodyFont,
                 maxLines: 3,
                 fitWidth: 400,
@@ -246,14 +251,14 @@ export async function renderCard(
             });
         } else {
             // Position
-            const positionSuffix = data.number !== undefined ? ` #${data.number}` : '';
+            const positionSuffix = cardData.number !== undefined ? ` #${cardData.number}` : '';
             ctx.font = opts.fonts.positionFont;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillStyle = opts.colors.shadow;
-            fillText(ctx, `${data.positionName}${positionSuffix}`, 595, 1425);
+            fillText(ctx, `${cardData.positionName}${positionSuffix}`, 595, 1425);
             ctx.fillStyle = opts.colors.title;
-            fillText(ctx, `${data.positionName}${positionSuffix}`, 590, 1420);
+            fillText(ctx, `${cardData.positionName}${positionSuffix}`, 590, 1420);
 
 
             // Development labels
@@ -261,18 +266,18 @@ export async function renderCard(
             ctx.fillStyle = opts.colors.text;
             ctx.textAlign = 'left';
             ctx.textBaseline = 'middle';
-            if (data.primary) fillText(ctx, data.primary, 365, 1250);
-            if (data.secondary) fillText(ctx, data.secondary, 365, 1300);
+            if (cardData.primary) fillText(ctx, cardData.primary, 365, 1250);
+            if (cardData.secondary) fillText(ctx, cardData.secondary, 365, 1300);
 
 
-            if (data.cost) {
+            if (cardData.cost) {
                 ctx.font = opts.fonts.costFont;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
                 ctx.fillStyle = opts.colors.shadow;
-                fillText(ctx, data.cost ?? '', 205, 1395);
+                fillText(ctx, cardData.cost ?? '', 205, 1395);
                 ctx.fillStyle = opts.colors.title;
-                fillText(ctx, data.cost ?? '', 205, 1390);
+                fillText(ctx, cardData.cost ?? '', 205, 1390);
             }
         }
     });
@@ -293,15 +298,15 @@ export async function renderCard(
         };
 
         // MA, ST, AG+, PA+, AV+
-        drawStat(data.ma, 220, 385, false);
-        drawStat(data.st, 220, 585, false);
-        drawStat(data.ag, 240, 785, true);
-        drawStat(data.pa, 240, 985, true);
-        drawStat(data.av, 240, 1185, true);
+        drawStat(cardData.ma, 220, 385, false);
+        drawStat(cardData.st, 220, 585, false);
+        drawStat(cardData.ag, 240, 785, true);
+        drawStat(cardData.pa, 240, 985, true);
+        drawStat(cardData.av, 240, 1185, true);
     });
 
     // QR code in bottom-right
-    await drawQrCode(ctx, data, opts);
+    await drawQrCode(ctx, cardData, opts);
 }
 
 function drawWrappedParagraph(

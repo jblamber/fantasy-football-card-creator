@@ -198,6 +198,16 @@ export function CardCreator() {
         }
     }, []);
 
+    // Determine if running on localhost for editor-only fields
+    const isLocalhost = useMemo(() => {
+        try {
+            const h = window.location.hostname;
+            return h === 'localhost' || h === '127.0.0.1' || h === '::1';
+        } catch {
+            return false;
+        }
+    }, []);
+
     // Available glow types (from enum)
     const glowOptions = Object.keys(CardGlowType).filter(k => isNaN(Number(k as any)));
 
@@ -495,6 +505,20 @@ export function CardCreator() {
                             around and center the player on the card.
                         </div>
                         <div>
+                            {isLocalhost && (
+                                <div className="grid gap-2 mt-2">
+                                    <Field label="Card Background (localhost only)">
+                                        <TextInput
+                                            placeholder="Background identifier or URL"
+                                            value={c.playerData.cardBackground || ''}
+                                            onChange={e => updatePlayer(cardDeckNo, { cardBackground: e.target.value })}
+                                        />
+                                    </Field>
+                                    <div className="text-xs text-amber-300 mt-1">
+                                        This field is only visible while editing on localhost and will be ignored by the public site.
+                                    </div>
+                                </div>
+                            )}
                             <div className="grid gap-2 mt-2">
                                 <Field label="Player Image">
                                     {Object.keys(c.imagery.lenticularUrls).map((u, j) => (

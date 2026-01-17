@@ -105,6 +105,7 @@ export interface FantasyFootballPlayerData {
     positionName: string;
     primary: string;
     secondary: string;
+    cardBackground?: string;
 
     //star player rules
     playsFor?: string;
