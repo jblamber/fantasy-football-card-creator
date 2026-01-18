@@ -34,7 +34,7 @@ function useStableSteps() {
     const viewerSteps: Step[] = useMemo(() => [
         {
             target: '[data-tour-id="deck-preview"]',
-            content: 'This is the deck preview, Swipe left and right to change cards.',
+            content: 'This is the deck preview, Swipe left and right to change cards. Double tap to see the card\'s back',
             disableBeacon: true,
         },
         {

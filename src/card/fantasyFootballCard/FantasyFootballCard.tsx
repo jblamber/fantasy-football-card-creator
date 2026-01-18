@@ -1,6 +1,12 @@
 import {HoloCard} from "../index";
 import React, {useEffect, useMemo, useRef, useState} from "react";
-import {FantasyFootballCardData, defaultOptions, ImageAssets, renderCard} from "./fantasyFootballRender";
+import {
+    FantasyFootballCardData,
+    defaultOptions,
+    ImageAssets,
+    renderCard,
+    renderCardBack, defaultBackOptions
+} from "./fantasyFootballRender";
 import {FantasyFootballCardSerializable, FantasyFootballPlayerData} from "../../types";
 import {getImageDataUrl, isLocalImageUrl, parseLocalImageId} from "../../services/localImages";
 import {CardBack, CardFront} from "../HoloCard";
@@ -67,14 +73,16 @@ export default function FantasyFootballCard({
     canvasRef?: React.RefObject<HTMLCanvasElement>
 }) {
 
-    const internalRef = useRef<HTMLCanvasElement | null>(null);
-    const ref = (externalCanvasRef ?? internalRef);
+    const internalCardFrontRef = useRef<HTMLCanvasElement | null>(null);
+    const cardBackRef = useRef<HTMLCanvasElement | null>(null);
+    const cardFrontRef = (externalCanvasRef ?? internalCardFrontRef);
     const [lenticular, setLenticular] = useState({x: 0, y: 0})
 
 
     const bloodBowlCardDefaultAssets: Promise<ImageAssets> = useMemo(async () => {
 
-        const bg1 = await loadImage('/img/card/blank.jpg')
+        const blankCard = await loadImage('/img/card/blank.jpg')
+        const cardBackBackground = await loadImage('/img/card/card_back.jpg')
         const frame = await loadImage('/img/card/bloodbowl_frame.png')
         const star_frame = await loadImage('/img/card/bloodbowl_specialplayer_frame.png')
         const border = await loadImage('/img/card/bloodbowl_border.png')
@@ -95,10 +103,11 @@ export default function FantasyFootballCard({
         numbers['+'] = await loadImage('/img/card/numbers/sf+.png')
 
         return {
-            bg1,
+            blankCard,
             border,
             frame,
             numbers,
+            cardBackBackground,
             playerImage: undefined,
             star_frame
         }
@@ -125,13 +134,22 @@ export default function FantasyFootballCard({
     }, [resolvedImageUrl, imagery, playerData]);
 
     useEffect(() => {
-        const canvas = ref.current!;
+        const canvas = cardFrontRef.current!;
         if (!canvas) return;
         const ctx = canvas.getContext('2d')!;
         bloodBowlCardDefaultAssets.then(assets => {
             return renderCard(ctx, data, assets, defaultOptions);
         })
-    }, [ref, data, bloodBowlCardDefaultAssets]);
+    }, [cardFrontRef, data, bloodBowlCardDefaultAssets]);
+
+    useEffect(() => {
+        const canvas = cardBackRef.current!;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d')!;
+        bloodBowlCardDefaultAssets.then(assets => {
+            return renderCardBack(ctx, data, assets.cardBackBackground, defaultBackOptions);
+        })
+    }, [cardFrontRef, data, bloodBowlCardDefaultAssets]);
 
     return (
         <HoloCard
@@ -147,18 +165,15 @@ export default function FantasyFootballCard({
             className={className}
             Back={
                 <CardBack>
-                    <img
-                        src={'/img/card/card_back.jpg'}
-                        alt={`The back of the ${playerData.cardName} Card`}
-                        width={822}
-                        height={1122}
-                        style={{width: '100%', height: 'auto', display: 'block'}}
-                    />
+                    <canvas
+                            ref={cardBackRef} width={822} height={1122}
+                            style={{width: '100%', height: 'auto', display: 'block'}}/>
                 </CardBack>
             }
             Front={
                 <CardFront>
-                     <canvas ref={ref} width={822} height={1122} style={{width: '100%', height: 'auto', display: 'block'}}/>
+                     <canvas ref={cardFrontRef} width={822} height={1122}
+                             style={{width: '100%', height: 'auto', display: 'block'}}/>
                 </CardFront>
             }
         >

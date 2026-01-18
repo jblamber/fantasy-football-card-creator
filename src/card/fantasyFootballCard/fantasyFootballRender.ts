@@ -47,10 +47,11 @@ export interface FantasyFootballCardData extends FantasyFootballPlayerData {
 
 export interface ImageAssets {
     // Backgrounds and frame elements
-    bg1: CanvasImageSource; // textured background
+    blankCard: CanvasImageSource; // textured background
     frame: CanvasImageSource;
     star_frame: CanvasImageSource;
     border?: CanvasImageSource;
+    cardBackBackground: CanvasImageSource;
 
     // Numerals (if you wish to mimic original number rendering via images). Optional.
     // If omitted, numbers are rendered as text.
@@ -96,7 +97,7 @@ export interface RenderOptions<fontOptions extends FontOptions, colorOptions ext
 }
 
 const defaultFonts: Required<FontOptions> = {
-    nameFont: 'italic 100px brothers-regular',
+    nameFont: 'italic 90px brothers-regular',
     teamFont: 'italic 60px brothers-regular',
     footerFont: '28px franklin-gothic-book',
     bodyFont: '36px franklin-gothic-book',
@@ -127,6 +128,138 @@ export const defaultOptions: Required<RenderOptions<Required<FontOptions>, Requi
     qrPlateStroke: 'rgba(0,0,0,0.35)'
 };
 
+// Back-of-card specific defaults (822x1122)
+export const defaultBackOptions: Required<RenderOptions<Required<FontOptions>, Required<ColorOptions>>> = {
+    designWidth: 822,
+    designHeight: 1122,
+    fonts: {
+        ...defaultFonts,
+        nameFont: '78px brothers-regular',
+        positionFont: '64px brothers-regular',
+        bodyFont: '36px franklin-gothic-book'
+    },
+    colors: defaultColors,
+    showQrCode: true,
+    qrSize: 420, // large QR
+    qrPadding: 24,
+    qrPlateRadius: 18,
+    qrPlateFill: 'rgba(255,255,255,0.95)',
+    qrPlateStroke: 'rgba(0,0,0,0.35)'
+};
+
+/**
+ * Render the back of the card. Size defaults to 822x1122 design space.
+ * Layout:
+ *  - Background image fills full card.
+ *  - Player name centered near top.
+ *  - Large QR code centered below the name (payload built from player stats).
+ *  - Below the QR, centered position and number.
+ */
+export async function renderCardBack(
+    ctx: CanvasRenderingContext2D,
+    data: FantasyFootballCardData,
+    background: CanvasImageSource,
+    opts: Required<RenderOptions<Required<FontOptions>, Required<ColorOptions>>> = defaultBackOptions
+): Promise<void> {
+    const {canvas} = ctx;
+
+    // Compute scale between device canvas and design space
+    const scaleX = canvas.width / opts.designWidth;
+    const scaleY = canvas.height / opts.designHeight;
+
+    const withDesignSpace = <T,>(fn: () => T): T => {
+        ctx.save();
+        ctx.scale(scaleX, scaleY);
+        const r = fn();
+        ctx.restore();
+        return r;
+    };
+
+    // Clear and draw background
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    withDesignSpace(() => {
+        ctx.drawImage(background, 0, 0, opts.designWidth, opts.designHeight);
+    });
+
+    // Title: Player name centered
+    withDesignSpace(() => {
+        const padTop = 48;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.font = opts.fonts.nameFont;
+        // Shadow for readability
+        ctx.fillStyle = opts.colors.shadow;
+        ctx.fillText(data.cardName ?? '', opts.designWidth / 2 + 3, padTop + 3);
+        ctx.fillStyle = opts.colors.title;
+        ctx.fillText(data.cardName ?? '', opts.designWidth / 2, padTop);
+    });
+
+    // QR Code centered below the name
+    const qrSizeDevice = Math.round((opts.qrSize ?? 420) * Math.min(scaleX, scaleY));
+    const centerX = Math.round(canvas.width / 2);
+    // Reserve space for name at top
+    const nameBlockHeightDevice = Math.round(150 * Math.min(scaleX, scaleY));
+    const qrY = Math.round((canvas.height - nameBlockHeightDevice) / 2);
+    const qrX = centerX - Math.round(qrSizeDevice / 2);
+
+    // Plate behind QR
+    const platePad = Math.round(12 * Math.min(scaleX, scaleY));
+    const plateRadius = Math.round((opts.qrPlateRadius ?? 16) * Math.min(scaleX, scaleY));
+    const plateX = qrX - platePad;
+    const plateY = qrY - platePad;
+    const plateW = qrSizeDevice + platePad * 2;
+    const plateH = qrSizeDevice + platePad * 2;
+
+    ctx.save();
+    ctx.beginPath();
+    roundRect(ctx, plateX, plateY, plateW, plateH, plateRadius);
+    ctx.fillStyle = opts.qrPlateFill ?? 'rgba(255,255,255,0.95)';
+    ctx.fill();
+    ctx.strokeStyle = opts.qrPlateStroke ?? 'rgba(0,0,0,0.35)';
+    ctx.lineWidth = Math.max(1, Math.round(2 * Math.min(scaleX, scaleY)));
+    ctx.stroke();
+    ctx.restore();
+
+    // Build QR
+    const payload = buildQrPayload(data);
+    const off = document.createElement('canvas');
+    off.width = qrSizeDevice;
+    off.height = qrSizeDevice;
+    try {
+        await QRCode.toCanvas(off, payload, {
+            errorCorrectionLevel: 'M',
+            margin: 0,
+            width: qrSizeDevice,
+            color: {dark: '#000000', light: '#FFFFFF'}
+        });
+    } catch {
+        // If QR fails, skip drawing it.
+    }
+    ctx.drawImage(off, qrX, qrY, qrSizeDevice, qrSizeDevice);
+
+    // Position and number under QR
+    withDesignSpace(() => {
+        const yTop = ((qrY + qrSizeDevice) / scaleY) + 24; // convert back to design-space plus padding
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.font = opts.fonts.positionFont;
+        ctx.fillStyle = opts.colors.shadow;
+        const line1 = data.positionName ?? '';
+        const line2 = (data.number ? `#${data.number}` : '').toString();
+        // Line 1
+        ctx.fillText(line1, opts.designWidth / 2 + 2, yTop + 2);
+        ctx.fillStyle = opts.colors.title;
+        ctx.fillText(line1, opts.designWidth / 2, yTop);
+        // Line 2 (smaller/body font)
+        const y2 = yTop + 68;
+        ctx.font = opts.fonts.bodyFont;
+        ctx.fillStyle = opts.colors.shadow;
+        ctx.fillText(line2, opts.designWidth / 2 + 2, y2 + 2);
+        ctx.fillStyle = opts.colors.title;
+        ctx.fillText(line2, opts.designWidth / 2, y2);
+    });
+}
+
 export async function renderCard(
     ctx: CanvasRenderingContext2D,
     cardData: FantasyFootballCardData,
@@ -153,7 +286,7 @@ export async function renderCard(
 
     // Background
     withDesignSpace(() => {
-        ctx.drawImage(assets.bg1, 0, 0, opts.designWidth, opts.designHeight);
+        ctx.drawImage(assets.blankCard, 0, 0, opts.designWidth, opts.designHeight);
     });
 
     // Optional player image

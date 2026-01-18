@@ -229,8 +229,8 @@ button.card__rotator {
 
 .card__back {
     background-color: var(--card-back);
-    -webkit-transform: rotateY(180deg) translateZ(1px);
-    transform: rotateY(180deg) translateZ(1px);
+    -webkit-transform: rotateY(0deg) translateZ(-1px);
+    transform: rotateY(0deg) translateZ(-1px);
     backface-visibility: visible;
 }
 
