@@ -3,6 +3,7 @@ import React, {useEffect, useMemo, useRef, useState} from "react";
 import {FantasyFootballCardData, defaultOptions, ImageAssets, renderCard} from "./fantasyFootballRender";
 import {FantasyFootballCardSerializable, FantasyFootballPlayerData} from "../../types";
 import {getImageDataUrl, isLocalImageUrl, parseLocalImageId} from "../../services/localImages";
+import {CardBack, CardFront} from "../HoloCard";
 
 export type PlayerType = 'normal' | 'star';
 
@@ -62,7 +63,9 @@ export default function FantasyFootballCard({
                                                 onSwipe,
                                                 // Optional external canvas ref to allow downloads/snapshots from parent
                                                 canvasRef: externalCanvasRef,
-                                            }: FantasyFootballCardProps & { canvasRef?: React.RefObject<HTMLCanvasElement> }) {
+                                            }: FantasyFootballCardProps & {
+    canvasRef?: React.RefObject<HTMLCanvasElement>
+}) {
 
     const internalRef = useRef<HTMLCanvasElement | null>(null);
     const ref = (externalCanvasRef ?? internalRef);
@@ -123,11 +126,12 @@ export default function FantasyFootballCard({
 
     useEffect(() => {
         const canvas = ref.current!;
+        if (!canvas) return;
         const ctx = canvas.getContext('2d')!;
         bloodBowlCardDefaultAssets.then(assets => {
             return renderCard(ctx, data, assets, defaultOptions);
         })
-    }, [data, bloodBowlCardDefaultAssets]);
+    }, [ref, data, bloodBowlCardDefaultAssets]);
 
     return (
         <HoloCard
@@ -141,8 +145,23 @@ export default function FantasyFootballCard({
             lenticularLength={Object.keys(imagery?.lenticularUrls || {}).length ?? 0}
             onSwipe={onSwipe}
             className={className}
+            Back={
+                <CardBack>
+                    <img
+                        src={'/img/card/card_back.jpg'}
+                        alt={`The back of the ${playerData.cardName} Card`}
+                        width={822}
+                        height={1122}
+                        style={{width: '100%', height: 'auto', display: 'block'}}
+                    />
+                </CardBack>
+            }
+            Front={
+                <CardFront>
+                     <canvas ref={ref} width={822} height={1122} style={{width: '100%', height: 'auto', display: 'block'}}/>
+                </CardFront>
+            }
         >
-            <canvas ref={ref} width={822} height={1122} style={{width: '100%', height: 'auto', display: 'block'}}/>
         </HoloCard>
     )
 }

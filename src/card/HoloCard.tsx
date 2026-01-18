@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
+import React, {ReactElement, useCallback, useEffect, useMemo, useRef, useState} from "react";
 import { useAppSettings } from "../appSettings/AppSettingsProvider";
 
 /**
@@ -11,7 +11,7 @@ import { useAppSettings } from "../appSettings/AppSettingsProvider";
  *   Consumers should ensure those styles are available (in the example src, we link them in index.html).
  */
 
-export type HoloCardProps = {
+export interface HoloCardProps {
     children?: React.ReactNode;
     id?: string;
     name?: string;
@@ -24,8 +24,8 @@ export type HoloCardProps = {
     isReverse?: boolean; // when true, rarity is treated as Reverse Holo for mask/foil computation
 
     // image props
-    img?: string; // front image (full URL or relative to the hosting site)
-    back?: string; // back image fallback
+    Front: ReactElement;
+    Back: ReactElement;
     foil?: string | boolean; // optional foil texture image URL; true/undefined -> auto, false -> none
     mask?: string | boolean; // optional mask image URL (defines where foil appears); true/undefined -> auto, false -> none
 
@@ -41,7 +41,7 @@ export type HoloCardProps = {
 
     // Gesture callbacks
     onSwipe?: (direction: 'left' | 'right') => void;
-};
+}
 
 function clamp(n: number, min = 0, max = 100) {
     return Math.max(min, Math.min(max, n));
@@ -58,6 +58,28 @@ function adjust(n: number, a: number, b: number, x: number, y: number) {
     return x + (n - a) * ((y - x) / (b - a));
 }
 
+export const CardFront: React.FC<{
+    className?: string;
+    children?: React.ReactNode;
+}> = ({ className, children }) => {
+    return (
+        <div className={className}>
+            {children}
+        </div>
+    )
+}
+
+export const CardBack: React.FC<{
+    className?: string;
+    children?: React.ReactNode;
+}> = ({ className, children }) => {
+    return (
+        <div className={'card__back ' + className}>
+            {children}
+        </div>
+    )
+}
+
 export const HoloCard: React.FC<HoloCardProps> = ({
                                                             children,
                                                             id = '',
@@ -69,8 +91,8 @@ export const HoloCard: React.FC<HoloCardProps> = ({
                                                             supertype = 'pokémon',
                                                             rarity = 'common',
                                                             isReverse = false,
-                                                            img,
-                                                            back = '/img/card/card_back.jpg',
+                                                            Back,
+                                                            Front,
                                                             foil,
                                                             mask,
                                                             className = '',
@@ -482,21 +504,9 @@ export const HoloCard: React.FC<HoloCardProps> = ({
                     onPointerLeave={(e) => { pointerActiveRef.current = false; onPointerLeave(e); }}
                     onBlur={(e) => { pointerActiveRef.current = false; onBlur(e as any); }}
                 >
-                    <img
-                        className="card__back"
-                        src={back}
-                        alt={`The back of the ${name || 'Holo'} Card`}
-                        width={822}
-                        height={1122}
-                        style={{width: '100%', height: 'auto', display: 'block'}}
-                    />
+                    {Back}
                     <div className="card__front" ref={frontRef} style={{display: showBack? 'none' : ''}}>
-                        {img ? (<img
-                            src={img}
-                            alt={`Front design of the ${name || 'Holo'} Card, with the stats and info around the edge`}
-                            width={822}
-                            height={1122}
-                        />) : children}
+                        {Front}
                         <div className="card__info">
                             <span className="card__name"></span>
                         </div>
