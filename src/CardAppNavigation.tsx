@@ -7,31 +7,27 @@ import {
     Bars3Icon, XMarkIcon
 } from "@heroicons/react/16/solid";
 import React, { useEffect, useRef, useState } from "react";
-import {getDeck, setCurrentDeckId} from "./services/localDecks";
 import {useTour} from "./tour/TourProvider";
-import {parseQuery, useHashRoute} from "./utils/UseHashRoute";
+import {useHashRoute} from "./utils/UseHashRoute";
 import { useAppSettings } from "./appSettings/AppSettingsProvider";
 import {DeviceMoveIcon} from "./buttons/device-move";
+import {Deck} from "./types";
 
 export interface CardAppNavigationProps {
-    currentId: string | null;
-    setCurrentId: (id: string | null) => void;
-    decks: { id: string, name: string }[];
+    decks: Deck[],
+    deck: Deck | undefined,
+    setCurrentDeck: (deck: Deck | undefined) => void,
 }
 
-export const CardAppNavigation = ({setCurrentId, currentId, decks}: CardAppNavigationProps) => {
+export const CardAppNavigation = ({setCurrentDeck, deck, decks}: CardAppNavigationProps) => {
 
     const { powerSaving, togglePowerSaving, tiltMode, toggleTiltMode } = useAppSettings();
     const hash = useHashRoute();
     const [, routeAndQuery] = hash.split("#");
-    const [route, queryString] = (routeAndQuery || "/viewer").split("?");
-    const q = parseQuery(queryString || "");
+    const [route] = (routeAndQuery || "/viewer").split("?");
     const { startTourForRoute } = useTour();
-    const hasActiveSet = (Boolean(q.d) || Boolean(q.s));
 
-    const viewHref = route === '/create' && (Boolean(q.d) || Boolean(q.s))
-        ? `#/viewer?${queryString || ''}`
-        : '#/viewer';
+    const viewHref = '#/viewer';
 
     // Mobile menu state
     const [menuOpen, setMenuOpen] = useState(false);
@@ -65,20 +61,8 @@ export const CardAppNavigation = ({setCurrentId, currentId, decks}: CardAppNavig
     }, [menuOpen]);
 
     const onSelectDeck = (id: string) => {
-        const deck = getDeck(id);
-        setCurrentDeckId(deck?.id || null);
-        setCurrentId(deck?.id || null);
-        if (route === '/create') {
-            // Navigate to creator with deck data
-            const newHash = deck ? `#/create?d=${deck.data}` : '#/create';
-            history.replaceState(null, '', `${window.location.pathname}${newHash}`);
-            window.dispatchEvent(new HashChangeEvent('hashchange'));
-        } else {
-            // go to creator with the selected deck
-            const newHash = deck ? `#/viewer?d=${deck.data}` : '#/create';
-            history.replaceState(null, '', `${window.location.pathname}${newHash}`);
-            window.dispatchEvent(new HashChangeEvent('hashchange'));
-        }
+        const d = decks.find(d=> d.id === id)
+        setCurrentDeck(d)
     };
 
     function StartTourBtn() {
@@ -110,7 +94,7 @@ export const CardAppNavigation = ({setCurrentId, currentId, decks}: CardAppNavig
         return (
             <a
                 id={"editor-link"}
-                href={hasActiveSet ? `#/create?${queryString || ''}` : '#/create'}
+                href={'#/create'}
                 className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20"
             >
                 <PencilSquareIcon className="size-5 pt-1"/>
@@ -187,7 +171,7 @@ export const CardAppNavigation = ({setCurrentId, currentId, decks}: CardAppNavig
                        className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20 flex items-center gap-2">
                         <PlayIcon className="size-5"/> <span>Viewer</span>
                     </a>
-                    <a id={"editor-link-mobile"} href={hasActiveSet ? `#/create?${queryString || ''}` : '#/create'}
+                    <a id={"editor-link-mobile"} href={'#/create'}
                        role="menuitem" onClick={() => setMenuOpen(false)}
                        className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20 flex items-center gap-2">
                         <PencilSquareIcon className="size-5"/> <span>Edit</span>
@@ -250,12 +234,14 @@ export const CardAppNavigation = ({setCurrentId, currentId, decks}: CardAppNavig
                 <select
                     id="deck-select"
                     className="bg-transparent text-white focus:outline-none"
-                    value={currentId ?? 'Sample Deck'}
+                    value={deck?.id ?? 'New Card Deck'}
                     onChange={(e) => onSelectDeck(e.target.value)}
                 >
-                    <option value="">Sample Deck</option>
+                    <option value="">New Card Deck</option>
+
                     {decks.map(d => (
-                        <option key={d.id} value={d.id}>{d.name}</option>
+                        //.filter(d=> Boolean(d.id))
+                        <option key={d.id} value={d.id || ""}>{d.name}</option>
                     ))}
                 </select>
                 {!powerSaving && (<div className="aurora">

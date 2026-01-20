@@ -1,24 +1,19 @@
 import {
-    FantasyFootballCardSerializable, type CardSetPayloadV1, FantasyFootballPlayerData, AnyPayload, CardGlowType,
-    CardHoloTypes
+    FantasyFootballCardSerializable, type FFCGDeckPayload, FantasyFootballPlayerData, CardGlowType,
+    CardHoloTypes, Deck
 } from "../types";
-import React, {useCallback, useEffect, useMemo, useRef, useState} from "react";
+import React, {Dispatch, SetStateAction, useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {isSignedIn, signIn, signOut} from "../services/auth";
 import {base64UrlEncode, base64UrlDecode} from "../utils/codec";
 import {saveSet, loadSet} from "../services/backend";
 import FantasyFootballCard, {CardRarity} from "./fantasyFootballCard/FantasyFootballCard";
 import {FantasyFootballCardData} from "./fantasyFootballCard/fantasyFootballRender";
-import {parseQuery, useHashRoute} from "../utils/UseHashRoute";
 import { TrashIcon, PlusIcon } from '@heroicons/react/24/solid';
 import {
     deleteDeck,
-    getCurrentDeckId,
-    getDeck,
     listDecks,
     nextUntitledName,
-    renameDeck as renameDeckLs,
-    saveDeck as saveDeckLs,
-    setCurrentDeckId
+    saveDeck
 } from "../services/localDecks";
 import {
     ArrowRightEndOnRectangleIcon,
@@ -89,16 +84,32 @@ function CollapsibleSection({ title, defaultOpen = true, children }:{ title: str
     );
 }
 
-export function CardCreator() {
+interface DeckCreatorProps {
+    deck: Deck | undefined,
+    setCurrentDeck: Dispatch<SetStateAction<Deck | undefined>>
+}
 
+const emptyDeck = {cards: [], name: 'Unsaved Team', v: 1, id: null}
 
+export function DeckCreator({deck: deckIn, setCurrentDeck}: DeckCreatorProps) {
+
+    //utility state
+    // Determine if running on localhost for editor-only fields
+    const isLocalhost = useMemo(() => {
+        try {
+            const h = window.location.hostname;
+            return h === 'localhost' || h === '127.0.0.1' || h === '::1';
+        } catch {
+            return false;
+        }
+    }, []);
+
+    const deck = deckIn || emptyDeck;
+
+    //backend saving
     const [saving, setSaving] = useState(false);
     const [saveError, setSaveError] = useState<string | null>(null);
     const [signedInState, setSignedInState] = useState<boolean>(isSignedIn());
-
-    // Local deck identity for Creator
-    const [deckId, setDeckId] = useState<string | null>(getCurrentDeckId());
-    const [deckName, setDeckName] = useState<string>(() => getDeck(getCurrentDeckId() || undefined)?.name || '');
 
     const emptyPlayer: FantasyFootballPlayerData = {
         ag: '',
@@ -107,7 +118,7 @@ export function CardCreator() {
         pa: '',
         st: '',
         playerType: 'normal',
-        teamName: deckName || '',
+        teamName: deck.name || '',
         cost: '',
         cardName: '',
         skillsAndTraits: '',
@@ -117,28 +128,33 @@ export function CardCreator() {
         footer: '',
         notes: ''
     };
-
     const emptyImagery = {
         imageProperties: {offsetX: 0, offsetY: 0, scalePercent: 100},
         lenticularUrls: {'0': '/img/players/blank-player.jpg'}
     }
 
-    const [cards, setCards] = useState<FantasyFootballCardSerializable[]>([{
+    const [cards, setCards] = useState<FantasyFootballCardSerializable[]>(deck.cards.length? deck.cards : [{
         rarity: 'common',
         playerData: emptyPlayer,
         imagery: emptyImagery
     }]);
+
+    useEffect(() => {
+        if (deck) {
+            setCards(deck.cards);
+        }
+    }, [deck]);
 
     // Import/Export helpers
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     const downloadDeckJson = useCallback(() => {
         try {
-            const payload: CardSetPayloadV1 = { v: 1, cards };
+            const payload: FFCGDeckPayload = { v: 1, cards };
             const json = JSON.stringify(payload, null, 2);
             const blob = new Blob([json], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
-            const safeName = (deckName || 'Untitled').replace(/[^a-z0-9-_ ]/gi, '').trim() || 'Untitled';
+            const safeName = (deck.name || 'Untitled').replace(/[^a-z0-9-_ ]/gi, '').trim() || 'Untitled';
             const a = document.createElement('a');
             a.href = url;
             a.download = `${safeName}-deck.ffcg.json`;
@@ -150,7 +166,7 @@ export function CardCreator() {
             console.error(e);
             toast('Failed to download deck JSON', { type: 'error' });
         }
-    }, [cards, deckName]);
+    }, [cards, deck]);
 
     const handleImportClick = useCallback(() => {
         fileInputRef.current?.click();
@@ -161,33 +177,24 @@ export function CardCreator() {
         try {
             if (!file) return;
             const text = await file.text();
-            const parsed: AnyPayload = JSON.parse(text);
+            const parsed: FFCGDeckPayload = JSON.parse(text);
             if (!(parsed && (parsed as any).v === 1 && Array.isArray((parsed as any).cards))) {
                 throw new Error('Invalid deck JSON: expected { v: 1, cards: [...] }');
             }
-            const payload = parsed as CardSetPayloadV1;
+            const payload = parsed as FFCGDeckPayload;
 
             // Basic sanity checks on cards
             const ok = payload.cards.every(c => c && typeof c === 'object' && c.playerData && c.imagery);
             if (!ok) throw new Error('Invalid cards array in deck JSON.');
 
-            setCards(payload.cards);
-            setDeckId(null);
-            setDeckName('');
-            setCurrentDeckId(null);
-
-            // Reflect imported deck in URL so the viewer link works immediately
-            try {
-                const d = base64UrlEncode(payload);
-                const [, rq] = (window.location.hash || '#/create').split('#');
-                const [r, qs] = (rq || '/create').split('?');
-                const params = new URLSearchParams(qs || '');
-                params.set('d', d);
-                params.delete('s');
-                history.replaceState(null, '', `${window.location.pathname}#/create?${params.toString()}`);
-                window.dispatchEvent(new HashChangeEvent('hashchange'));
-            } catch {}
-
+            const importedDeck = {
+                name: payload.cards[0].playerData.teamName || deck.name || 'Imported Deck',
+                cards: payload.cards,
+                v: (parsed as any).v,
+                id: null,
+            } as Deck;
+            setCurrentDeck(importedDeck);
+            saveDeck(importedDeck);
             toast(`Deck imported: ${payload.cards.length} cards`);
         } catch (err) {
             console.error(err);
@@ -198,15 +205,6 @@ export function CardCreator() {
         }
     }, []);
 
-    // Determine if running on localhost for editor-only fields
-    const isLocalhost = useMemo(() => {
-        try {
-            const h = window.location.hostname;
-            return h === 'localhost' || h === '127.0.0.1' || h === '::1';
-        } catch {
-            return false;
-        }
-    }, []);
 
     // Available glow types (from enum)
     const glowOptions = Object.keys(CardGlowType).filter(k => isNaN(Number(k as any)));
@@ -214,9 +212,9 @@ export function CardCreator() {
     // Team/Template selection for new cards
     const teamNames = useMemo(() => Object.keys(TeamData), []);
     const initialTeam = useMemo(() => {
-        if (deckName && teamNames.includes(deckName)) return deckName;
+        if (deck.name && teamNames.includes(deck.name)) return deck.name;
         return teamNames[0] || '';
-    }, [deckName, teamNames]);
+    }, [deck.name, teamNames]);
     const [selectedTeam, setSelectedTeam] = useState<string>(initialTeam);
     const selectedTeamPlayers = useMemo(() => {
         const mod = (TeamData as any)[selectedTeam] as any;
@@ -232,95 +230,18 @@ export function CardCreator() {
 
     useEffect(() => {
         // If deckName matches a team, set as selected when deck changes
-        if (deckName && teamNames.includes(deckName)) {
-            setSelectedTeam(deckName);
+        if (deck.name && teamNames.includes(deck.name)) {
+            setSelectedTeam(deck.name);
         }
-    }, [deckName, teamNames]);
+    }, [deck.name, teamNames]);
 
-    // Remix support: if arriving on /create with ?d= or ?s=, preload those cards for editing
-    const hash = useHashRoute();
-    const [, routeAndQuery] = hash.split('#');
-    const [route, queryString] = (routeAndQuery || '/create').split('?');
-    const q = parseQuery(queryString || '');
-
+    // Save the deck every time cards change (debounced 500ms)
     useEffect(() => {
-        let cancelled = false;
-        async function loadFromQueryOrCurrentDeck() {
-            try {
-                if (route !== '/create') return;
-                if (q.d) {
-                    const payload = base64UrlDecode<AnyPayload>(q.d);
-                    if ((payload as any)?.v === 1) {
-                        if (!cancelled) setCards((payload as AnyPayload).cards);
-                        const cid = getCurrentDeckId();
-                        setDeckId(cid);
-                        setDeckName(getDeck(cid || undefined)?.name || '');
-                        return;
-                    }
-                } else if (q.s) {
-                    const {data} = await loadSet(q.s);
-                    const payload = base64UrlDecode<AnyPayload>(data);
-                    if ((payload as any)?.v === 1) {
-                        if (!cancelled) setCards((payload as AnyPayload).cards);
-                        // editing shortcode is unsaved deck until user saves
-                        setDeckId(getCurrentDeckId());
-                        setDeckName(getDeck(getCurrentDeckId() || undefined)?.name || '');
-                        return;
-                    }
-                }
-                // No query payloads; try current deck
-                const curId = getCurrentDeckId();
-                const deck = getDeck(curId || undefined);
-                if (deck) {
-                    const payload = base64UrlDecode<AnyPayload>(deck.data);
-                    if ((payload as any)?.v === 1) {
-                        if (!cancelled) setCards((payload as AnyPayload).cards);
-                        setDeckId(deck.id);
-                        setDeckName(deck.name);
-                    }
-                }
-            } catch (e) {
-                // ignore and keep defaults
-                console.error('Failed to load remix/deck set', e);
-            }
-        }
-        loadFromQueryOrCurrentDeck();
-        return () => {
-            cancelled = true;
-        }
-    }, [route, q.d, q.s]);
-
-    // Keep the creator URL in-sync with the current cards so the View link can display them
-    // Debounced: wait 2s after the last change before updating the URL
-    useEffect(() => {
-        if (route !== '/create') return;
         const timer = window.setTimeout(() => {
-            try {
-                const payload: CardSetPayloadV1 = {v: 1, cards};
-                const d = base64UrlEncode(payload);
-
-                // Parse existing params
-                const [, rq] = (window.location.hash || '#/create').split('#');
-                const [r, qs] = (rq || '/create').split('?');
-                const params = new URLSearchParams(qs || '');
-                const currentD = params.get('d') || '';
-
-                if (currentD !== d) {
-                    params.set('d', d);
-                    // remove backend shortcode to avoid ambiguity with live data edits
-                    params.delete('s');
-                    const newHash = `#/create?${params.toString()}`;
-                    const newUrl = `${window.location.pathname}${newHash}`;
-                    // Replace without adding history entries, and notify listeners
-                    history.replaceState(null, '', newUrl);
-                    window.dispatchEvent(new HashChangeEvent('hashchange'));
-                }
-            } catch (e) {
-                // no-op
-            }
-        }, 2000);
+                //saveDeckLocally();
+        }, 500);
         return () => window.clearTimeout(timer);
-    }, [cards, route]);
+    }, [cards]);
 
     const addCard = useCallback((duplicate = false) => {
         if (duplicate) {
@@ -403,7 +324,7 @@ export function CardCreator() {
         setSaveError(null);
         setSaving(true);
         try {
-            const payload: CardSetPayloadV1 = {v: 1, cards};
+            const payload: FFCGDeckPayload = {v: 1, cards};
             const d = base64UrlEncode(payload);
             const {code} = await saveSet(d);
             const url = `${window.location.origin}${window.location.pathname}#/viewer?s=${encodeURIComponent(code)}`;
@@ -623,43 +544,25 @@ export function CardCreator() {
 
                     {/* Deck storage controls */}
                     <div className="mt-3 flex flex-wrap items-center gap-2">
-                        <Field label="Deck Name"><TextInput value={deckName || ''}
+                        <Field label={`${'Deck Name' + (deck?.id ? '' : ' (Unsaved)')}`}><TextInput value={deck.name || ''}
                                                        onChange={e => {
-                                                           const current = deckName || getDeck(deckId || undefined)?.name || '';
                                                            const name = e.target.value
-                                                           if (!name) return;
-                                                           if (!deckId) {
-                                                               // If unsaved, just set local name; will apply on first save
-                                                               setDeckName(name);
-                                                               return;
+                                                           const d = {
+                                                               ...deck,
+                                                               name
                                                            }
-                                                           const updated = renameDeckLs(deckId, name.trim());
-                                                           if (updated) {
-                                                               setDeckName(updated.name.trim());
-                                                           }
+                                                           setCurrentDeck(d)
                                                        }}/></Field>
 
                         <div className={'mt-5.5 flex flex-wrap items-center gap-2'}>
                             <button
                                 onClick={() => {
-                                    try {
-                                        const payload: CardSetPayloadV1 = { v: 1, cards };
-                                        const d = base64UrlEncode(payload);
-                                        const saved = saveDeckLs({ id: deckId, name: deckName || undefined, data: d });
-                                        setCurrentDeckId(saved.id);
-                                        setDeckId(saved.id);
-                                        setDeckName(saved.name);
-                                        // reflect in URL immediately
-                                        const params = new URLSearchParams(window.location.hash.split('?')[1] || '');
-                                        params.set('d', saved.data);
-                                        params.delete('s');
-                                        history.replaceState(null, '', `${window.location.pathname}#/create?${params.toString()}`);
-                                        window.dispatchEvent(new HashChangeEvent('hashchange'));
-                                        toast('Deck saved');
-                                    } catch (e) {
-                                        toast('Failed to save deck', { type: 'error' });
-                                        console.error(e)
-                                    }
+                                    const n = saveDeck({
+                                        ...deck,
+                                        cards: cards
+                                    });
+                                    setCurrentDeck(n)
+                                    toast('Deck saved');
                                 }}
                                 className="bg-emerald-700 text-white border border-emerald-600 rounded-md px-3 py-1.5 hover:bg-emerald-600"
                                 title="Save to Device"
@@ -677,14 +580,13 @@ export function CardCreator() {
                                         playerData: emptyPlayer,
                                         imagery: emptyImagery
                                     }];
-                                    const d = base64UrlEncode({ v: 1, cards: defaultCards });
-                                    const saved = saveDeckLs({ name, data: d });
-                                    setCurrentDeckId(saved.id);
-                                    setDeckId(saved.id);
-                                    setDeckName(saved.name);
-                                    setCards(defaultCards);
-                                    history.replaceState(null, '', `${window.location.pathname}#/create?d=${saved.data}`);
-                                    window.dispatchEvent(new HashChangeEvent('hashchange'));
+                                    const blankDeck = {
+                                        name,
+                                        cards: defaultCards,
+                                        id: null,
+                                        v: 1,
+                                    }
+                                    setCurrentDeck(blankDeck);
                                 }}
                                 className="bg-sky-800 text-white border border-sky-700 rounded-md px-3 py-1.5 hover:bg-sky-700"
                                 title="Create new Deck"
@@ -694,7 +596,7 @@ export function CardCreator() {
 
                             <button
                                 onClick={() => {
-                                    if (!deckId) {
+                                    if (!deck?.id) {
                                         // Nothing to delete for unsaved deck; clear fields
                                         if (confirm('Discard current unsaved changes and start a new deck?')) {
                                             const name = nextUntitledName();
@@ -703,40 +605,38 @@ export function CardCreator() {
                                                 playerData: emptyPlayer,
                                                 imagery: emptyImagery
                                             }];
-                                            setCards(defaultCards);
-                                            setDeckName('');
-                                            history.replaceState(null, '', `${window.location.pathname}#/create`);
-                                            window.dispatchEvent(new HashChangeEvent('hashchange'));
+                                            const blankDeck = {
+                                                name,
+                                                cards: defaultCards,
+                                                id: null,
+                                                v: 1,
+                                            }
+                                            setCurrentDeck(blankDeck);
                                         }
                                         return;
                                     }
-                                    const deck = getDeck(deckId);
                                     const ok = confirm(`Delete deck "${deck?.name || 'Untitled'}"? This cannot be undone.`);
                                     if (!ok) return;
-                                    deleteDeck(deckId);
+                                    deleteDeck(deck.id);
                                     // Choose next deck or create fresh unsaved
                                     const remaining = listDecks();
                                     if (remaining.length > 0) {
                                         const next = remaining[0];
-                                        setCurrentDeckId(next.id);
-                                        setDeckId(next.id);
-                                        setDeckName(next.name);
-                                        try {
-                                            const payload = base64UrlDecode<AnyPayload>(next.data);
-                                            if ((payload as any)?.v === 1) setCards((payload as AnyPayload).cards);
-                                        } catch {}
-                                        history.replaceState(null, '', `${window.location.pathname}#/create?d=${next.data}`);
+                                        setCurrentDeck(next);
                                     } else {
-                                        setCurrentDeckId(null);
-                                        setDeckId(null);
-                                        setDeckName('');
+                                        const name = nextUntitledName();
                                         const defaultCards: FantasyFootballCardSerializable[] = [{
                                             rarity: 'common',
                                             playerData: emptyPlayer,
                                             imagery: emptyImagery
                                         }];
-                                        setCards(defaultCards);
-                                        history.replaceState(null, '', `${window.location.pathname}#/create`);
+                                        const blankDeck = {
+                                            name,
+                                            cards: defaultCards,
+                                            id: null,
+                                            v: 1,
+                                        }
+                                        setCurrentDeck(blankDeck);
                                     }
                                     window.dispatchEvent(new HashChangeEvent('hashchange'));
                                 }}

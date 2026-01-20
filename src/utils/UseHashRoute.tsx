@@ -17,6 +17,22 @@ export function parseQuery(search: string) {
     return Object.fromEntries(params.entries());
 }
 
+// Remove query string from current hash without reloading the page
+export function stripHashQuery() {
+    try {
+        const hash = window.location.hash || '#/viewer';
+        const [, rq] = hash.split('#');
+        const [routeOnly] = (rq || '/viewer').split('?');
+        const newHash = `#${routeOnly}`;
+        const newUrl = `${window.location.pathname}${newHash}`;
+        history.replaceState(null, '', newUrl);
+        // Notify listeners that hash changed (some hooks rely on this)
+        window.dispatchEvent(new HashChangeEvent('hashchange'));
+    } catch {
+        // ignore
+    }
+}
+
 export function mapToRuntime(card: FantasyFootballCardSerializable) {
     return {
         ...card,

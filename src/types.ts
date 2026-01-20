@@ -129,9 +129,14 @@ export interface FantasyFootballCardSerializable {
     }
 }
 
-export interface CardSetPayloadV1 {
+export interface FFCGDeckPayload {
     v: 1;
     cards: FantasyFootballCardSerializable[];
 }
 
-export type AnyPayload = CardSetPayloadV1;
+export type Deck = {
+    v: number; // deck version
+    id: string | null;
+    name: string;
+    cards: FantasyFootballCardSerializable[];
+}
