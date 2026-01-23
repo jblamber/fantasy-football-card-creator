@@ -3,10 +3,11 @@ import {DeckCreator} from "./card/DeckCreator";
 import {DeckViewer} from "./card/DeckViewer";
 import React, {useEffect, useState} from "react";
 import {parseQuery, stripHashQuery, useHashRoute} from "./utils/UseHashRoute";
-import {listDecks, saveDeck, saveDeckLs} from "./services/localDecks";
+import {listDecks, saveDeck} from "./services/localDecks";
 import {CardAppNavigation} from "./CardAppNavigation";
 import {FFCGDeckPayload, Deck} from "./types";
 import {base64UrlDecode} from "./utils/codec";
+import {toast} from "react-toastify";
 
 
 export default function CardApp() {
@@ -19,7 +20,6 @@ export default function CardApp() {
     // Local decks state for nav select when on /create
     const [decks, setDecks] = useState<Deck[]>([]);
     const [deck, setCurrentDeck] = useState<Deck | undefined>(undefined);
-
 
     useEffect(() => {
         // initial load
@@ -47,6 +47,7 @@ export default function CardApp() {
                         } as Deck
                         saveDeck(legacyDeck);
                         setCurrentDeck(legacyDeck)
+                        toast.info("Legacy deck coverted. Please rename it to something more descriptive.");
                     }
                 }
             } catch {

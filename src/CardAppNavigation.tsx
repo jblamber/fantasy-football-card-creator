@@ -10,8 +10,11 @@ import React, { useEffect, useRef, useState } from "react";
 import {useTour} from "./tour/TourProvider";
 import {useHashRoute} from "./utils/UseHashRoute";
 import { useAppSettings } from "./appSettings/AppSettingsProvider";
-import {DeviceMoveIcon} from "./buttons/device-move";
+import {DeviceMoveIcon} from "./buttons/DeviceMoveIcon";
 import {Deck} from "./types";
+import {useAuth0} from "@auth0/auth0-react";
+import LoginButton from "./buttons/LoginButton";
+import LogoutButton from "./buttons/LogoutButton";
 
 export interface CardAppNavigationProps {
     decks: Deck[],
@@ -21,6 +24,7 @@ export interface CardAppNavigationProps {
 
 export const CardAppNavigation = ({setCurrentDeck, deck, decks}: CardAppNavigationProps) => {
 
+    const { isAuthenticated, isLoading, error } = useAuth0();
     const { powerSaving, togglePowerSaving, tiltMode, toggleTiltMode } = useAppSettings();
     const hash = useHashRoute();
     const [, routeAndQuery] = hash.split("#");
@@ -201,6 +205,8 @@ export const CardAppNavigation = ({setCurrentDeck, deck, decks}: CardAppNavigati
                             className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20 flex items-center gap-2">
                         <QuestionMarkCircleIcon className="size-5"/> <span>How to use this app</span>
                     </button>
+                    {isAuthenticated && <LogoutButton className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20 flex items-center gap-2"> <span>Logout</span></LogoutButton> ||
+                        <LoginButton className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20 flex items-center gap-2"><span>Login</span></LoginButton>}
                     <a id={'source-link-mobile'} role="menuitem"
                        href="https://github.com/jblamber/fantasy-football-card-creator"
                        onClick={() => setMenuOpen(false)}
@@ -221,6 +227,8 @@ export const CardAppNavigation = ({setCurrentDeck, deck, decks}: CardAppNavigati
             <TiltModeBtn/>
             <StartTourBtn/>
             <SourceBtn/>
+            {!isAuthenticated && <LoginButton/>}
+            {isAuthenticated && <LogoutButton/>}
         </div>;
     }
 
