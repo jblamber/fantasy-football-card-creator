@@ -32,6 +32,6 @@
     "pretty-quick": "^4.2.2",
     "simple-git-hooks": "^2.13.1",
     "typescript": "^5.6.3",
-    "vite": "^5.4.8"
+    "vite": "^7.3.1"
   }
 }
