@@ -3,8 +3,6 @@ import {
     CardHoloTypes, Deck
 } from "../types";
 import React, {Dispatch, SetStateAction, useCallback, useEffect, useMemo, useRef, useState} from "react";
-import {base64UrlEncode, base64UrlDecode} from "../utils/codec";
-import {saveSet, loadSet} from "../backend/backend";
 import FantasyFootballCard, {CardRarity} from "./fantasyFootballCard/FantasyFootballCard";
 import {FantasyFootballCardData} from "./fantasyFootballCard/fantasyFootballRender";
 import { TrashIcon, PlusIcon } from '@heroicons/react/24/solid';
@@ -306,28 +304,6 @@ export function DeckCreator({deck: deckIn, setCurrentDeck}: DeckCreatorProps) {
     }, []);
 
     const removeCard = useCallback((idx: number) => setCards(prev => prev.filter((_, i) => i !== idx)), []);
-
-    const saveToBackend = useCallback(async () => {
-        setSaveError(null);
-        setSaving(true);
-        try {
-            const payload: FFCGDeckPayload = {v: 1, cards};
-            const d = base64UrlEncode(payload);
-            const {code} = await saveSet(d);
-            const url = `${window.location.origin}${window.location.pathname}#/viewer?s=${encodeURIComponent(code)}`;
-            try {
-                await navigator.clipboard?.writeText(url);
-            } catch {
-            }
-            toast(`Shortcode link copied to clipboard:\n${url}`);
-        } catch (e: any) {
-            console.error(e);
-            setSaveError(e?.message || 'Save failed');
-            toast(`Save failed: ${e?.message || e}`, {type: 'error'});
-        } finally {
-            setSaving(false);
-        }
-    }, [cards]);
 
     function cardForm(cardDeckNo: number, c: FantasyFootballCardSerializable) {
 

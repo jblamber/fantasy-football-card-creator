@@ -4,7 +4,7 @@ import {
     PlayIcon,
     QuestionMarkCircleIcon,
     BoltIcon, BoltSlashIcon,
-    Bars3Icon, XMarkIcon
+    Bars3Icon, XMarkIcon, CloudArrowDownIcon
 } from "@heroicons/react/16/solid";
 import React, { useEffect, useRef, useState } from "react";
 import {useTour} from "./tour/TourProvider";
@@ -15,6 +15,7 @@ import {Deck} from "./types";
 import {useAuth0} from "@auth0/auth0-react";
 import LoginButton from "./buttons/LoginButton";
 import LogoutButton from "./buttons/LogoutButton";
+import UseDecksApi from "./backend/decksApi";
 
 export interface CardAppNavigationProps {
     decks: Deck[],
@@ -30,6 +31,7 @@ export const CardAppNavigation = ({setCurrentDeck, deck, decks}: CardAppNavigati
     const [, routeAndQuery] = hash.split("#");
     const [route] = (routeAndQuery || "/viewer").split("?");
     const { startTourForRoute } = useTour();
+    const {decksApiResponse, fetchDecks} = UseDecksApi();
 
     const viewHref = '#/viewer';
 
@@ -149,6 +151,18 @@ export const CardAppNavigation = ({setCurrentDeck, deck, decks}: CardAppNavigati
         )
     }
 
+    function ApiBtn() {
+        return (
+            <button
+                id={"api-link"}
+                onClick={() => fetchDecks()}
+                className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20"
+            >
+                <CloudArrowDownIcon className={"size-5 pt-1"}/>
+            </button>
+        )
+    }
+
     function MobileMenu() {
         return <>
             <button
@@ -227,8 +241,10 @@ export const CardAppNavigation = ({setCurrentDeck, deck, decks}: CardAppNavigati
             <TiltModeBtn/>
             <StartTourBtn/>
             <SourceBtn/>
+            <ApiBtn/>
             {!isAuthenticated && <LoginButton/>}
             {isAuthenticated && <LogoutButton/>}
+
         </div>;
     }
 
