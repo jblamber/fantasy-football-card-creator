@@ -203,7 +203,6 @@ export function DeckCreator({deck: deckIn, setCurrentDeck}: DeckCreatorProps) {
         }
     }, []);
 
-
     // Available glow types (from enum)
     const glowOptions = Object.keys(CardGlowType).filter(k => isNaN(Number(k as any)));
 

@@ -88,7 +88,7 @@ export const HoloCard: React.FC<HoloCardProps> = ({
                                                             set: setName = '',
                                                             types = '',
                                                             subtypes = 'basic',
-                                                            supertype = 'pokémon',
+                                                            supertype = 'na',
                                                             rarity = 'common',
                                                             isReverse = false,
                                                             Back,
