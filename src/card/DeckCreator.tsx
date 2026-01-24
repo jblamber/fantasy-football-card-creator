@@ -3,7 +3,6 @@ import {
     CardHoloTypes, Deck
 } from "../types";
 import React, {Dispatch, SetStateAction, useCallback, useEffect, useMemo, useRef, useState} from "react";
-import {isSignedIn, signIn, signOut} from "../services/auth";
 import {base64UrlEncode, base64UrlDecode} from "../utils/codec";
 import {saveSet, loadSet} from "../services/backend";
 import FantasyFootballCard, {CardRarity} from "./fantasyFootballCard/FantasyFootballCard";
@@ -109,7 +108,6 @@ export function DeckCreator({deck: deckIn, setCurrentDeck}: DeckCreatorProps) {
     //backend saving
     const [saving, setSaving] = useState(false);
     const [saveError, setSaveError] = useState<string | null>(null);
-    const [signedInState, setSignedInState] = useState<boolean>(isSignedIn());
 
     const emptyPlayer: FantasyFootballPlayerData = {
         ag: '',
@@ -309,16 +307,6 @@ export function DeckCreator({deck: deckIn, setCurrentDeck}: DeckCreatorProps) {
     }, []);
 
     const removeCard = useCallback((idx: number) => setCards(prev => prev.filter((_, i) => i !== idx)), []);
-
-    const handleSignIn = useCallback(async () => {
-        await signIn();
-        setSignedInState(isSignedIn());
-    }, []);
-
-    const handleSignOut = useCallback(() => {
-        signOut();
-        setSignedInState(isSignedIn());
-    }, []);
 
     const saveToBackend = useCallback(async () => {
         setSaveError(null);
