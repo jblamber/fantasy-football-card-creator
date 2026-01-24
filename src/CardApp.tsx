@@ -3,7 +3,7 @@ import {DeckCreator} from "./card/DeckCreator";
 import {DeckViewer} from "./card/DeckViewer";
 import React, {useEffect, useState} from "react";
 import {parseQuery, stripHashQuery, useHashRoute} from "./utils/UseHashRoute";
-import {listDecks, saveDeck} from "./services/localDecks";
+import {listDecks, saveDeck} from "./localStorage/localDecks";
 import {CardAppNavigation} from "./CardAppNavigation";
 import {FFCGDeckPayload, Deck} from "./types";
 import {base64UrlDecode} from "./utils/codec";

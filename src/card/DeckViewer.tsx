@@ -5,7 +5,7 @@ import {mapToRuntime, parseQuery, stripHashQuery, useHashRoute} from "../utils/U
 import {CardsCarousel} from "./CardsCarousel";
 import sample_cards from './sample_cards.json';
 import { useTour } from "../tour/TourProvider";
-import {listDecks, saveDeckLs} from "../services/localDecks";
+import {listDecks, saveDeckLs} from "../localStorage/localDecks";
 
 const sampleDeck = {
     cards: sample_cards,

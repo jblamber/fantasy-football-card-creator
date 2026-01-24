@@ -4,7 +4,7 @@ import {
 } from "../types";
 import React, {Dispatch, SetStateAction, useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {base64UrlEncode, base64UrlDecode} from "../utils/codec";
-import {saveSet, loadSet} from "../services/backend";
+import {saveSet, loadSet} from "../backend/backend";
 import FantasyFootballCard, {CardRarity} from "./fantasyFootballCard/FantasyFootballCard";
 import {FantasyFootballCardData} from "./fantasyFootballCard/fantasyFootballRender";
 import { TrashIcon, PlusIcon } from '@heroicons/react/24/solid';
@@ -13,7 +13,7 @@ import {
     listDecks,
     nextUntitledName,
     saveDeck
-} from "../services/localDecks";
+} from "../localStorage/localDecks";
 import {
     ArrowRightEndOnRectangleIcon,
     DocumentDuplicateIcon,
@@ -22,7 +22,7 @@ import {
     ArrowUpTrayIcon
 } from "@heroicons/react/16/solid";
 import {toast} from "react-toastify";
-import {isLocalImageUrl, localImageUrl, saveImageFile} from "../services/localImages";
+import {isLocalImageUrl, localImageUrl, saveImageFile} from "../localStorage/localImages";
 import { TeamData } from "./data";
 
 function Field({label, children}: { label: string; children: React.ReactNode }) {

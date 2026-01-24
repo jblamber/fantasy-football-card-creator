@@ -4,7 +4,7 @@ import {ArrowDownTrayIcon} from "@heroicons/react/24/solid";
 import skillsDataSet from './data/skills.json'
 import {Deck, FantasyFootballCardSerializable} from "../types";
 import {ArrowPathIcon} from "@heroicons/react/16/solid";
-import {saveDeck} from "../services/localDecks";
+import {saveDeck} from "../localStorage/localDecks";
 
 interface CardsCarouselProps {
     deck: Deck | undefined,

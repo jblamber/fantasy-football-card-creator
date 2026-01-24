@@ -8,7 +8,7 @@ import {
     renderCardBack, defaultBackOptions
 } from "./fantasyFootballRender";
 import {FantasyFootballCardSerializable, FantasyFootballPlayerData} from "../../types";
-import {getImageDataUrl, isLocalImageUrl, parseLocalImageId} from "../../services/localImages";
+import {getImageDataUrl, isLocalImageUrl, parseLocalImageId} from "../../localStorage/localImages";
 import {CardBack, CardFront} from "../HoloCard";
 
 export type PlayerType = 'normal' | 'star';
