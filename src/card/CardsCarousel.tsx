@@ -19,7 +19,14 @@ export function CardsCarousel({deck, setCurrentDeck}: CardsCarouselProps) {
     useEffect(() => {
         if (!deck) return;
         setLocalCards(deck.cards);
-        setSelectedCardIndex(0);
+        setSelectedCardIndex(v=> {
+            if (v >= deck.cards.length) {
+                return 0;
+            }
+            else {
+                return v;
+            }
+        });
     }, [deck])
 
     const downloadImageCanvasRef = useRef<HTMLCanvasElement | null>(null);
