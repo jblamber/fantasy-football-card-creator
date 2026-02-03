@@ -15,6 +15,8 @@ export function CardsCarousel({deck, setCurrentDeck}: CardsCarouselProps) {
     const [localCards, setLocalCards] = useState<FantasyFootballCardSerializable[]>(deck?.cards || []);
     const [selectedCardIndex, setSelectedCardIndex] = useState(0);
     const [isDirty, setIsDirty] = useState(false);
+    const [notesInput, setNotesInput] = useState<string>('');
+    const notesDebounceRef = useRef<number | null>(null);
 
     useEffect(() => {
         if (!deck) return;
@@ -37,6 +39,27 @@ export function CardsCarousel({deck, setCurrentDeck}: CardsCarouselProps) {
         //if (!raw || raw.indexOf(',') === -1) return [] as string[];
         return Array.from(new Set(raw.split(',').map(s => s.trim()).filter(Boolean)));
     }, [localCards, selectedCardIndex]);
+
+    // Keep a separate input state for notes to avoid re-rendering the whole card on each keystroke.
+    // Debounce updating localCards by 1s so the card canvas doesn't constantly re-render while typing.
+    useEffect(() => {
+        const currentNotes = ((localCards[selectedCardIndex]?.playerData?.notes ?? '') as string);
+        setNotesInput(currentNotes);
+        // Clear any pending debounce when switching cards
+        if (notesDebounceRef.current) {
+            window.clearTimeout(notesDebounceRef.current);
+            notesDebounceRef.current = null;
+        }
+    }, [selectedCardIndex, localCards]);
+
+    // Clear any pending debounce on unmount
+    useEffect(() => {
+        return () => {
+            if (notesDebounceRef.current) {
+                window.clearTimeout(notesDebounceRef.current);
+            }
+        };
+    }, []);
 
     const next = useCallback(() => setSelectedCardIndex(i => (i + 1) % localCards.length), [localCards.length]);
     const prev = useCallback(() => setSelectedCardIndex(i => (i - 1 + localCards.length) % localCards.length), [localCards.length]);
@@ -236,19 +259,28 @@ export function CardsCarousel({deck, setCurrentDeck}: CardsCarouselProps) {
                         data-tour-id="card-notes"
                         rows={3}
                         placeholder="Add player notes here"
-                        value={(localCards[selectedCardIndex]?.playerData?.notes ?? '') as string}
+                        value={notesInput}
                         onChange={(e) => {
                             const v = e.target.value;
-                            setLocalCards(prev => prev.map((c, i) => {
-                                if (i !== selectedCardIndex) return c;
-                                return {
-                                    ...c,
-                                    playerData: {
-                                        ...(c.playerData || {}),
-                                        notes: v,
-                                    }
-                                };
-                            }));
+                            setNotesInput(v);
+                            if (notesDebounceRef.current) {
+                                window.clearTimeout(notesDebounceRef.current);
+                                notesDebounceRef.current = null;
+                            }
+                            const indexAtSchedule = selectedCardIndex;
+                            notesDebounceRef.current = window.setTimeout(() => {
+                                setLocalCards(prev => prev.map((c, i) => {
+                                    if (i !== indexAtSchedule) return c;
+                                    return {
+                                        ...c,
+                                        playerData: {
+                                            ...(c.playerData || {}),
+                                            notes: v,
+                                        }
+                                    };
+                                }));
+                                notesDebounceRef.current = null;
+                            }, 1000);
                         }}
                         className="w-full resize-none min-h-[64px] max-h-[40vh] px-2.5 py-2 rounded-t-md border
                         border-neutral-700 bg-neutral-900/90 text-white placeholder:text-neutral-500
