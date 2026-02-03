@@ -31,6 +31,11 @@ export function CardsCarousel({deck, setCurrentDeck}: CardsCarouselProps) {
         });
     }, [deck])
 
+    useEffect(() => {
+        if (!deck?.name) return;
+        setSelectedCardIndex(0);
+    }, [deck?.name])
+
     const downloadImageCanvasRef = useRef<HTMLCanvasElement | null>(null);
     const [openSkill, setOpenSkill] = useState<string | null>(null);
     const skillData = skillsDataSet.find(s=>s.name?.toLowerCase() === openSkill?.toLowerCase());
