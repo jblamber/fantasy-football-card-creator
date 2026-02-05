@@ -13,25 +13,12 @@ import {CardBack, CardFront} from "../HoloCard";
 
 export type PlayerType = 'normal' | 'star';
 
-interface FantasyFootballCardProps extends FantasyFootballCardSerializable {
-    className?: string;
-    /*rarity: CardRarity;
-  className?: string;
-  set?: string;
-  types?: string | string[];
-  subtypes?: string | string[];*/
-    supertype?: string;
-    onSwipe?: (direction: 'left' | 'right') => void;
-    /*playerData: FantasyFootballPlayerData,
-    imagery: {
-      lenticularImages?: Map<string, string>
-      imageProperties: {
-        offsetX: number, // px
-        offsetY: number, // px
-        scalePercent: number
-      },
-    }*/
-
+interface FantasyFootballComponentProps extends FantasyFootballCardSerializable {
+    className?: string,
+    supertype?: string,
+    onSwipe?: (direction: 'left' | 'right') => void,
+    onDoubleClick?: () => void,
+    disableAnimations?: boolean
 }
 
 export enum RarityType {
@@ -62,14 +49,14 @@ export default function FantasyFootballCard({
                                                 className = "",
                                                 rarity,
                                                 imagery,
-                                                //set,
                                                 types,
                                                 subtypes,
                                                 supertype,
                                                 onSwipe,
-                                                // Optional external canvas ref to allow downloads/snapshots from parent
                                                 canvasRef: externalCanvasRef,
-                                            }: FantasyFootballCardProps & {
+                                                onDoubleClick,
+                                                disableAnimations = false
+                                            }: FantasyFootballComponentProps & {
     canvasRef?: React.RefObject<HTMLCanvasElement>
 }) {
 
@@ -162,18 +149,20 @@ export default function FantasyFootballCard({
             onLenticularChange={(lenticularX: number) => setLenticular({x: lenticularX, y: 0})}
             lenticularLength={Object.keys(imagery?.lenticularUrls || {}).length ?? 0}
             onSwipe={onSwipe}
+            onDoubleClick={onDoubleClick}
             className={className}
+            disableAnimations={disableAnimations}
             Back={
                 <CardBack>
                     <canvas
-                            ref={cardBackRef} width={822} height={1122}
-                            style={{width: '100%', height: 'auto', display: 'block'}}/>
+                        ref={cardBackRef} width={822} height={1122}
+                        style={{width: '100%', height: 'auto', display: 'block'}}/>
                 </CardBack>
             }
             Front={
                 <CardFront>
-                     <canvas ref={cardFrontRef} width={822} height={1122}
-                             style={{width: '100%', height: 'auto', display: 'block'}}/>
+                    <canvas ref={cardFrontRef} width={822} height={1122}
+                            style={{width: '100%', height: 'auto', display: 'block'}}/>
                 </CardFront>
             }
         >

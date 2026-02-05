@@ -24,9 +24,6 @@ export default function CardsFanView({deck, className, initialIndex = 0, onOpenC
     const [angleOffset, setAngleOffset] = useState<number>(0); // live rotation offset from pointer
 
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const rAF = useRef<number | null>(null);
-
-    const clamp = (n: number, min: number, max: number) => Math.max(min, Math.min(max, n));
 
     const angles = useMemo(() => {
         const n = cards.length || 1;
@@ -43,16 +40,24 @@ export default function CardsFanView({deck, className, initialIndex = 0, onOpenC
         return 1000 - d; // large base to ensure ordering
     }, [frontIndex]);
 
-    // Double-click / double-tap
-    const lastTapRef = useRef<number>(0);
-    const onCardActivate = useCallback((i: number) => {
-        if (onOpenCarousel) onOpenCarousel(i);
-        else {
-            // default: update hash to viewer
-            const params = new URLSearchParams();
-            params.set('i', String(i));
-            window.location.hash = `#/viewer?${params.toString()}`;
+    useEffect(() => {
+        try {
+            const [, rq] = (window.location.hash || '#/viewer').split('#');
+            const [r, qs] = (rq || '/viewer').split('?');
+            const params = new URLSearchParams(qs || '');
+            params.set('i', String(frontIndex));
+            window.location.hash = `#${r}?${params.toString()}`;
+        } catch {
+            console.log('Failed to update hash');
         }
+    }, [frontIndex]);
+
+
+    const onCardActivate = useCallback((i: number) => {
+        const params = new URLSearchParams();
+        params.set('i', String(i));
+        window.location.hash = `#/viewer?${params.toString()}`;
+        if (onOpenCarousel) onOpenCarousel(i);
     }, [onOpenCarousel]);
 
     const onKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -97,10 +102,9 @@ export default function CardsFanView({deck, className, initialIndex = 0, onOpenC
                                 pointerEvents: 'auto',
 
                             }}
-                            onDoubleClick={() => onCardActivate(i)}
                         >
                             <div
-                                className={`transition-transform duration-1000 ease-in-out transform-gpu`}
+                                className={`card__translater duration-1000 ease-in-out`}
                                 style={{
                                     width: '45dvw',
                                     transform: `translate3d(${tx}dvw, ${ty}dvh, ${zFor(i)}px) rotate(${angle}deg) ${isFront ? '' : 'scale(0.98)'}`,
@@ -108,6 +112,8 @@ export default function CardsFanView({deck, className, initialIndex = 0, onOpenC
                             >
                                 <FantasyFootballCard
                                     {...card}
+                                    onDoubleClick={() => onCardActivate(i)}
+                                    disableAnimations={!isFront}
                                     onSwipe={(dir) => {
                                         setFrontIndex(idx => dir === 'left' ? (idx + 1) % cards.length : (idx - 1 + cards.length) % cards.length);
                                     }}

@@ -1,5 +1,5 @@
 import React, {ReactElement, useCallback, useEffect, useMemo, useRef, useState} from "react";
-import { useAppSettings } from "../appSettings/AppSettingsProvider";
+import {useAppSettings} from "../appSettings/AppSettingsProvider";
 
 /**
  * Trading Card
@@ -11,36 +11,28 @@ import { useAppSettings } from "../appSettings/AppSettingsProvider";
  *   Consumers should ensure those styles are available (in the example src, we link them in index.html).
  */
 
-export interface HoloCardProps {
-    children?: React.ReactNode;
-    id?: string;
-    name?: string;
-    number?: string;
-    set?: string;
-    types?: string | string[];
-    subtypes?: string | string[];
-    supertype?: string;
-    rarity?: string;
-    isReverse?: boolean; // when true, rarity is treated as Reverse Holo for mask/foil computation
-
-    // image props
-    Front: ReactElement;
-    Back: ReactElement;
-    foil?: string | boolean; // optional foil texture image URL; true/undefined -> auto, false -> none
-    mask?: string | boolean; // optional mask image URL (defines where foil appears); true/undefined -> auto, false -> none
-
-    // Optional: apply additional className
-    className?: string;
-
-    // Whether to enable a small idle showcase animation on mount
-    showcase?: boolean;
-
-    // Listener props for lenticular imagery
-    onLenticularChange?: (x: number, y: number) => void;
-    lenticularLength?: number;
-
-    // Gesture callbacks
-    onSwipe?: (direction: 'left' | 'right') => void;
+export interface HoloCardComponentProps {
+    children?: React.ReactNode,
+    id?: string,
+    name?: string,
+    number?: string,
+    set?: string,
+    types?: string | string[],
+    subtypes?: string | string[],
+    supertype?: string,
+    rarity?: string,
+    isReverse?: boolean,
+    Front: ReactElement,
+    Back: ReactElement,
+    foil?: string | boolean,
+    mask?: string | boolean,
+    className?: string,
+    showcase?: boolean,
+    onLenticularChange?: (x: number, y: number) => void,
+    lenticularLength?: number,
+    onSwipe?: (direction: 'left' | 'right') => void,
+    onDoubleClick?: (() => void) | undefined,
+    disableAnimations?: undefined | boolean
 }
 
 function clamp(n: number, min = 0, max = 100) {
@@ -61,7 +53,7 @@ function adjust(n: number, a: number, b: number, x: number, y: number) {
 export const CardFront: React.FC<{
     className?: string;
     children?: React.ReactNode;
-}> = ({ className, children }) => {
+}> = ({className, children}) => {
     return (
         <div className={className}>
             {children}
@@ -72,7 +64,7 @@ export const CardFront: React.FC<{
 export const CardBack: React.FC<{
     className?: string;
     children?: React.ReactNode;
-}> = ({ className, children }) => {
+}> = ({className, children}) => {
     return (
         <div className={'card__back ' + className}>
             {children}
@@ -80,29 +72,31 @@ export const CardBack: React.FC<{
     )
 }
 
-export const HoloCard: React.FC<HoloCardProps> = ({
-                                                            children,
-                                                            id = '',
-                                                            name = '',
-                                                            number = '',
-                                                            set: setName = '',
-                                                            types = '',
-                                                            subtypes = 'basic',
-                                                            supertype = 'na',
-                                                            rarity = 'common',
-                                                            isReverse = false,
-                                                            Back,
-                                                            Front,
-                                                            foil,
-                                                            mask,
-                                                            className = '',
-                                                            showcase = false,
-                                                            onLenticularChange = () => {
-                                                            },
-                                                            lenticularLength = 0,
-                                                            onSwipe,
-                                                        }) => {
-    const { powerSaving, tiltMode } = useAppSettings();
+export const HoloCard: React.FC<HoloCardComponentProps> = ({
+                                                      children,
+                                                      id = '',
+                                                      name = '',
+                                                      number = '',
+                                                      set: setName = '',
+                                                      types = '',
+                                                      subtypes = 'basic',
+                                                      supertype = 'na',
+                                                      rarity = 'common',
+                                                      isReverse = false,
+                                                      Back,
+                                                      Front,
+                                                      foil,
+                                                      mask,
+                                                      className = '',
+                                                      showcase = false,
+                                                      onLenticularChange = () => {
+                                                      },
+                                                      lenticularLength = 0,
+                                                      onSwipe,
+                                                      onDoubleClick,
+                                                      disableAnimations = false
+                                                  }) => {
+    const {powerSaving, tiltMode} = useAppSettings();
     const cardRef = useRef<HTMLDivElement | null>(null);
     const frontRef = useRef<HTMLDivElement | null>(null);
     const rotatorRef = useRef<HTMLButtonElement | null>(null);
@@ -155,7 +149,7 @@ export const HoloCard: React.FC<HoloCardProps> = ({
 
     const tick = () => {
         // If power-saving or back-of-card is showing, do not animate or schedule frames
-        if (powerSaving || showBack) {
+        if (powerSaving || showBack || disableAnimations) {
             rafRef.current = null;
             return;
         }
@@ -234,7 +228,7 @@ export const HoloCard: React.FC<HoloCardProps> = ({
         target.current.go = 0;
         target.current.bgx = 50;
         target.current.bgy = 50;
-        current.current = { ...target.current };
+        current.current = {...target.current};
         applyVars();
     }, [powerSaving]);
 
@@ -252,7 +246,7 @@ export const HoloCard: React.FC<HoloCardProps> = ({
             target.current.go = 0;
             target.current.bgx = 50;
             target.current.bgy = 50;
-            current.current = { ...target.current };
+            current.current = {...target.current};
             applyVars();
         } else {
             // resume animation loop if needed
@@ -322,16 +316,18 @@ export const HoloCard: React.FC<HoloCardProps> = ({
             beta = Math.max(-45, Math.min(45, beta));
             const x = clamp(round(((gamma + 45) / 90) * 100));
             const y = clamp(round(((beta + 45) / 90) * 100));
-            applyPercentToTargets({ x, y });
+            applyPercentToTargets({x, y});
         };
         try {
             window.addEventListener('deviceorientation', handleOrientation, true);
-        } catch {}
+        } catch {
+        }
         return () => {
             active = false;
             try {
                 window.removeEventListener('deviceorientation', handleOrientation, true);
-            } catch {}
+            } catch {
+            }
         };
     }, [tiltMode, powerSaving]);
 
@@ -443,12 +439,16 @@ export const HoloCard: React.FC<HoloCardProps> = ({
                         const now = Date.now();
                         const last = lastTapRef.current;
                         if (e.detail >= 2 || (last && (now - last.t) < 300 && Math.hypot(e.clientX - last.x, e.clientY - last.y) < 15)) {
-                            setShowBack(v => !v);
+                            if (onDoubleClick) {
+                                onDoubleClick();
+                            } else {
+                                setShowBack(v => !v);
+                            }
                             lastTapRef.current = null;
                             // Do not start swipe/tilt for this gesture
                             return;
                         }
-                        lastTapRef.current = { x: e.clientX, y: e.clientY, t: now };
+                        lastTapRef.current = {x: e.clientX, y: e.clientY, t: now};
 
                         const targetEl = e.currentTarget;
                         try {
@@ -460,9 +460,12 @@ export const HoloCard: React.FC<HoloCardProps> = ({
                         try {
                             const AnyDO = (window as any).DeviceOrientationEvent;
                             if (tiltMode && AnyDO && typeof AnyDO.requestPermission === 'function') {
-                                AnyDO.requestPermission().catch(() => {}).then(() => {});
+                                AnyDO.requestPermission().catch(() => {
+                                }).then(() => {
+                                });
                             }
-                        } catch {}
+                        } catch {
+                        }
                         // record swipe start
                         swipeRef.current = {x: e.clientX, y: e.clientY, t: Date.now()};
                         onPointerMove(e);
@@ -501,11 +504,17 @@ export const HoloCard: React.FC<HoloCardProps> = ({
                         pointerActiveRef.current = false;
                         resetInteraction(200);
                     }}
-                    onPointerLeave={(e) => { pointerActiveRef.current = false; onPointerLeave(e); }}
-                    onBlur={(e) => { pointerActiveRef.current = false; onBlur(e as any); }}
+                    onPointerLeave={(e) => {
+                        pointerActiveRef.current = false;
+                        onPointerLeave(e);
+                    }}
+                    onBlur={(e) => {
+                        pointerActiveRef.current = false;
+                        onBlur(e as any);
+                    }}
                 >
                     {Back}
-                    <div className="card__front" ref={frontRef} style={{display: showBack? 'none' : ''}}>
+                    <div className="card__front" ref={frontRef} style={{display: showBack ? 'none' : ''}}>
                         {Front}
                         <div className="card__info">
                             <span className="card__name"></span>

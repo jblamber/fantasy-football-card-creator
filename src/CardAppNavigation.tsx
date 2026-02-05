@@ -33,14 +33,17 @@ export const CardAppNavigation = ({setCurrentDeck, deck, decks}: CardAppNavigati
     const { startTourForRoute } = useTour();
     const {decksApiResponse, fetchDecks} = UseDecksApi();
 
-    const viewHref = '#/viewer';
-    const fanHref = React.useMemo(() => {
+    const viewHref = React.useMemo(() => {
         try {
             const [, rq] = (window.location.hash || '#/viewer').split('#');
             const [r, qs] = (rq || '/viewer').split('?');
             const params = new URLSearchParams(qs || '');
-            params.set('mode', 'fan');
-            return `#${r}?${params.toString()}`;
+            if (params.get('mode') === 'fan') {
+                params.delete('mode');
+            } else {
+                params.set('mode', 'fan');
+            }
+            return `#/viewer?${params.toString()}`;
         } catch {
             return '#/viewer?mode=fan';
         }
@@ -162,19 +165,7 @@ export const CardAppNavigation = ({setCurrentDeck, deck, decks}: CardAppNavigati
         )
     }
 
-    function FanBtn() {
-        return (
-            <a
-                id={"fan-link"}
-                href={fanHref}
-                className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20"
-                title="Fan-out"
-                aria-label="Fan-out"
-            >
-                <Square2StackIcon className={"size-5 pt-1"}/>
-            </a>
-        )
-    }
+    //<Square2StackIcon className={"size-5 pt-1"}/>
 
     function ApiBtn() {
         return (
@@ -212,11 +203,7 @@ export const CardAppNavigation = ({setCurrentDeck, deck, decks}: CardAppNavigati
                 >
                     <a id={"viewer-link-mobile"} href={viewHref} role="menuitem" onClick={() => setMenuOpen(false)}
                        className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20 flex items-center gap-2">
-                        <PlayIcon className="size-5"/> <span>Viewer</span>
-                    </a>
-                    <a id={"fan-link-mobile"} href={fanHref} role="menuitem" onClick={() => setMenuOpen(false)}
-                       className="text-white no-underline px-2.5 py-1.5 bg-white/10 rounded-md hover:bg-white/20 flex items-center gap-2">
-                        <Square2StackIcon className={"size-5"}/><span>Fan-out</span>
+                        <PlayIcon className="size-5"/> <span>Play</span>
                     </a>
                     <a id={"editor-link-mobile"} href={'#/create'}
                        role="menuitem" onClick={() => setMenuOpen(false)}
@@ -270,11 +257,9 @@ export const CardAppNavigation = ({setCurrentDeck, deck, decks}: CardAppNavigati
             <TiltModeBtn/>
             <StartTourBtn/>
             <SourceBtn/>
-            <FanBtn/>
             <ApiBtn/>
             {!isAuthenticated && <LoginButton/>}
             {isAuthenticated && <LogoutButton/>}
-
         </div>;
     }
 

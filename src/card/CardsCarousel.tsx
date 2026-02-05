@@ -55,6 +55,9 @@ export function CardsCarousel({deck, setCurrentDeck, initialIndex = 0}: CardsCar
     useEffect(() => {
         const currentNotes = ((localCards[selectedCardIndex]?.playerData?.notes ?? '') as string);
         setNotesInput(currentNotes);
+        const params = new URLSearchParams();
+        params.set('i', String(selectedCardIndex));
+        window.location.hash = `#/viewer?${params.toString()}`;
         // Clear any pending debounce when switching cards
         if (notesDebounceRef.current) {
             window.clearTimeout(notesDebounceRef.current);
@@ -93,7 +96,6 @@ export function CardsCarousel({deck, setCurrentDeck, initialIndex = 0}: CardsCar
         const card = localCards[selectedCardIndex] || {};
         const name: string = (card.playerData?.cardName || card.playerData?.teamName || 'card');
         const filename = `card-${selectedCardIndex + 1}-${sanitizeCardDownloadName(name) || 'card'}.png`;
-
         const trigger = (href: string) => {
             const a = document.createElement('a');
             a.href = href;
