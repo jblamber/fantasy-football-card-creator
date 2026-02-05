@@ -193,21 +193,7 @@ export const HoloCard: React.FC<HoloCardComponentProps> = ({
         }
     };
 
-    useEffect(() => {
-        if (!powerSaving) {
-            rafRef.current = requestAnimationFrame(tick);
-        }
-        return () => {
-            if (rafRef.current) cancelAnimationFrame(rafRef.current);
-            if (showIntervalRef.current) window.clearInterval(showIntervalRef.current);
-            if (showTimeoutRef.current) window.clearTimeout(showTimeoutRef.current as unknown as number);
-            rafRef.current = null;
-        };
-    }, [powerSaving]);
-
-    // When power-saving toggles on, immediately stop and reset animated values
-    useEffect(() => {
-        if (!powerSaving) return;
+    const resetAnimationData = () => {
         if (rafRef.current) {
             cancelAnimationFrame(rafRef.current);
             rafRef.current = null;
@@ -230,24 +216,30 @@ export const HoloCard: React.FC<HoloCardComponentProps> = ({
         target.current.bgy = 50;
         current.current = {...target.current};
         applyVars();
+    }
+
+    useEffect(() => {
+        if (!powerSaving) {
+            rafRef.current = requestAnimationFrame(tick);
+        }
+        return () => {
+            if (rafRef.current) cancelAnimationFrame(rafRef.current);
+            if (showIntervalRef.current) window.clearInterval(showIntervalRef.current);
+            if (showTimeoutRef.current) window.clearTimeout(showTimeoutRef.current as unknown as number);
+            rafRef.current = null;
+        };
+    }, [powerSaving]);
+
+    // When power-saving toggles on, immediately stop and reset animated values
+    useEffect(() => {
+        if (!powerSaving) return; //when power-saving is off, do not reset animation data
+        resetAnimationData();
     }, [powerSaving]);
 
     // When showing the back, stop animations and reset interaction; resume when returning to front
     useEffect(() => {
         if (showBack) {
-            if (rafRef.current) {
-                cancelAnimationFrame(rafRef.current);
-                rafRef.current = null;
-            }
-            target.current.rx = 0;
-            target.current.ry = 0;
-            target.current.gx = 50;
-            target.current.gy = 50;
-            target.current.go = 0;
-            target.current.bgx = 50;
-            target.current.bgy = 50;
-            current.current = {...target.current};
-            applyVars();
+            resetAnimationData();
         } else {
             // resume animation loop if needed
             if (rafRef.current === null && !powerSaving) {
@@ -255,6 +247,17 @@ export const HoloCard: React.FC<HoloCardComponentProps> = ({
             }
         }
     }, [showBack, powerSaving]);
+
+    useEffect(() => {
+        if (disableAnimations) {
+            resetAnimationData();
+        } else {
+            // resume animation loop if needed
+            if (rafRef.current === null && !powerSaving) {
+                rafRef.current = requestAnimationFrame(tick);
+            }
+        }
+    }, [disableAnimations, powerSaving]);
 
     useEffect(() => {
         // showcase idle animation like Svelte version (subtle sine-wave motion)
