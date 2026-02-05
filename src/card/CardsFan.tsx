@@ -43,55 +43,6 @@ export default function CardsFanView({deck, className, initialIndex = 0, onOpenC
         return 1000 - d; // large base to ensure ordering
     }, [frontIndex]);
 
-    // Swipe detection (touch/mouse drag)
-    const dragState = useRef<{active: boolean; startX: number; startY: number; moved: boolean; targetIndex: number | null; pressTs: number;}>({active:false,startX:0,startY:0,moved:false,targetIndex:null, pressTs: 0});
-
-    const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-        (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId);
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        dragState.current = {active: true, startX: x, startY: y, moved: false, targetIndex: null, pressTs: Date.now()};
-        // Find nearest card by angle-projected index
-        const n = cards.length;
-        if (n > 0) {
-            // project x position across indices
-            const idx = Math.round((x / rect.width) * (n - 1));
-            dragState.current.targetIndex = clamp(idx, 0, n - 1);
-        }
-    }, [cards.length]);
-
-    const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const dx = e.clientX - cx;
-        const nx = clamp(dx / (rect.width / 2), -1, 1);
-        if (dragState.current.active) {
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const moved = dragState.current.moved || Math.hypot(x - dragState.current.startX, y - dragState.current.startY) > 8;
-            dragState.current.moved = moved;
-        }
-    }, []);
-
-    const handlePointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-        (e.currentTarget as HTMLElement).releasePointerCapture?.(e.pointerId);
-        const st = dragState.current;
-        const now = Date.now();
-        const longPress = !st.moved && st.active && now - st.pressTs > 1000;
-        if (longPress && st.targetIndex != null) {
-            setFrontIndex(st.targetIndex);
-        } else if (st.moved) {
-            // interpret as swipe left/right
-            const dx = (e.clientX - (e.currentTarget.getBoundingClientRect().left + st.startX));
-            if (Math.abs(dx) > 24) {
-                setFrontIndex(i => (dx < 0 ? (i + 1) : (i - 1 + cards.length)) % cards.length);
-            }
-        }
-        dragState.current.active = false;
-        dragState.current.moved = false;
-    }, [cards.length]);
-
     // Double-click / double-tap
     const lastTapRef = useRef<number>(0);
     const onCardActivate = useCallback((i: number) => {
@@ -104,15 +55,6 @@ export default function CardsFanView({deck, className, initialIndex = 0, onOpenC
         }
     }, [onOpenCarousel]);
 
-    const handleCardPointerUp = useCallback((i: number) => (e: React.PointerEvent) => {
-        e.stopPropagation();
-        const now = Date.now();
-        if (now - lastTapRef.current < 350) {
-            onCardActivate(i);
-        }
-        lastTapRef.current = now;
-    }, [onCardActivate]);
-
     const onKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
         if (e.key === 'ArrowRight') setFrontIndex(i => (i + 1) % cards.length);
         if (e.key === 'ArrowLeft') setFrontIndex(i => (i - 1 + cards.length) % cards.length);
@@ -123,9 +65,6 @@ export default function CardsFanView({deck, className, initialIndex = 0, onOpenC
 
     return (
         <section className={`card-viewport h-screen flex p-1 justify-center [touch-action:manipulation] ${className || ''}`}
-                 onPointerMove={handlePointerMove}
-                 onPointerDown={handlePointerDown}
-                 onPointerUp={handlePointerUp}
                  onKeyDown={onKeyDown}
         >
             <div ref={containerRef}
@@ -158,7 +97,6 @@ export default function CardsFanView({deck, className, initialIndex = 0, onOpenC
                                 pointerEvents: 'auto',
 
                             }}
-                            onPointerUp={handleCardPointerUp(i)}
                             onDoubleClick={() => onCardActivate(i)}
                         >
                             <div
