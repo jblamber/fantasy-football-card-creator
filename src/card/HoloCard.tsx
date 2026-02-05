@@ -162,7 +162,7 @@ export const HoloCard: React.FC<HoloCardProps> = ({
         const s = 0.05; // smoothing for spring-like behavior (0..1) closer to 0, more smooth.
         const c = current.current;
         const t = target.current;
-        const threshold = 0.001; // minimum delta to continue animation
+        const threshold = 0.1; // minimum delta to continue animation
 
         // Check if all values are close enough to target
         const isSettled =

@@ -8,12 +8,13 @@ import {saveDeck} from "../localStorage/localDecks";
 
 interface CardsCarouselProps {
     deck: Deck | undefined,
-    setCurrentDeck: Dispatch<SetStateAction<Deck | undefined>>
+    setCurrentDeck: Dispatch<SetStateAction<Deck | undefined>>,
+    initialIndex?: number,
 }
 
-export function CardsCarousel({deck, setCurrentDeck}: CardsCarouselProps) {
+export function CardsCarousel({deck, setCurrentDeck, initialIndex = 0}: CardsCarouselProps) {
     const [localCards, setLocalCards] = useState<FantasyFootballCardSerializable[]>(deck?.cards || []);
-    const [selectedCardIndex, setSelectedCardIndex] = useState(0);
+    const [selectedCardIndex, setSelectedCardIndex] = useState(initialIndex || 0);
     const [isDirty, setIsDirty] = useState(false);
     const [notesInput, setNotesInput] = useState<string>('');
     const notesDebounceRef = useRef<number | null>(null);
@@ -22,19 +23,23 @@ export function CardsCarousel({deck, setCurrentDeck}: CardsCarouselProps) {
         if (!deck) return;
         setLocalCards(deck.cards);
         setSelectedCardIndex(v=> {
+            const desired = (initialIndex || 0);
+            const clamped = Math.max(0, Math.min(deck.cards.length - 1, desired));
             if (v >= deck.cards.length) {
-                return 0;
+                return clamped;
             }
             else {
-                return v;
+                return clamped;
             }
         });
-    }, [deck])
+    }, [deck, initialIndex])
 
     useEffect(() => {
         if (!deck?.name) return;
-        setSelectedCardIndex(0);
-    }, [deck?.name])
+        if ((initialIndex || 0) === 0) {
+            setSelectedCardIndex(0);
+        }
+    }, [deck?.name, initialIndex])
 
     const downloadImageCanvasRef = useRef<HTMLCanvasElement | null>(null);
     const [openSkill, setOpenSkill] = useState<string | null>(null);

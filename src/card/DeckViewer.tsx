@@ -3,6 +3,7 @@ import {FFCGDeckPayload, Deck, FantasyFootballCardSerializable} from "../types";
 import React, {Dispatch, SetStateAction, useEffect, useMemo, useState} from "react";
 import {mapToRuntime, parseQuery, stripHashQuery, useHashRoute} from "../utils/UseHashRoute";
 import {CardsCarousel} from "./CardsCarousel";
+import CardsFanView from './CardsFan';
 import sample_cards from './sample_cards.json';
 import { useTour } from "../tour/TourProvider";
 import {listDecks, saveDeckLs} from "../localStorage/localDecks";
@@ -84,10 +85,26 @@ export function DeckViewer({deck, setCurrentDeck}: DeckViewerProps) {
     const [loaded, setLoaded] = useState<{ ok: boolean; cards?: any[] } | null>(null);
 
 
+    const initialIndex = Number.isFinite(Number(q.i)) ? Math.max(0, Number(q.i)) : 0;
+    const mode = (q.mode || '').toString();
+
+    const openCarouselAt = (i: number) => {
+        const params = new URLSearchParams();
+        params.set('i', String(i));
+        window.location.hash = `#/viewer?${params.toString()}`;
+    };
+
+
     if (!deck) {
-        return <CardsCarousel setCurrentDeck={setCurrentDeck} deck={sampleDeck}/>;
+        if (mode === 'fan') {
+            return <CardsFanView deck={sampleDeck} initialIndex={initialIndex} onOpenCarousel={openCarouselAt}/>;
+        }
+        return <CardsCarousel setCurrentDeck={setCurrentDeck} deck={sampleDeck} initialIndex={initialIndex}/>;
     }
     else {
-        return <CardsCarousel setCurrentDeck={setCurrentDeck} deck={deck}></CardsCarousel>
+        if (mode === 'fan') {
+            return <CardsFanView deck={deck} initialIndex={initialIndex} onOpenCarousel={openCarouselAt}/>;
+        }
+        return <CardsCarousel setCurrentDeck={setCurrentDeck} deck={deck} initialIndex={initialIndex}></CardsCarousel>
     }
 }
